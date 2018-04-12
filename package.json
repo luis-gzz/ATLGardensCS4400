@@ -1,0 +1,19 @@
+{
+  "name": "cs4400web-app",
+  "version": "1.0.0",
+  "description": "CS 4400 ATL Gardens project",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.gatech.edu/etrexler8/cs4400web-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "mysql": "^2.15.0"
+  }
+}
