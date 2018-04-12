@@ -3,9 +3,14 @@ const mysql = require('mysql2');
 // create the connection to database
 const connection = mysql.createConnection({
   host: 'academic-mysql.cc.gatech.edu',
-  user: 'cs4400_Group_37',
+  user: 'cs4400_team_37',
   password: 'tg7zvTd5',
-  database: 'cs4400_Group_37'
+  database: 'cs4400_team_37'
+});
+
+connection.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
 });
 
 connection.query(
