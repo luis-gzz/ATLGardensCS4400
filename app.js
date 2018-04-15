@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const express = require('express')
+const bodyParser = require('body-parser')
 const hostname = '127.0.0.1';
 
 // Set up express and listen at the port
@@ -14,6 +15,11 @@ const connection = mysql.createConnection({
   database: 'cs4400_team_37'
 });
 
+connection.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+});
+
 
 // =================== expressJS routing ======================
 // GET is called when the front end wants to retrieve some data
@@ -21,7 +27,24 @@ const connection = mysql.createConnection({
 // DELETE is called when the front end wants to delete data
 // ============================================================
 app.get('/login', function(req, res){
-   res.send("Access Granted!");
+  res.send("Access Granted!");
+
+  var body = JSON.parse(req.body);
+  var email = body.email;
+  var password = body.password;
+
+  var results = 0;
+  connection.query(
+    "SELECT * FROM `User` WHERE email = " + email + " password = " + password,
+    function(err, results, fields) {
+    if (results.length > 0) {
+      results = 1;
+    }
+    console.log(results); // results contains rows returned by server
+    //console.log(fields); // fields contains extra meta data about results, if available
+  });
+
+  res.send(results);
 
 });
 
@@ -36,6 +59,7 @@ app.get('/properties', function(req, res){
   // Will respond with a list of properties determined by the
   // request. Or with more info on a single property
   res.send("Your Properties!");
+
 
 });
 
@@ -81,14 +105,10 @@ app.delete('/delete', function(req, res){
 // ============================================================
 
 
-connection.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected!");
-});
 
-connection.query(
-  'SELECT * FROM `User`;',
-  function(err, results, fields) {
-  console.log(results); // results contains rows returned by server
-  //console.log(fields); // fields contains extra meta data about results, if available
-});
+// connection.query(
+//   'SELECT * FROM `User`;',
+//   function(err, results, fields) {
+//   console.log(results); // results contains rows returned by server
+//   //console.log(fields); // fields contains extra meta data about results, if available
+// });
