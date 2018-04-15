@@ -1,11 +1,14 @@
-const mysql = require('mysql');
-const express = require('express')
-const bodyParser = require('body-parser')
+var mysql = require('mysql');
+var express = require('express')
+var bodyParser = require('body-parser')
+var cors = require('cors')
 const hostname = '127.0.0.1';
 
 // Set up express and listen at the port
 const app = express()
-app.listen(3000, () => console.log('ATLgardens listening on port 3000!'))
+app.listen(5000, () => console.log('ATLgardens listening on port 3000!'))
+app.use(cors())
+app.use(bodyParser.json())
 
 // Connection to MySQL database
 const connection = mysql.createConnection({
@@ -26,25 +29,32 @@ connection.connect(function(err) {
 // PUT is called when the front end wants to insert some data
 // DELETE is called when the front end wants to delete data
 // ============================================================
-app.get('/login', function(req, res){
-  res.send("Access Granted!");
+app.post('/login', function(req, res){
+    // === What it expects ===
+    // var payload = {
+    //   email = "...",
+    //   password = "..."
+    // }
+    // === what it responds ===
+    // "0" for failure
+    // "1" for success
 
-  var body = JSON.parse(req.body);
-  var email = body.email;
-  var password = body.password;
+    var email = req.body.email;
+    var password = req.body.password;
 
-  var results = 0;
-  connection.query(
-    "SELECT * FROM `User` WHERE email = " + email + " password = " + password,
-    function(err, results, fields) {
-    if (results.length > 0) {
-      results = 1;
-    }
-    console.log(results); // results contains rows returned by server
-    //console.log(fields); // fields contains extra meta data about results, if available
-  });
+    connection.query(
+      'SELECT Email, Password FROM `User` WHERE Email = ? AND Password = ?', [email, password],
+      function(err, results, fields) {
+        if (results.length > 0 && results[0].Email == email && results[0].Password == password) {
+          // 1 for success
+          res.write("1");
+        } else {
+          // 0 for failure
+          res.write("0");
+        }
 
-  res.send(results);
+        res.end();
+    });
 
 });
 
