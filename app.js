@@ -214,6 +214,61 @@ app.post('/properties', function(req, res){
 
 });
 
+app.post('/info', function(req, res){
+  // gets info on a property
+  // var payload = {
+  //  id = the property id
+  //}
+  // it will respond with an array of objects that contain the fields we need
+  //  or "0" if failed
+
+  var id = req.body.id;
+
+  var sql = "SELECT Property.Name, Property.Ownedby, COUNT(Visits.Email), Property.Address, AVG(Visits.Rating), Property.Size, Property.PType, Property.IsPublic, Property.IsCommercial, Property.ID, Grows_Raises.IName FROM Property " +
+    "LEFT JOIN Visits ON Property.ID = Visits.PId " +
+    "LEFT JOIN Grows_Raises ON Property.ID = Grows_Raises.PId WHERE Property.ID = ? Group by (Property.ID)"
+
+  var sql2 = "SELECT IName FROM Grows_Raises " +
+    "WHERE PId = ?"
+
+  var info;
+  connection.query(sql, [id],
+      function(err, results, fields) {
+        console.log(results)
+        console.log(err)
+        if (results.length > 0 ) {
+          info = results;
+          connection.query(sql2, [id],
+          function(err, results, fields) {
+            console.log(results)
+            console.log(err)
+            if (results.length > 0 ) {
+              // 1 for success
+              info[0].IName = new Array(results.length);
+              for (i = 0; i < results.length; i++) {
+                info[0].IName[i] = results[i].IName;
+              }
+              console.log(info)
+              res.write(JSON.stringify(info));
+            } else {
+              // 0 for failure
+              res.write("0");
+            }
+
+           res.end();
+          });
+        } else {
+          // 0 for failure
+          res.write("0");
+          res.end();
+        }
+
+
+    });
+
+
+});
+
 app.post('/add', function(req, res){
   // Will add items requested (crops, properties, etc)
   // Add properties and visits
@@ -524,22 +579,90 @@ app.post('/visits', function(req, res){
 
 });
 
-app.put('/approve', function(req, res){
+app.post('/approve', function(req, res){
   // Will approve items requested (users, crops, properties, etc)
   // Add properties, users, crops, visits
   //
   // var payload = {
   //  what =  "approveProp" OR "approveItem" OR "approveUser"
   //  id = propId OR item name OR user email
+  //  admin = the admin's email
   // }
-  res.send("Access Granted!");
+  var what = req.body.what;
+  var id = req.body.id;
+  var admin = req.body.admin;
+  var sql;
+
+  if (what == "approveProp") {
+    sql = "UPDATE Property SET ApprovedBy = ? WHERE ID = ?";
+  } else if (what == "approveItem") {
+    admin = 1;
+    sql = "UPDATE FarmItem SET isApproved = ? WHERE Name = ?";
+  }
+
+  connection.query(sql, [admin, id],
+      function(err, results, fields) {
+        console.log(err)
+        if (err == null) {
+          // 1 for success
+          res.write("1");
+        } else {
+          // 0 for failure
+          res.write("0");
+        }
+
+        res.end();
+    });
 
 });
 
-app.delete('/delete', function(req, res){
+app.post('/delete', function(req, res){
   // Will delete information requested by the front end
   // Users, properties, crops, visits
-  res.send("Access Granted!");
+  // var payload = {
+  //  what =  "visitorUnlog" OR "adminUnlog" OR "deleteUser" OR "deleteItem" OR "deleteProp"
+  //  email = user email
+  //  id = property id OR item name
+  //  propName = property name for unlogging visit
+  // }
+
+  var what = req.body.what;
+  var id = req.body.id;
+  var email = req.body.email;
+  var propName = req.body.propName;
+  var sql;
+  var values;
+
+  if (what == "visitorUnlog") {
+    sql = "DELETE FROM Visits WHERE PId = ? AND Email = ?";
+    values = [id, email];
+  } else if (what == "adminUnlog") {
+    sql = "DELETE FROM Visits WHERE Email = ?";
+    values = [email];
+  } else if (what == "deleteUser") {
+    sql = "DELETE FROM User WHERE Email = ?";
+    values = [email];
+  } else if (what == "deleteItem") {
+    sql = "DELETE FROM FarmItem WHERE Name = ?"
+    values = [id];
+  } else if (what == "deleteProp") {
+    sql = "DELETE FROM Property WHERE ID = ?"
+    values = [id];
+  }
+
+  connection.query(sql, values,
+      function(err, results, fields) {
+        console.log(err)
+        if (err == null) {
+          // 1 for success
+          res.write("1");
+        } else {
+          // 0 for failure
+          res.write("0");
+        }
+
+        res.end();
+    });
 
 });
 
