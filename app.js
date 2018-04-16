@@ -6,7 +6,7 @@ const hostname = '127.0.0.1';
 
 // Set up express and listen at the port
 const app = express()
-app.listen(5000, () => console.log('ATLgardens listening on port 3000!'))
+app.listen(5000, () => console.log('========= ATLgardens listening on port 3000! =========='))
 app.use(cors())
 app.use(bodyParser.json())
 
@@ -20,7 +20,7 @@ const connection = mysql.createConnection({
 
 connection.connect(function(err) {
   if (err) throw err;
-  console.log("Connected!");
+  console.log(" =================== Connected! ====================");
 });
 
 
@@ -58,10 +58,48 @@ app.post('/login', function(req, res){
 
 });
 
-app.put('/registration', function(req, res){
-  // Will register a new owner or visitor and respond with
-  // success or failure
-  res.send("New User Created!");
+app.post('/registration', function(req, res){
+  // === What it expects ===
+  // var payload = {
+  //   email = "...",
+  //   username = "...",
+  //   password = "...",
+  //   type = "..."
+  // }
+  // === what it responds ===
+  // "failed" for error failure
+  // "exists" because user already exists
+  // "1" for success
+
+  var email = req.body.email;
+  var password = req.body.password;
+  var username = req.body.username;
+  var type = req.body.type;
+
+  // A query like login to check if users already exists
+  connection.query(
+      'SELECT Email, Username FROM `User` WHERE Email = ? AND Username = ?', [email, username],
+      function(err, results, fields) {
+        if (results.length > 0 && results[0].Email == email && results[0].Password == password) {
+          // failure because the user already exists
+          res.write("exists");
+          res.end()
+        } else {
+          connection.query(
+            'INSERT INTO User(Username, Email, Password, UType) VALUES (?, ?, ?, ?)', [username, email, password, type],
+            function(err, results, fields) {
+              if (err == null) {
+                // Success the new entry was added
+                res.write("1");
+              } else {
+                // failed do to error
+                res.write("failed");
+              }
+              res.end()
+
+          });
+        };
+    });
 
 });
 
