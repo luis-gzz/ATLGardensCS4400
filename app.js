@@ -189,7 +189,7 @@ app.post('/properties', function(req, res){
     var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email), AVG(Rating) FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.IsPublic = 1 AND Property.ApprovedBy IS NOT NULL Group By Property.ID";
   } else if (type == "conf") {
     // All confirmed properties
-    var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial FROM `Property` WHERE Property.ApprovedBy IS NOT NULL Group By Property.ID";
+    var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email), AVG(Rating) FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.ApprovedBy IS NOT NULL Group By Property.ID";
   } else if (type == "unconf") {
     // All unonfrimed properties
     var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial FROM `Property` WHERE Property.ApprovedBy IS NULL Group By Property.ID";
@@ -220,15 +220,82 @@ app.put('/manageProperty', function(req, res){
 
 });
 
-app.get('/users', function(req, res){
+app.post('/users', function(req, res){
   // Will respond with the list of users requested (confirmed/unconfrimed)
-  res.send("Access Granted!");
+  // Will respond the list of crops or animals requested (confirmed/unconfrimed)
+  // What it need
+  // var payload = {
+  //  type = "visitor" OR "owner"
+  //}
+  // it will respond with an array of objects that contain the fields we need
+  //  or "0" if failed
+
+  var type = req.body.type;
+  var sql;
+  if (type == "visitor") {
+    // All properties for owned by a user
+    type = "Visitor";
+    var sql = "SELECT User.Email, User.Username, COUNT(Visits.Email) FROM User LEFT JOIN Visits ON User.Email = Visits.Email WHERE User.UType = ? Group by (User.Email)";
+  } else if (type == "owner") {
+    // All properties for owned by a user
+    type = "Owner";
+    var sql = "SELECT User.Username, User.Email, COUNT(User.Email) FROM User LEFT JOIN Property ON User.Email = Property.OwnedBy WHERE User.UType = ? Group by (User.Email)";
+  }
+
+  connection.query(sql, [type],
+      function(err, results, fields) {
+        console.log(results)
+        console.log(err)
+        if (results.length > 0 ) {
+          // 1 for success
+          res.write(JSON.stringify(results));
+        } else {
+          // 0 for failure
+          res.write("0");
+        }
+
+        res.end();
+    });
 
 });
 
-app.get('/items', function(req, res){
+app.post('/items', function(req, res){
   // Will respond the list of crops or animals requested (confirmed/unconfrimed)
-  res.send("Access Granted!");
+  // What it need
+  // var payload = {
+  //  type = "animal" OR "crop"
+  //  confirmed = 1 OR 0
+  //}
+  // it will respond with an array of objects that contain the fields we need
+  //  or "0" if failed
+
+  var type = req.body.type;
+  var confirmed = req.body.confirmed;
+  var sql;
+  if (type == "animal") {
+    // All properties for owned by a user
+    type = "Animal";
+    var sql = "SELECT Name, IType FROM `FarmItem` WHERE IType = ? AND isApproved = ?";
+  } else if (type == "crop") {
+    // All properties for owned by a user
+    type = "Animal";
+    var sql = "SELECT Name, IType FROM `FarmItem` WHERE IType != ? AND isApproved = ?";
+  }
+
+  connection.query(sql, [type, confirmed],
+      function(err, results, fields) {
+        console.log(results)
+        console.log(err)
+        if (results.length > 0 ) {
+          // 1 for success
+          res.write(JSON.stringify(results));
+        } else {
+          // 0 for failure
+          res.write("0");
+        }
+
+        res.end();
+    });
 
 });
 
