@@ -76,7 +76,8 @@ app.post('/registration', function(req, res){
   //  "items" : [["Pig"], ["Peruvian Lily"]]
   // }
   // === what it responds ===
-  // "failed" for error failure
+  // "failed to add crop" for error failure
+  // "failed to add user"
   // "exists" because user already exists
   // "1" for success
 
@@ -128,7 +129,6 @@ console.log(items);
                         connection.query(
                         'INSERT INTO Grows_Raises(PId, IName) VALUES ?', [items],
                         function(err, results, fields) {
-                          console.log(err)
                           if (err == null) {
                             // Success the new entry was added to property
                            res.write("1");
@@ -139,8 +139,6 @@ console.log(items);
                             res.write("failed to add crop");
                             res.end()
                           }
-
-
                         });
 
                       } else {
@@ -148,8 +146,6 @@ console.log(items);
                         res.write("failed to add property");
                         res.end()
                       }
-
-
                     });
 
                 } else {
@@ -164,17 +160,56 @@ console.log(items);
                 res.end()
               }
 
-
           });
         }
     });
 
 });
 
-app.get('/properties', function(req, res){
-  // Will respond with a list of properties determined by the
-  // request. Or with more info on a single property
-  res.send("Your Properties!");
+app.post('/properties', function(req, res){
+  // What it need
+  // var payload = {
+  //  type = "ownerProps" OR "notOwner" OR "public" OR "conf" OR "unconf"
+  //  email = "owneremail@gmail.com",
+  //}
+  // it will respond with an array of objects that contain the fields we need
+  //  or "0" if failed
+
+  var type = req.body.type;
+  var email = req.body.email;
+  var sql;
+  if (type == "ownerProps") {
+    // All properties for owned by a user
+    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email), AVG(Rating) FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.OwnedBy = ? Group By Property";
+  } else if (type == "notOwner") {
+    // All properties not owned by a user
+    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email), AVG(Rating) FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.OwnedBy != ? AND Property.ApprovedBy IS NOT NULL Group By Property.ID";
+  } else if (type == "public") {
+    // All public and confirmed properties
+    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email), AVG(Rating) FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.IsPublic = 1 AND Property.ApprovedBy IS NOT NULL Group By Property.ID";
+  } else if (type == "conf") {
+    // All confirmed properties
+    var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial FROM `Property` WHERE Property.ApprovedBy IS NOT NULL Group By Property.ID";
+  } else if (type == "unconf") {
+    // All unonfrimed properties
+    var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial FROM `Property` WHERE Property.ApprovedBy IS NULL Group By Property.ID";
+  }
+
+
+  connection.query(sql, [email],
+      function(err, results, fields) {
+        console.log(results)
+        console.log(err)
+        if (results.length > 0 ) {
+          // 1 for success
+          res.write(JSON.stringify(results));
+        } else {
+          // 0 for failure
+          res.write("0");
+        }
+
+        res.end();
+    });
 
 
 });
