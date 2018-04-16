@@ -214,8 +214,115 @@ app.post('/properties', function(req, res){
 
 });
 
-app.put('/manageProperty', function(req, res){
+app.post('/add', function(req, res){
+  // Will add items requested (crops, properties, etc)
+  // Add properties, crops, visits
+  //   for visit
+  // var payload = {
+  //  what = "logVisit",
+  //  pID = 28282,
+  //  email = "user@mail.com",
+  //  date = 12/1/12,
+  //  rating = 5
+  // }
+  //  for property
+  // let payload = {
+  //  what = "addProp",
+  //  "email": "test2@harvard.edu",
+  //  "property": "Test Garden",
+  //  "address": "555 Test Road",
+  //  "city": "Atlanta",
+  //  "zip": "30332",
+  //  "acres": 2,
+  //  "public": 1,
+  //  "commercial": 0,
+  //  "propType": "Farm",
+  //  "items" : [["Pig"], ["Peruvian Lily"]]
+  // }
+
+  var what = req.body.what;
+  var email = req.body.email;
+
+  var id = req.body.pID;
+  var date = req.body.date;
+  var rating = req.body.rating;
+
+  var propName = req.body.property;
+  var address = req.body.address;
+  var city = req.body.city;
+  var zip = req.body.zip;
+  var acres = req.body.acres;
+  var propType = req.body.propType;
+  var public = req.body.public;
+  var commercial = req.body.commercial;
+  var items = req.body.items;
+
+  var sql;
+  var sql2;
+  if (what == "logVisit") {
+    sql = "INSERT INTO Visits(PID, Email, VDate, Rating) VALUES (?, ?, ?, ?)";
+
+    connection.query(sql, [id, email, date, rating],
+      function(err, results, fields) {
+        console.log(results)
+        console.log(err)
+        if (err == null) {
+          // 1 for success
+          res.write(JSON.stringify(results));
+        } else {
+          // 0 for failure
+          res.write("0");
+        }
+
+        res.end();
+    });
+
+  } else if (what == "addProp") {
+    sql = "INSERT INTO Property(ID, Name, Size, Address, IsPublic, IsCommercial, OwnedBy, PType) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    sql2 = 'INSERT INTO Grows_Raises(PId, IName) VALUES ?';
+    id = Math.floor(Math.random()*90000) + 10000;
+    for (i = 0; i < items.length; i++) {
+      items[i].unshift(id);
+    }
+
+    connection.query(sql, [id, propName, acres, address + city + zip, public, commercial, email, propType],
+      function(err, results, fields) {
+        console.log(results)
+        console.log(err)
+        if (err == null) {
+          connection.query(sql2, [items],
+            function(err, results, fields) {
+              if (err == null) {
+                // 1 for success
+                res.write("1");
+                res.end();
+
+              } else {
+                // 0 for failure
+                res.write("failed crop");
+                res.end();
+              }
+            });
+
+        } else {
+          // 0 for failure
+          res.write("failed property");
+          res.end();
+        }
+
+
+    });
+
+  }
+
+
+
+
+});
+
+app.put('/manage', function(req, res){
   // Will update information on a property or add a new one
+
   res.send("Access Granted!");
 
 });
@@ -300,15 +407,40 @@ app.post('/items', function(req, res){
 });
 
 
-app.get('/visits', function(req, res){
+app.post('/visits', function(req, res){
   // Will respond with a list of visits youve made
-  res.send("Access Granted!");
+  // What it need
+  // var payload = {
+  //  email = "user@mail.com"
+  // }
+
+  var email = req.body.email;
+  var sql = "SELECT Property.Name, VDate, AVG(Rating) FROM Visits LEFT Join Property ON Property.ID = Visits.PId WHERE Visits.Email = ? Group by (Property.Name)"
+
+  connection.query(sql, [email],
+      function(err, results, fields) {
+        console.log(results)
+        console.log(err)
+        if (results.length > 0 ) {
+          // 1 for success
+          res.write(JSON.stringify(results));
+        } else {
+          // 0 for failure
+          res.write("0");
+        }
+
+        res.end();
+    });
 
 });
 
 app.put('/approve', function(req, res){
   // Will approve items requested (users, crops, properties, etc)
   // Add properties, users, crops, visits
+  //
+  // var payload = {
+  //  what =  "manageProp" OR "addItem" OR
+  // }
   res.send("Access Granted!");
 
 });
