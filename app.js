@@ -80,7 +80,6 @@ app.post('/registration', function(req, res){
   connection.query(
       'SELECT Email, Username FROM `User` WHERE Email = ? OR Username = ?', [email, username],
       function(err, results, fields) {
-        console.log(results);
         if (results.length > 0) {
           // failure because the user already exists
           res.write("exists");
