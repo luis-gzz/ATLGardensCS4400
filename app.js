@@ -78,7 +78,7 @@ app.post('/registration', function(req, res){
 
   // A query like login to check if users already exists
   connection.query(
-      'SELECT Email, Username FROM `User` WHERE Email = ? AND Username = ?', [email, username],
+      'SELECT Email, Username FROM `User` WHERE Email = ? OR Username = ?', [email, username],
       function(err, results, fields) {
         if (results.length > 0) {
           // failure because the user already exists
@@ -88,6 +88,7 @@ app.post('/registration', function(req, res){
           connection.query(
             'INSERT INTO User(Username, Email, Password, UType) VALUES (?, ?, ?, ?)', [username, email, password, type],
             function(err, results, fields) {
+              console.log(err)
               if (err == null) {
                 // Success the new entry was added
                 res.write("1");
