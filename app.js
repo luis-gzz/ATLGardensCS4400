@@ -216,7 +216,7 @@ app.post('/properties', function(req, res){
 
 app.post('/add', function(req, res){
   // Will add items requested (crops, properties, etc)
-  // Add properties, crops, visits
+  // Add properties and visits
   //   for visit
   // var payload = {
   //  what = "logVisit",
@@ -239,6 +239,12 @@ app.post('/add', function(req, res){
   //  "propType": "Farm",
   //  "items" : [["Pig"], ["Peruvian Lily"]]
   // }
+  //   for item
+  // var payload = {
+  //  what = "addItem",
+  //  iName = "Alpaca",
+  //  iType = "Animal"
+  // }
 
   var what = req.body.what;
   var email = req.body.email;
@@ -256,6 +262,9 @@ app.post('/add', function(req, res){
   var public = req.body.public;
   var commercial = req.body.commercial;
   var items = req.body.items;
+
+  var iName = req.body.iName;
+  var iType = req.body.iType;
 
   var sql;
   var sql2;
@@ -313,17 +322,98 @@ app.post('/add', function(req, res){
 
     });
 
+  } else if (what == "addItem") {
+      sql = "INSERT INTO FarmItem(Name, IType) VALUES (?, ?)";
+      connection.query(sql, [iName, iType],
+      function(err, results, fields) {
+        console.log(results)
+        console.log(err)
+        if (err == null) {
+          // 1 for success
+          res.write("1");
+        } else {
+          // 0 for failure
+          res.write("0");
+        }
+
+        res.end();
+    });
+
   }
-
-
-
-
 });
 
-app.put('/manage', function(req, res){
-  // Will update information on a property or add a new one
+app.post('/manage', function(req, res){
+  // Will update information on a property
+  //  for property
+  // let payload = {
+  //  "email": "test2@harvard.edu",
+  //  "property": "Test Garden",
+  //  "address": "555 Test Road",
+  //  "city": "Atlanta",
+  //  "zip": "30332",
+  //  "acres": 2,
+  //  "public": 1,
+  //  "commercial": 0,
+  //  "items" : [["Pig"], ["Peruvian Lily"]]
+  // }
 
-  res.send("Access Granted!");
+  var email = req.body.email;
+  var id = req.body.id;
+  var propName = req.body.property;
+  var address = req.body.address;
+  var city = req.body.city;
+  var zip = req.body.zip;
+  var acres = req.body.acres;
+  var public = req.body.public;
+  var commercial = req.body.commercial;
+  var items = req.body.items;
+  for (i = 0; i < items.length; i++) {
+    items[i].unshift(id);
+  }
+
+  var sql = "UPDATE Property SET Name = ?, Size = ?, Address = ?, IsPublic = ?, IsCommercial = ?, ApprovedBy = NULL WHERE ID = ?";
+  var deletOldItems = "DELETE FROM Grows_Raises WHERE PId = ?";
+  var addNewItems = "INSERT INTO Grows_Raises(PId, IName) VALUES ?";
+
+  connection.query(sql, [propName, acres, address + " " + city + " " + zip, public, commercial, id],
+    function(err, results, fields) {
+      //console.log(results)
+      console.log(err)
+      if (err == null) {
+        // After updating property we delete old items
+        connection.query(deletOldItems, [id],
+        function(err, results, fields) {
+          //console.log(results)
+          console.log(err)
+          if (err == null) {
+            //After delete old items we update the list for the property
+            connection.query(addNewItems, [items],
+            function(err, results, fields) {
+              //console.log(results)
+              console.log(err)
+              if (err == null) {
+                // 1 for success
+                res.write("1");
+              } else {
+                //failure
+                res.write("fail add item");
+              }
+              res.end();
+            });
+          } else {
+            //failure
+            res.write("fall remove item");
+            res.end();
+          }
+
+        });
+      } else {
+        // failure
+        res.write("fail update property");
+        res.end();
+      }
+    });
+
 
 });
 
@@ -439,7 +529,8 @@ app.put('/approve', function(req, res){
   // Add properties, users, crops, visits
   //
   // var payload = {
-  //  what =  "manageProp" OR "addItem" OR
+  //  what =  "approveProp" OR "approveItem" OR "approveUser"
+  //  id = propId OR item name OR user email
   // }
   res.send("Access Granted!");
 
