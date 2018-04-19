@@ -6,6 +6,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
+  <script>
+      function addToDB() {
+          let payload = {
+            "what" : "addProp",
+            "email": "farmerJoe@gmail.com",
+            "property": document.getElementById("name").value,
+            "address": document.getElementById("address").value,
+            "city": document.getElementById("city").value,
+            "zip": document.getElementById("zip").value,
+            "acres": document.getElementById("size").value,
+            "public": 1,
+            "commercial": 0,
+            "propType": "Farm",
+            "items" : [["Pig"], ["Peruvian Lily"]]
+          }
+
+          console.log(payload);
+
+          var xhr = new XMLHttpRequest();
+                xhr.onload = () => {
+                    var data = xhr.responseText;
+
+                    console.log("This is data " + data);
+                    propertyArray = JSON.parse(data);
+
+                    if (data != "0") {
+                            //window.location.replace("webapp/loginhome.html");
+                        console.log("Completed");
+                    }
+                }
+
+          xhr.open("POST", "http://localhost:3000/add", true);
+          xhr.setRequestHeader("Content-Type", 'application/json');
+          xhr.send(JSON.stringify(payload));
+
+      }
+
+      window.onload = function() {
+        // var payload = {
+  //  type = "animal" OR "crop"
+  //  confirmed = 1 OR 0
+  //}
+          let payload = {
+              "type": "crop",
+              "confirmed": 1
+          }
+
+          var xhr = new XMLHttpRequest();
+              xhr.onload = () => {
+                  var data = xhr.responseText;
+
+                  console.log("This is data" + data);
+                  propertyArray = JSON.parse(data);
+
+                  if (data != "0") {
+                         //window.location.replace("webapp/loginhome.html");
+                        console.log("Completed");
+                  }
+               }
+
+          xhr.open("POST", "http://localhost:3000/items", true);
+          xhr.setRequestHeader("Content-Type", 'application/json');
+          xhr.send(JSON.stringify(payload));
+
+          var crop_dropdown = document.getElementById("crop_dropdown");
+
+          var node = document.createElement("option");                 // Create a <li> node
+          node.text = "water"
+          node.setAttribute("value", "water");
+
+          crop_dropdown.add(node);
+      }
+  </script>
 
 <body>
   <nav class="navbar navbar-expand-md bg-primary navbar-dark">
@@ -32,32 +105,27 @@
           <a style="font-size:15px;color:red">* </a>
           <a style="font-size:15px">= required fields )</a>
         </div>
-        <form class="">
+
           <div class="row">
             <div class="form-group ">Property Name: &nbsp;
-              <input type="text" class="form-control" placeholder="*Property Name">
+              <input id = "name" type="text" class="form-control" placeholder="*Property Name">
               <br> Street Address: &nbsp;
-              <input type="text" class="form-control" placeholder="*Street Address">
+              <input id = "address" type="text" class="form-control" placeholder="*Street Address">
               <br>
               <div class="row">
                 <div class="form-group col-md-4"> City: &nbsp;
-                  <input id="firstname" type="text" class="form-control" placeholder="*City"> </div>
+                  <input id="city" type="text" class="form-control" placeholder="*City"> </div>
                 <div class="form-group col-md-4 "> Zip: &nbsp;
-                  <input id="lastname" type="text" class="form-control" placeholder="*Zip Code"> </div>
+                  <input id="zip" type="text" class="form-control" placeholder="*Zip Code"> </div>
                 <div class="form-group col-md-4 "> Acres: &nbsp;
-                  <input id="lastname" type="text" class="form-control" placeholder="*Acres"> </div>
+                  <input id="size" type="text" class="form-control" placeholder="*Acres"> </div>
               </div>
               <div class="row">
                 <div class="col-md-4">
-                  <div class="btn-group">
-                    <text>&nbsp;&nbsp;Property Type*: &nbsp;&nbsp;</text>
-                    <button class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown"> Select </button>
-                    <div class="dropdown-menu">
-                      <a class="dropdown-item" href="#">Action</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">Separated link</a>
-                    </div>
-                  </div>
+                  <select id="type_dropdown">
+                    <option value="volvo">Volvo</option>
+                    <option value="saab">Saab</option>
+                  </select>
                 </div>
                 <div class="col-md-4">
                   <div class="btn-group">
@@ -71,15 +139,10 @@
                   </div>
                 </div>
                 <div class="col-md-4">
-                  <div class="btn-group">
-                    <text>Crop*:</text>&nbsp;&nbsp;
-                    <button class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown"> Select </button>
-                    <div class="dropdown-menu">
-                      <a class="dropdown-item" href="#">Action</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">Separated link</a>
-                    </div>
-                  </div>
+                  <select id="crop_dropdown">
+                    <option value="volvo">Volvo</option>
+                    <option value="saab">Saab</option>
+                  </select>
                 </div>
               </div>
               <br>
@@ -110,7 +173,7 @@
               <br>
               <div class="row">
                 <div class="col-md-4">
-                  <button type="submit" class="btn btn-primary" onclick="storeinfo()">Add Property</button>
+                  <button type="submit" class="btn btn-primary" onclick="addToDB()">Add Property</button>
                 </div>
                 <div class="col-md-4"></div>
                 <div class="col-md-4">
@@ -121,7 +184,7 @@
               <div class="btn-toolbar"> &nbsp;&nbsp; </div>
             </div>
           </div>
-        </form>
+        
       </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

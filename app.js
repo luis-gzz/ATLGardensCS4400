@@ -203,7 +203,7 @@ app.post('/properties', function(req, res){
 
   connection.query(sql, [email],
       function(err, results, fields) {
-        console.log(results)
+        //console.log(results)
         console.log(err)
         if (results.length > 0 ) {
           // 1 for success
@@ -287,7 +287,7 @@ app.post('/add', function(req, res){
   // }
   //  for property
   // let payload = {
-  //  what = "addProp",
+  //  "what" = "addProp",
   //  "email": "test2@harvard.edu",
   //  "property": "Test Garden",
   //  "address": "555 Test Road",
@@ -328,6 +328,9 @@ app.post('/add', function(req, res){
 
   var sql;
   var sql2;
+
+  console.log("Adding to DB");
+
   if (what == "logVisit") {
     sql = "INSERT INTO Visits(PID, Email, VDate, Rating) VALUES (?, ?, ?, ?)";
 
@@ -538,6 +541,9 @@ app.post('/items', function(req, res){
     type = "Animal";
     var sql = "SELECT Name, IType FROM `FarmItem` WHERE IType != ? AND isApproved = ?";
   }
+
+  console.log(type + confirmed);
+  console.log("Accessing all items with query " + sql);
 
   connection.query(sql, [type, confirmed],
       function(err, results, fields) {
