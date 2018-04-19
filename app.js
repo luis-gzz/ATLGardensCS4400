@@ -56,7 +56,6 @@ app.post('/login', function(req, res){
           // 0 for failure
           res.write("0");
         }
-
         res.end();
     });
 });

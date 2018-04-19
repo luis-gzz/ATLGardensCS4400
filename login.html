@@ -25,6 +25,7 @@
                         console.log("This is data" + data);
 
                         if (data == "1") {
+                            window.location.replace("webapp/loginhome.html");
                             console.log("Next page");
                         }
                     }
@@ -55,7 +56,7 @@
                             <div class="form-group col-md-6"> 
 </div>
                         </div>
-                        <form>
+
                             <div class="form-group">
                                 <input id="email" type="email" class="form-control" placeholder="*Enter email"> 
                             </div>
@@ -66,8 +67,6 @@
                                 <button class="btn btn-primary text-white" onclick="checkLogin()">
                                     Log In
                                 </button>
-
-                        </form>
                     </div>
                 </div>
             </div>             
