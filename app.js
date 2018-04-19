@@ -179,10 +179,12 @@ app.post('/properties', function(req, res){
 
   var type = req.body.type;
   var email = req.body.email;
+
+  console.log("Accessing properties with email " + email + " and owner type " + type);
   var sql;
   if (type == "ownerProps") {
     // All properties for owned by a user
-    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email), AVG(Rating) FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.OwnedBy = ? Group By Property";
+    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email), AVG(Rating) FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.OwnedBy = ? Group By Property.ID";
   } else if (type == "notOwner") {
     // All properties not owned by a user
     var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email), AVG(Rating) FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.OwnedBy != ? AND Property.ApprovedBy IS NOT NULL Group By Property.ID";
@@ -197,6 +199,7 @@ app.post('/properties', function(req, res){
     var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial FROM `Property` WHERE Property.ApprovedBy IS NULL Group By Property.ID";
   }
 
+  console.log("Executing " + sql);
 
   connection.query(sql, [email],
       function(err, results, fields) {
