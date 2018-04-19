@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
-        <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> 
+        <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css">
         <script>
             function checkLogin() {
                 console.log("Logging in");
@@ -24,7 +24,9 @@
                         var data = xhr.responseText;
                         console.log("This is data" + data);
 
-                        if (data == "1") {
+                        if (data != "0") {
+                            document.cookie = "type=" + data;
+                            document.cookie = "email=" + email;
                             window.location.replace("webapp/loginhome.html");
                             console.log("Next page");
                         }
@@ -51,17 +53,17 @@
                     <div class="col-md-6">
                         <div style="font-size: 45px">ATL Gardens, Farms, &amp; Orchards</div>
                         <div class="row">
-                            <div class="form-group col-md-6"> 
+                            <div class="form-group col-md-6">
 </div>
-                            <div class="form-group col-md-6"> 
+                            <div class="form-group col-md-6">
 </div>
                         </div>
 
                             <div class="form-group">
-                                <input id="email" type="email" class="form-control" placeholder="*Enter email"> 
+                                <input id="email" type="email" class="form-control" placeholder="*Enter email">
                             </div>
                             <div class="form-group">
-                                <input id="password" type="password" class="form-control" placeholder="*Enter password"> 
+                                <input id="password" type="password" class="form-control" placeholder="*Enter password">
                             </div>
 
                                 <button class="btn btn-primary text-white" onclick="checkLogin()">
@@ -69,7 +71,7 @@
                                 </button>
                     </div>
                 </div>
-            </div>             
+            </div>
             <div class="py-2 text-sm-center">
                 <a href="visitorsignup.html"> </a>
                 <a href="">

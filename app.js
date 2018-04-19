@@ -47,11 +47,11 @@ app.post('/login', function(req, res){
     console.log("login attempt" + email + " " + password);
 
     connection.query(
-      'SELECT Email, Password FROM `User` WHERE Email = ? AND Password = ?', [email, password],
+      'SELECT Email, Password, UType FROM `User` WHERE Email = ? AND Password = ?', [email, password],
       function(err, results, fields) {
         if (results.length > 0 && results[0].Email == email && results[0].Password == password) {
           // 1 for success
-          res.write("1");
+          res.write(results[0].UType);
         } else {
           // 0 for failure
           res.write("0");
