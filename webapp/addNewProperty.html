@@ -5,7 +5,43 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
-  <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
+  <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> 
+    
+    
+<script>
+
+            function checkLogin() {
+                console.log("Logging in");
+
+                email = document.getElementById("email").value;
+                pass = document.getElementById("password").value;
+                pass = md5(pass);
+                let payload = {
+                    "email": email,
+                    "password": pass
+                }
+
+                console.log(payload);
+
+                var xhr = new XMLHttpRequest();
+                    xhr.onload = () => {
+                        var data = xhr.responseText;
+                        console.log("This is data" + data);
+
+                        if (data != "0") {
+                            document.cookie = "type=" + data;
+                            document.cookie = "email=" + email;
+                            window.location.replace("webapp/loginhome.html");
+                            console.log("Next page");
+                        }
+                    }
+
+                xhr.open("POST", "http://localhost:3000/login", true);
+                xhr.setRequestHeader("Content-Type", 'application/json');
+                xhr.send(JSON.stringify(payload));
+            }
+        </script>
+</head>
 
 <body>
   <nav class="navbar navbar-expand-md bg-primary navbar-dark">
