@@ -6,7 +6,7 @@ const hostname = '127.0.0.1';
 
 // Set up express and listen at the port
 const app = express()
-app.listen(5000, () => console.log('========= ATLgardens listening on port 3000! =========='))
+app.listen(3000, () => console.log('========= ATLgardens listening on port 3000! =========='))
 app.use(cors())
 app.use(bodyParser.json())
 
@@ -22,6 +22,8 @@ connection.connect(function(err) {
   if (err) throw err;
   console.log(" =================== Connected! ====================");
 });
+
+app.get('/landing-page')
 
 
 // =================== expressJS routing ======================
@@ -42,6 +44,8 @@ app.post('/login', function(req, res){
     var email = req.body.email;
     var password = req.body.password;
 
+    console.log("login attempt" + email + " " + password);
+
     connection.query(
       'SELECT Email, Password FROM `User` WHERE Email = ? AND Password = ?', [email, password],
       function(err, results, fields) {
@@ -55,7 +59,6 @@ app.post('/login', function(req, res){
 
         res.end();
     });
-
 });
 
 app.post('/registration', function(req, res){
