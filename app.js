@@ -435,8 +435,6 @@ app.post('/manage', function(req, res){
   var id = req.body.id;
   var propName = req.body.property;
   var address = req.body.address;
-  var city = req.body.city;
-  var zip = req.body.zip;
   var acres = req.body.acres;
   var public = req.body.public;
   var commercial = req.body.commercial;
@@ -449,7 +447,7 @@ app.post('/manage', function(req, res){
   var deletOldItems = "DELETE FROM Grows_Raises WHERE PId = ?";
   var addNewItems = "INSERT INTO Grows_Raises(PId, IName) VALUES ?";
 
-  connection.query(sql, [propName, acres, address + " " + city + " " + zip, public, commercial, id],
+  connection.query(sql, [propName, acres, address, public, commercial, id],
     function(err, results, fields) {
       //console.log(results)
       console.log(err)

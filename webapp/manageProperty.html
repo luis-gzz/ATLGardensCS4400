@@ -7,6 +7,45 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
   <script>
+      function editDB() {
+          var url_string = window.location.href;
+
+          var url = new URL(url_string);
+          var id = url.searchParams.get("id");
+
+          items = [];
+
+          let payload = {
+            "email": "farmerJoe@gmail.com",
+            "id": id, 
+            "property": document.getElementById("name").value,
+            "address": document.getElementById("address").value,
+            "acres": document.getElementById("size").value,
+            "public": document.getElementById("public_dropdown").value,
+            "commercial": document.getElementById("commercial_dropdown").value,
+            "items" : items
+          }
+
+          console.log(payload);
+
+          var xhr = new XMLHttpRequest();
+                xhr.onload = () => {
+                    var data = xhr.responseText;
+
+                    //console.log("This is data " + data);
+                    //propertyArray = JSON.parse(data);
+
+                    if (data != "0") {
+                            //window.location.replace("webapp/loginhome.html");
+                        console.log("Completed");
+                    }
+                }
+
+          xhr.open("POST", "http://localhost:3000/manage", true);
+          xhr.setRequestHeader("Content-Type", 'application/json');
+          xhr.send(JSON.stringify(payload));
+
+      }
       function displayEditable(property_info) {
           ID = property_info.ID;
           Name = property_info.Name;
@@ -183,7 +222,6 @@
           <a style="font-size:15px;color:red">* </a>
           <a style="font-size:15px">= required fields )</a>
         </div>
-        <form class="">
           <br>
           <div>
             <p id="id_text">ID: 000000</p>
@@ -233,7 +271,7 @@
               <br>
               <div class="row">
                 <div class="col-md-4">
-                  <button type="submit" class="btn btn-primary" onclick="addToDB()">Update Property</button>
+                  <button  class="btn btn-primary" onclick="editDB()">Update Property</button>
                 </div>
                 <div class="col-md-4"></div>
                 <div class="col-md-4">
@@ -245,7 +283,7 @@
             </div>
           </div>
           <br>
-          <br> </form>
+          <br> 
       </div>
     </div>
   </div>
