@@ -351,40 +351,47 @@ app.post('/add', function(req, res){
 
   } else if (what == "addProp") {
     sql = "INSERT INTO Property(ID, Name, Size, Address, IsPublic, IsCommercial, OwnedBy, PType) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    sql2 = 'INSERT INTO Grows_Raises(PId, IName) VALUES ?';
+    sql2 = 'INSERT INTO Grows_Raises(PId, IName) VALUES (?, ?)';
     id = Math.floor(Math.random()*90000) + 10000;
+
+
+    item_arr = []
+    // Something needs to be changed about this
     for (i = 0; i < items.length; i++) {
-      items[i].unshift(id);
+      item_arr[i] = [id, items[i]];
     }
+
+    console.log(item_arr);
 
     connection.query(sql, [id, propName, acres, address + city + zip, public, commercial, email, propType],
       function(err, results, fields) {
         console.log(results)
         console.log(err)
         if (err == null) {
-          connection.query(sql2, [items],
+          for (var i = 0; i < item_arr.length; i++) {
+
+          connection.query(sql2, [item_arr[i][0], item_arr[i][1]],
             function(err, results, fields) {
+              console.log(results)
+              console.log(err)
               if (err == null) {
                 // 1 for success
-                res.write("1");
-                res.end();
-
+                // Weird result when trying to insert two grows/raises
+                //res.write("1");
               } else {
                 // 0 for failure
-                res.write("failed crop");
-                res.end();
+                res.write("failed crop");       
               }
             });
-
+        }
         } else {
           // 0 for failure
           res.write("failed property");
-          res.end();
+          
         }
-
-
+        
     });
-
+    res.end();
   } else if (what == "addItem") {
       sql = "INSERT INTO FarmItem(Name, IType) VALUES (?, ?)";
       connection.query(sql, [iName, iType],
