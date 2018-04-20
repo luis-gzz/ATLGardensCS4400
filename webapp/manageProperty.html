@@ -54,6 +54,7 @@
           Type = property_info.PType;
           Public = property_info.IsPublic;
           Commercial = property_info.IsCommercial;
+          Items = property_info.IName;
 
           document.getElementById("id_text").innerHTML = "ID: " + ID;
           document.getElementById("name").value = Name;
@@ -72,6 +73,14 @@
           if (Commercial) {
               commercial_dropdown.options[1].selected = true;
           }
+
+          for (var i = 0; i < Items.length; i++) {
+              if (Items[i][1] == "Animal") {
+                  document.getElementById("animal_list").innerHTML = document.getElementById("animal_list").innerHTML + Items[i][0]
+              } else {
+                  document.getElementById("crop_list").innerHTML = document.getElementById("crop_list").innerHTML + Items[i][0] + "\n"
+              }
+          }
       }
 
       function processGet() {
@@ -81,8 +90,7 @@
         var id = url.searchParams.get("id");
         
         let payload = {
-                "email": id,
-                "type": "id"
+                "id": id
             }
 
             var propertyArray;
@@ -104,7 +112,7 @@
                         }
                     }
 
-                xhr.open("POST", "http://localhost:3000/properties", true);
+                xhr.open("POST", "http://localhost:3000/info", true);
                 xhr.setRequestHeader("Content-Type", 'application/json');
                 xhr.send(JSON.stringify(payload));
       }
@@ -242,13 +250,17 @@
                 </div>
                 <div class="col-md-4">
                   <p>Animal</p>
+                  <p id = "animal_list"></p>
                   <select id="animal_dropdown">
                   </select>
+                  <button id = "add_animal" onClick="addAnimal()">Add Animal</button>
                 </div>
                 <div class="col-md-4">
                   <p>Crop</p>
+                  <p id = "crop_list"></p>
                   <select id="crop_dropdown">
                   </select>
+                  <button id = "add_crop" onClick="addCrop()">Add Crop</button>
                 </div>
               </div>
               <br>

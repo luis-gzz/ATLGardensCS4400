@@ -237,8 +237,8 @@ app.post('/info', function(req, res){
     "LEFT JOIN Visits ON Property.ID = Visits.PId " +
     "LEFT JOIN Grows_Raises ON Property.ID = Grows_Raises.PId WHERE Property.ID = ? Group by (Property.ID)"
 
-  var sql2 = "SELECT IName FROM Grows_Raises " +
-    "WHERE PId = ?"
+  var sql2 = "SELECT Grows_Raises.IName, FarmItem.IType FROM Grows_Raises, FarmItem " +
+    "WHERE PId = ? AND FarmItem.Name = Grows_Raises.IName"
 
   var info;
   connection.query(sql, [id],
@@ -255,7 +255,7 @@ app.post('/info', function(req, res){
               // 1 for success
               info[0].IName = new Array(results.length);
               for (i = 0; i < results.length; i++) {
-                info[0].IName[i] = results[i].IName;
+                info[0].IName[i] = [results[i].IName, results[i].IType];
               }
               console.log(info)
               res.write(JSON.stringify(info));
