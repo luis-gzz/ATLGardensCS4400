@@ -6,7 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
+  <script>
+      function processGet() {
+        var url_string = window.location.href;
 
+        var url = new URL(url_string);
+        var id = url.searchParams.get("id");
+        
+        document.getElementById("id_text").innerHTML = "ID: " + id;
+        document.getElementById("name_text").value = "Name here";
+      }
+
+      window.onload = function() {
+          processGet();
+      }
+  </script>
 <body>
   <nav class="navbar navbar-expand-md bg-primary navbar-dark">
     <div class="container">
@@ -35,10 +49,10 @@
         <form class="">
           <br>
           <div>
-            <text>ID: 000000</text>
+            <p id="id_text">ID: 000000</p>
           </div>
           <br> Property Name: &nbsp;
-          <input type="text" class="form-control" placeholder="*Property Name">
+          <input id = "name_text" type="text" class="form-control" placeholder="*Property Name">
           <br> Street Address: &nbsp;
           <input type="text" class="form-control" placeholder="*Street Address">
           <br>
