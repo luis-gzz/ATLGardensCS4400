@@ -7,6 +7,34 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
   <script>
+      current_item_list = [];
+
+      function logItem(item) {
+          current_item_list.push(item);
+      }
+
+      function displayItemLog() {
+          console.log(current_item_list);
+      }
+
+      function addAnimal() {
+          var new_animal = document.getElementById("animal_dropdown").value
+
+          if (!current_item_list.includes(new_animal)) {
+            current_item_list.push(document.getElementById("animal_dropdown").value);
+            document.getElementById("animal_list").innerHTML = document.getElementById("animal_list").innerHTML + document.getElementById("animal_dropdown").value
+          }
+      }
+
+      function addCrop() {
+          var new_crop = document.getElementById("crop_dropdown").value
+
+          if (!current_item_list.includes(new_crop)) {
+            current_item_list.push(document.getElementById("crop_dropdown").value);
+            document.getElementById("crop_list").innerHTML = document.getElementById("crop_list").innerHTML + document.getElementById("crop_dropdown").value
+          }
+      }
+
       function editDB() {
           var url_string = window.location.href;
 
@@ -23,7 +51,7 @@
             "acres": document.getElementById("size").value,
             "public": document.getElementById("public_dropdown").value,
             "commercial": document.getElementById("commercial_dropdown").value,
-            "items" : items
+            "items" : current_item_list
           }
 
           console.log(payload);
@@ -80,6 +108,8 @@
               } else {
                   document.getElementById("crop_list").innerHTML = document.getElementById("crop_list").innerHTML + Items[i][0] + "\n"
               }
+
+              logItem(Items[i][0]);
           }
       }
 
@@ -251,14 +281,14 @@
                 <div class="col-md-4">
                   <p>Animal</p>
                   <p id = "animal_list"></p>
-                  <select id="animal_dropdown">
+                  <select id="animal_dropdown" onChange="displayItemLog()">
                   </select>
                   <button id = "add_animal" onClick="addAnimal()">Add Animal</button>
                 </div>
                 <div class="col-md-4">
                   <p>Crop</p>
                   <p id = "crop_list"></p>
-                  <select id="crop_dropdown">
+                  <select id="crop_dropdown" onChange="displayItemLog()">
                   </select>
                   <button id = "add_crop" onClick="addCrop()">Add Crop</button>
                 </div>
