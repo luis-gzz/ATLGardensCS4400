@@ -7,6 +7,19 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
   <script>
+      function listProperties(props) {
+          var text = document.getElementById("property_list");
+          
+
+          for (var i = 0; i < props.length; i++) {  
+              text.innerHTML = text.innerHTML + props[i].Name;
+              text.innerHTML = text.innerHTML + " ";
+          }
+
+          console.log("Built property list");
+      }
+
+
       function getProperties(email, ownerType) {
             let payload = {
                 "email": email,
@@ -21,7 +34,6 @@
                     xhr.onload = () => {
                         var data = xhr.responseText;
 
-                       
                         propertyArray = JSON.parse(data);
                       
                         
@@ -79,8 +91,10 @@
             tbl.setAttribute("border", "2");
 
 
+
                         if (data != "0") {
                             //window.location.replace("webapp/loginhome.html");
+                            listProperties(propertyArray);
                             console.log("Completed");
                         }
                     }
@@ -88,7 +102,7 @@
                 xhr.open("POST", "http://localhost:3000/properties", true);
                 xhr.setRequestHeader("Content-Type", 'application/json');
                 xhr.send(JSON.stringify(payload));
-               
+
 
       }
       window.onload = function() {
@@ -161,6 +175,7 @@
         <div class="row">
           <div class="form-group ">
             <font size="5px">Your Properties: </font> &nbsp; </div>
+            <p id="property_list">Hi</p>
         </div>
           <table id="table"></table>
       </div>
