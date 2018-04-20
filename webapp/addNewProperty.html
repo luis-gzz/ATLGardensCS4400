@@ -9,6 +9,12 @@
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
   <script>
       function addToDB() {
+          items = [document.getElementById("crop_dropdown").value] 
+
+          if (document.getElementById("type_dropdown").value == "Farm") {
+              items.push(document.getElementById("animal_dropdown").value);
+          }
+
           let payload = {
             "what" : "addProp",
             "email": "farmerJoe@gmail.com",
@@ -20,7 +26,7 @@
             "public": document.getElementById("public_dropdown").value,
             "commercial": document.getElementById("commercial_dropdown").value,
             "propType": document.getElementById("type_dropdown").value,
-            "items" : [document.getElementById("animal_dropdown").value, document.getElementById("crop_dropdown").value]
+            "items" : items
           }
 
           console.log(payload);
