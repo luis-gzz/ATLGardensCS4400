@@ -99,11 +99,13 @@ app.post('/registration', function(req, res){
   var public = req.body.public;
   var commercial = req.body.commercial;
   var items = req.body.items;
+  // TODO: Fix?
   for (i = 0; i < items.length; i++) {
     items[i].unshift(id);
   }
 
-console.log(items);
+  console.log("Registering user " + username);
+
   // A query like login to check if users already exists
   connection.query(
       'SELECT Email, Username FROM `User` WHERE Email = ? OR Username = ?', [email, username],

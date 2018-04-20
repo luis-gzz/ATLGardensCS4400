@@ -6,6 +6,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
+  <script> 
+  // let payload = {
+  //  "email": "test2@harvard.edu",
+  //  "username": "testUser2",
+  //  "password": "shgshYYVSH7",
+  //  "type" : "Owner",
+  //  "property": "Test Garden",
+  //  "address": "555 Test Road",
+  //  "city": "Atlanta",
+  //  "zip": "30332",
+  //  "acres": 2,
+  //  "public": 1,
+  //  "commercial": 0,
+  //  "propType": "Farm",
+  //  "items" : [["Pig"], ["Peruvian Lily"]]
+  // }
+      function insertUser() {
+          let payload = {
+            "email": document.getElementById("email").value,
+            "username": document.getElementById("username").value,
+            "password": document.getElementById("password").value,
+            "type" : "Visitor",
+            "property": "Test Garden",
+            "address": "555 Test Road",
+            "city": "Atlanta",
+            "zip": "30332",
+            "acres": 2,
+            "public": 1,
+            "commercial": 0,
+            "propType": "Farm",
+            "items" : [["Pig"], ["Peruvian Lily"]]
+          }
+
+
+          console.log(payload);
+
+          var xhr = new XMLHttpRequest();
+              xhr.onload = () => {
+                  var data = xhr.responseText;
+                  console.log("This is data" + data);
+
+                  if (data != "0") {
+                      window.location.replace("../login.html");
+                  }
+                }
+
+            xhr.open("POST", "http://localhost:3000/registration", true);
+            xhr.setRequestHeader("Content-Type", 'application/json');
+            xhr.send(JSON.stringify(payload));
+      }
+
+  </script>
 
 <body>
   <nav class="navbar navbar-expand-md bg-primary navbar-dark">
@@ -40,18 +92,14 @@
           </div>
           <div class="row">
             <div class="form-group col-md-6">
-              <input id="firstname" type="text" class="form-control" placeholder="*First name"> </div>
-            <div class="form-group col-md-6 ">
-              <input id="lastname" type="text" class="form-control" placeholder="*Last name"> </div>
-          </div>
-          <form class="">
+              <input id="username" type="text" class="form-control" placeholder="*Username"> </div>
             <div class="form-group">
-              <input id="email" onkeyup="validateEmails()" onblur="validateEmail(); checkEmail()" type="email" class="form-control" placeholder="*Enter email"> </div>
+              <input id="email" type="email" class="form-control"placeholder="*Enter email"> </div>
             <div class="form-group">
-              <input id="password" onkeyup="validatePasswords()" onblur="validatePassword(); checkPassword()" type="password" class="form-control" placeholder="*New password"> </div>
-            <button type="submit" class="btn btn-primary" onclick="storeinfo()">Create Account</button>
+              <input id="password" type="password" class="form-control" placeholder="*New password"> </div>
+            <button type="submit" class="btn btn-primary" onclick="insertUser()">Create Account</button>
             <button type="reset" class="btn btn-primary" onclick="clean()">Clear </button>
-          </form>
+          
         </div>
       </div>
     </div>
