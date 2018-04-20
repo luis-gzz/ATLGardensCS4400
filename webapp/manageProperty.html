@@ -7,17 +7,154 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
   <script>
+      function displayEditable(property_info) {
+          ID = property_info.ID;
+          Name = property_info.Name;
+          Address = property_info.Address;
+          Size = property_info.Size;
+          Type = property_info.PType;
+          Public = property_info.IsPublic;
+          Commercial = property_info.IsCommercial;
+
+          document.getElementById("id_text").innerHTML = "ID: " + ID;
+          document.getElementById("name").value = Name;
+          document.getElementById("address").value = Address;
+          document.getElementById("size").value = Size;
+          document.getElementById("property_type").innerHTML = "Type: " + Type;
+
+          var public_dropdown = document.getElementById("public_dropdown");
+
+          if (Public) {
+              public_dropdown.options[1].selected = true;
+          }
+
+          var commercial_dropdown = document.getElementById("commercial_dropdown");
+
+          if (Commercial) {
+              commercial_dropdown.options[1].selected = true;
+          }
+      }
+
       function processGet() {
         var url_string = window.location.href;
 
         var url = new URL(url_string);
         var id = url.searchParams.get("id");
         
-        document.getElementById("id_text").innerHTML = "ID: " + id;
-        document.getElementById("name_text").value = "Name here";
+        let payload = {
+                "email": id,
+                "type": "id"
+            }
+
+            var propertyArray;
+
+                console.log(payload);
+
+                var xhr = new XMLHttpRequest();
+                    xhr.onload = () => {
+                        var data = xhr.responseText;
+                      
+                        console.log(data);
+
+                        property_info = JSON.parse(data);
+
+                        if (data != "0") {
+                            //window.location.replace("webapp/loginhome.html");
+                            displayEditable(property_info[0]);
+                            console.log("Completed");
+                        }
+                    }
+
+                xhr.open("POST", "http://localhost:3000/properties", true);
+                xhr.setRequestHeader("Content-Type", 'application/json');
+                xhr.send(JSON.stringify(payload));
+      }
+
+      function getAnimals() {
+          let payload = {
+              "type": "animal",
+              "confirmed": 1
+          }
+
+          var xhr = new XMLHttpRequest();
+              xhr.onload = () => {
+              var data = xhr.responseText;
+
+              var animalArray = JSON.parse(data);
+              console.log("This is data" + animalArray);
+
+              // *******************************************************************
+              // ************* Move this when we figure out async stuff ************
+              // *******************************************************************
+              var animal_dropdown = document.getElementById("animal_dropdown");
+
+              for (var i = 0; i < animalArray.length; i++) {
+                var node = document.createElement("option");          
+                node.text = animalArray[i].Name;
+                node.setAttribute("value", animalArray[i].Name);
+
+                animal_dropdown.add(node);
+              }
+
+              // *******************************************************************
+              // *********** End Move this *****************************************
+              // *******************************************************************
+
+              if (data != "0") {
+                         //window.location.replace("webapp/loginhome.html");
+                  console.log("Completed");
+              }
+          }
+
+          xhr.open("POST", "http://localhost:3000/items", true);
+          xhr.setRequestHeader("Content-Type", 'application/json');
+          xhr.send(JSON.stringify(payload));
+      }
+
+      function getCrops() {
+          let payload = {
+              "type": "crop",
+              "confirmed": 1
+          }
+
+          var xhr = new XMLHttpRequest();
+              xhr.onload = () => {
+              var data = xhr.responseText;
+
+              var cropArray = JSON.parse(data);
+              console.log("This is data" + cropArray);
+
+              // *******************************************************************
+              // ************* Move this when we figure out async stuff ************
+              // *******************************************************************
+              var crop_dropdown = document.getElementById("crop_dropdown");
+
+              for (var i = 0; i < cropArray.length; i++) {
+                var node = document.createElement("option");          
+                node.text = cropArray[i].Name;
+                node.setAttribute("value", cropArray[i].Name);
+
+                crop_dropdown.add(node);
+              }
+
+              // *******************************************************************
+              // *********** End Move this *****************************************
+              // *******************************************************************
+
+              if (data != "0") {
+                         //window.location.replace("webapp/loginhome.html");
+                  console.log("Completed");
+              }
+          }
+
+          xhr.open("POST", "http://localhost:3000/items", true);
+          xhr.setRequestHeader("Content-Type", 'application/json');
+          xhr.send(JSON.stringify(payload));
       }
 
       window.onload = function() {
+          getAnimals();
+          getCrops();
           processGet();
       }
   </script>
@@ -51,89 +188,63 @@
           <div>
             <p id="id_text">ID: 000000</p>
           </div>
-          <br> Property Name: &nbsp;
-          <input id = "name_text" type="text" class="form-control" placeholder="*Property Name">
-          <br> Street Address: &nbsp;
-          <input type="text" class="form-control" placeholder="*Street Address">
-          <br>
           <div class="row">
-            <div class="form-group col-md-4"> City: &nbsp;
-              <input id="firstname" type="text" class="form-control" placeholder="*City"> </div>
-            <div class="form-group col-md-4 "> Zip: &nbsp;
-              <input id="lastname" type="text" class="form-control" placeholder="*Zip Code"> </div>
-            <div class="form-group col-md-4 "> Acres: &nbsp;
-              <input id="lastname" type="text" class="form-control" placeholder="*Acres"> </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4">
-              <div class="btn-group">
-                <text>&nbsp;&nbsp;Property Type*: &nbsp;&nbsp;</text>
-                <button class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown"> Select </button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">Action</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Separated link</a>
+            <div class="form-group ">Property Name: &nbsp;
+              <input id = "name" type="text" class="form-control" placeholder="*Property Name">
+              <br> Street Address: &nbsp;
+              <input id = "address" type="text" class="form-control" placeholder="*Street Address">
+              <br>
+              <div class="row">
+               Acres: &nbsp;
+                  <input id="size" type="text" class="form-control" placeholder="*Acres">
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <p id="property_type">Type</p>
+                </div>
+                <div class="col-md-4">
+                  <p>Animal</p>
+                  <select id="animal_dropdown">
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <p>Crop</p>
+                  <select id="crop_dropdown">
+                  </select>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4">
-              <div class="btn-group">
-                <text>Animal*:&nbsp;&nbsp;</text>
-                <button class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown"> Select </button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">Action</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Separated link</a>
+              <br>
+              <div class="row">
+                <div class="col-md-4">
+                  <p>Public</p>
+                  <select id="public_dropdown">
+                    <option value="0">False</option>
+                    <option value="1">True</option>
+                  </select>
+                  </div>
+                <div class="col-md-4">
+                  <p>Commercial</p>
+                  <select id="commercial_dropdown">
+                    <option value="0">False</option>
+                    <option value="1">True</option>
+                  </select>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4">
-              <div class="btn-group">
-                <text>Crop*:</text>&nbsp;&nbsp;
-                <button class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown"> Select </button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">Action</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Separated link</a>
+              <br>
+              <div class="row">
+                <div class="col-md-4">
+                  <button type="submit" class="btn btn-primary" onclick="addToDB()">Update Property</button>
+                </div>
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                  <button type="reset" class="btn btn-primary" onclick="clean()">Cancel </button>
                 </div>
               </div>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col-md-4">
-              <div class="btn-group">
-                <text>&nbsp;&nbsp;Public?*: &nbsp;&nbsp;</text>
-                <button class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown"> Select </button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">Yes</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">No</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="btn-group">
-                <text>Commercial?*:&nbsp;&nbsp;</text>
-                <button class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown"> Select </button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">Yes</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">No</a>
-                </div>
-              </div>
+              <br>
+              <div class="btn-toolbar"> &nbsp;&nbsp; </div>
             </div>
           </div>
           <br>
-          <div class="row">
-            <div class="col-md-4">
-              <button type="submit" class="btn btn-primary" onclick="storeinfo()">Add Property</button>
-            </div>
-            <div class="col-md-4"></div>
-            <div class="col-md-4">
-              <button type="reset" class="btn btn-primary" onclick="clean()">Cancel </button>
-            </div>
-          </div>
           <br> </form>
       </div>
     </div>
