@@ -8,24 +8,27 @@
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
   <script>
       function listProperties(propertyArray) {
-                                  //////////////
+  
 
                     var tbl     = document.getElementById("table");
                     var tblBody = document.createElement("tbody");
 
 
                      var row = document.createElement("tr");
-                        var cell = document.createElement("th");    
+                        var cell = document.createElement("th");
+                        cell.onclick= function(){sortTable(0);} ; 
                         var cellText = document.createTextNode("ID"); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
 
-                        var cell = document.createElement("th");    
+                        var cell = document.createElement("th"); 
+                        cell.onclick = function(){sortTable(1);};   
                         var cellText = document.createTextNode("Name"); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
   
-                        var cell = document.createElement("th");    
+                        var cell = document.createElement("th"); 
+                        cell.onclick = function(){sortTable(2);};   
                         var cellText = document.createTextNode("Address"); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
@@ -52,6 +55,7 @@
            
                         tblBody.appendChild(row);
                 }
+
 
         // append the <tbody> inside the <table>
         tbl.appendChild(tblBody);
@@ -86,7 +90,6 @@
 
                         if (data != "0") {
                             //window.location.replace("webapp/loginhome.html");
-                            listProperties(propertyArray);
                             console.log("Completed");
                         }
                     }
@@ -94,13 +97,52 @@
                 xhr.open("POST", "http://localhost:3000/properties", true);
                 xhr.setRequestHeader("Content-Type", 'application/json');
                 xhr.send(JSON.stringify(payload));
-
+               
 
       }
       window.onload = function() {
           console.log("Cookies" + document.cookie);
           getProperties("farmerJoe@gmail.com", "ownerProps");
       }
+
+     
+    function sortTable(n) {
+        console.log("sorting")
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("table");
+        switching = true;
+        dir = "asc"; 
+        while (switching) {
+            switching = false;
+            rows = table.getElementsByTagName("tr");
+            for (i = 1; i < (rows.length - 1); i++) {
+            shouldSwitch = false;
+            x = rows[i].getElementsByTagName("td")[n];
+            y = rows[i + 1].getElementsByTagName("td")[n];
+            if (dir == "asc") {
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                shouldSwitch= true;
+                break;
+            }
+        } else if (dir == "desc") {
+            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+            shouldSwitch= true;
+            break;
+            }
+        }
+        }
+        if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+            switchcount ++; 
+        } else {
+        if (switchcount == 0 && dir == "asc") {
+            dir = "desc";
+            switching = true;
+        }
+        }
+        }
+    }
   </script>
 
 <body>
@@ -128,7 +170,6 @@
         <div class="row">
           <div class="form-group ">
             <font size="5px">Your Properties: </font> &nbsp; </div>
-            <p id="property_list">Hi</p>
         </div>
           <table id="table"></table>
       </div>
