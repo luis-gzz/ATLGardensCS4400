@@ -7,26 +7,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
   <script>
-      function getProperties(email, ownerType) {
-            let payload = {
-                "email": email,
-                "type": ownerType
-            }
-
-            var propertyArray;
-
-                console.log(payload);
-
-                var xhr = new XMLHttpRequest();
-                    xhr.onload = () => {
-                        var data = xhr.responseText;
-
-                       
-                        propertyArray = JSON.parse(data);
-                      
-                        
-
-                        //////////////
+      function listProperties(propertyArray) {
+  
 
                     var tbl     = document.getElementById("table");
                     var tblBody = document.createElement("tbody");
@@ -74,9 +56,36 @@
                         tblBody.appendChild(row);
                 }
 
-        
-            tbl.appendChild(tblBody);
-            tbl.setAttribute("border", "2");
+
+        // append the <tbody> inside the <table>
+        tbl.appendChild(tblBody);
+       
+        tbl.setAttribute("border", "2");
+
+                        //////////////////
+
+          console.log("Built property list");
+      }
+
+
+      function getProperties(email, ownerType) {
+            let payload = {
+                "email": email,
+                "type": ownerType
+            }
+
+            var propertyArray;
+
+                console.log(payload);
+
+                var xhr = new XMLHttpRequest();
+                    xhr.onload = () => {
+                        var data = xhr.responseText;
+
+                        propertyArray = JSON.parse(data);
+                      
+                        console.log(data)
+
 
 
                         if (data != "0") {
