@@ -16,10 +16,10 @@
             "city": document.getElementById("city").value,
             "zip": document.getElementById("zip").value,
             "acres": document.getElementById("size").value,
-            "public": 1,
-            "commercial": 0,
-            "propType": "Farm",
-            "items" : [["Pig"], ["Peruvian Lily"]]
+            "public": document.getElementById("public_dropdown").value,
+            "commercial": document.getElementById("commercial_dropdown").value,
+            "propType": document.getElementById("type_dropdown").value,
+            "items" : [document.getElementById("animal_dropdown").value, document.getElementById("crop_dropdown").value]
           }
 
           console.log(payload);
@@ -28,8 +28,8 @@
                 xhr.onload = () => {
                     var data = xhr.responseText;
 
-                    console.log("This is data " + data);
-                    propertyArray = JSON.parse(data);
+                    //console.log("This is data " + data);
+                    //propertyArray = JSON.parse(data);
 
                     if (data != "0") {
                             //window.location.replace("webapp/loginhome.html");
@@ -43,11 +43,61 @@
 
       }
 
-      window.onload = function() {
-        // var payload = {
-  //  type = "animal" OR "crop"
-  //  confirmed = 1 OR 0
-  //}
+      function editMenus() {
+          var type = document.getElementById("type_dropdown").value;
+          var animal_dropdown = document.getElementById("animal_dropdown");
+
+          animal_dropdown.style.display = "block";
+
+          if (type != "Farm") { 
+              animal_dropdown.style.display = "none";
+          } 
+
+          console.log(animal_dropdown);
+      }
+
+      function getAnimals() {
+          let payload = {
+              "type": "animal",
+              "confirmed": 1
+          }
+
+          var xhr = new XMLHttpRequest();
+              xhr.onload = () => {
+              var data = xhr.responseText;
+
+              var animalArray = JSON.parse(data);
+              console.log("This is data" + animalArray);
+
+              // *******************************************************************
+              // ************* Move this when we figure out async stuff ************
+              // *******************************************************************
+              var animal_dropdown = document.getElementById("animal_dropdown");
+
+              for (var i = 0; i < animalArray.length; i++) {
+                var node = document.createElement("option");          
+                node.text = animalArray[i].Name;
+                node.setAttribute("value", animalArray[i].Name);
+
+                animal_dropdown.add(node);
+              }
+
+              // *******************************************************************
+              // *********** End Move this *****************************************
+              // *******************************************************************
+
+              if (data != "0") {
+                         //window.location.replace("webapp/loginhome.html");
+                  console.log("Completed");
+              }
+          }
+
+          xhr.open("POST", "http://localhost:3000/items", true);
+          xhr.setRequestHeader("Content-Type", 'application/json');
+          xhr.send(JSON.stringify(payload));
+      }
+
+      function getCrops() {
           let payload = {
               "type": "crop",
               "confirmed": 1
@@ -55,28 +105,47 @@
 
           var xhr = new XMLHttpRequest();
               xhr.onload = () => {
-                  var data = xhr.responseText;
+              var data = xhr.responseText;
 
-                  console.log("This is data" + data);
-                  propertyArray = JSON.parse(data);
+              var cropArray = JSON.parse(data);
+              console.log("This is data" + cropArray);
 
-                  if (data != "0") {
+              // *******************************************************************
+              // ************* Move this when we figure out async stuff ************
+              // *******************************************************************
+              var crop_dropdown = document.getElementById("crop_dropdown");
+
+              for (var i = 0; i < cropArray.length; i++) {
+                var node = document.createElement("option");          
+                node.text = cropArray[i].Name;
+                node.setAttribute("value", cropArray[i].Name);
+
+                crop_dropdown.add(node);
+              }
+
+              // *******************************************************************
+              // *********** End Move this *****************************************
+              // *******************************************************************
+
+              if (data != "0") {
                          //window.location.replace("webapp/loginhome.html");
-                        console.log("Completed");
-                  }
-               }
+                  console.log("Completed");
+              }
+          }
 
           xhr.open("POST", "http://localhost:3000/items", true);
           xhr.setRequestHeader("Content-Type", 'application/json');
           xhr.send(JSON.stringify(payload));
+      }
 
-          var crop_dropdown = document.getElementById("crop_dropdown");
+      window.onload = function() {
+        // var payload = {
+  //  type = "animal" OR "crop"
+  //  confirmed = 1 OR 0
+  //}
 
-          var node = document.createElement("option");                 // Create a <li> node
-          node.text = "water"
-          node.setAttribute("value", "water");
-
-          crop_dropdown.add(node);
+          getAnimals();
+          getCrops();
       }
   </script>
 
@@ -122,52 +191,39 @@
               </div>
               <div class="row">
                 <div class="col-md-4">
-                  <select id="type_dropdown">
-                    <option value="volvo">Volvo</option>
-                    <option value="saab">Saab</option>
+                  <p>Type</p>
+                  <select id="type_dropdown" onChange="editMenus()">
+                    <option value="Farm">Farm</option>
+                    <option value="Garden">Garden</option>
+                    <option value="Orchard">Orchard</option>
                   </select>
                 </div>
                 <div class="col-md-4">
-                  <div class="btn-group">
-                    <text>Animal*:&nbsp;&nbsp;</text>
-                    <button class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown"> Select </button>
-                    <div class="dropdown-menu">
-                      <a class="dropdown-item" href="#">Action</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">Separated link</a>
-                    </div>
-                  </div>
+                  <p>Animal</p>
+                  <select id="animal_dropdown">
+                  </select>
                 </div>
                 <div class="col-md-4">
+                  <p>Crop</p>
                   <select id="crop_dropdown">
-                    <option value="volvo">Volvo</option>
-                    <option value="saab">Saab</option>
                   </select>
                 </div>
               </div>
               <br>
               <div class="row">
                 <div class="col-md-4">
-                  <div class="btn-group">
-                    <text>&nbsp;&nbsp;Public?*: &nbsp;&nbsp;</text>
-                    <button class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown"> Select </button>
-                    <div class="dropdown-menu">
-                      <a class="dropdown-item" href="#">Yes</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">No</a>
-                    </div>
+                  <p>Public</p>
+                  <select id="public_dropdown">
+                    <option value="0">False</option>
+                    <option value="1">True</option>
+                  </select>
                   </div>
-                </div>
                 <div class="col-md-4">
-                  <div class="btn-group">
-                    <text>Commercial?*:&nbsp;&nbsp;</text>
-                    <button class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown"> Select </button>
-                    <div class="dropdown-menu">
-                      <a class="dropdown-item" href="#">Yes</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">No</a>
-                    </div>
-                  </div>
+                  <p>Commercial</p>
+                  <select id="commercial_dropdown">
+                    <option value="0">False</option>
+                    <option value="1">True</option>
+                  </select>
                 </div>
               </div>
               <br>
