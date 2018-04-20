@@ -21,8 +21,64 @@
                     xhr.onload = () => {
                         var data = xhr.responseText;
 
-                        console.log("This is data" + data);
+                       
                         propertyArray = JSON.parse(data);
+                      
+                        console.log(data)
+
+                        //////////////
+
+                    var tbl     = document.getElementById("table");
+                    var tblBody = document.createElement("tbody");
+
+
+                     var row = document.createElement("tr");
+                        var cell = document.createElement("th");    
+                        var cellText = document.createTextNode("ID"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+
+                        var cell = document.createElement("th");    
+                        var cellText = document.createTextNode("Name"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+  
+                        var cell = document.createElement("th");    
+                        var cellText = document.createTextNode("Address"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                         tblBody.appendChild(row);
+                
+                    for (var j = 0; j <= propertyArray.length-1; j++) {
+
+                        var row = document.createElement("tr");
+                        var cell = document.createElement("td");    
+                        var cellText = document.createTextNode(propertyArray[j].ID); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+
+                        var cell = document.createElement("td");    
+                        var cellText = document.createTextNode(propertyArray[j].Name); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                    
+                        var cell = document.createElement("td");    
+                        var cellText = document.createTextNode(propertyArray[j].Address); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+
+           
+                        tblBody.appendChild(row);
+                }
+
+        // append the <tbody> inside the <table>
+        tbl.appendChild(tblBody);
+       
+        tbl.setAttribute("border", "2");
+
+                        //////////////////
+
+
 
                         if (data != "0") {
                             //window.location.replace("webapp/loginhome.html");
@@ -33,7 +89,7 @@
                 xhr.open("POST", "http://localhost:3000/properties", true);
                 xhr.setRequestHeader("Content-Type", 'application/json');
                 xhr.send(JSON.stringify(payload));
-
+               
 
       }
       window.onload = function() {
@@ -68,6 +124,7 @@
           <div class="form-group ">
             <font size="5px">Your Properties: </font> &nbsp; </div>
         </div>
+          <table id="table"></table>
       </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
