@@ -186,16 +186,16 @@ app.post('/properties', function(req, res){
   var sql;
   if (type == "ownerProps") {
     // All properties for owned by a user
-    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email), AVG(Rating) FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.OwnedBy = ? Group By Property.ID";
+    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email) AS Count, AVG(Rating) AS Avg FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.OwnedBy = ? Group By Property.ID";
   } else if (type == "notOwner") {
     // All properties not owned by a user
-    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email), AVG(Rating) FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.OwnedBy != ? AND Property.ApprovedBy IS NOT NULL Group By Property.ID";
+    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email) AS Count, AVG(Rating) AS Avg FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.OwnedBy != ? AND Property.ApprovedBy IS NOT NULL Group By Property.ID";
   } else if (type == "public") {
     // All public and confirmed properties
-    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email), AVG(Rating) FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.IsPublic = 1 AND Property.ApprovedBy IS NOT NULL Group By Property.ID";
+    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email) AS Count, AVG(Rating) AS Avg FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.IsPublic = 1 AND Property.ApprovedBy IS NOT NULL Group By Property.ID";
   } else if (type == "conf") {
     // All confirmed properties
-    var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email), AVG(Rating) FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.ApprovedBy IS NOT NULL Group By Property.ID";
+    var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email) AS Count, AVG(Rating) AS Avg FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.ApprovedBy IS NOT NULL Group By Property.ID";
   } else if (type == "unconf") {
     // All unonfrimed properties
     var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial FROM `Property` WHERE Property.ApprovedBy IS NULL Group By Property.ID";
