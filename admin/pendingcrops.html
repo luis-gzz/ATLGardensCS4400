@@ -6,6 +6,168 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
         <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> 
     </head>
+    <script>
+        function approveItem(name) {
+            // var payload = {
+              //  what =  "approveProp" OR "approveItem" OR "approveUser"
+              //  id = propId OR item name OR user email
+              //  admin = the admin's email
+              // }
+
+            let payload = {
+                "what": "approveItem",
+                "id": name,
+                "admin": "who_cares"
+            }
+
+            console.log(payload);
+
+                var xhr = new XMLHttpRequest();
+                    xhr.onload = () => {
+                        var data = xhr.responseText;
+
+                        itemArray = JSON.parse(data);
+                      
+                        console.log(data)
+
+
+
+                        if (data != "0") {
+                            //window.location.replace("webapp/loginhome.html");
+                            console.log("Completed");
+                            listItems(itemArray);
+                        }
+                    }
+
+                xhr.open("POST", "http://localhost:3000/approve", true);
+                xhr.setRequestHeader("Content-Type", 'application/json');
+                xhr.send(JSON.stringify(payload));
+        }
+
+        function getItems() {
+            let payload = {
+                "type": "unapproved",
+                "confirmed": "0"
+            }
+
+            var itemArray;
+
+                console.log(payload);
+
+                var xhr = new XMLHttpRequest();
+                    xhr.onload = () => {
+                        var data = xhr.responseText;
+
+                        itemArray = JSON.parse(data);
+                      
+                        console.log(data)
+
+
+
+                        if (data != "0") {
+                            //window.location.replace("webapp/loginhome.html");
+                            console.log("Completed");
+                            listItems(itemArray);
+                        }
+                    }
+
+                xhr.open("POST", "http://localhost:3000/items", true);
+                xhr.setRequestHeader("Content-Type", 'application/json');
+                xhr.send(JSON.stringify(payload));
+        }
+
+        function listItems(cropArray) {
+  
+          console.log("listing crop")
+                    var tbl     = document.getElementById("table");
+                    var tblBody = document.createElement("tbody");
+
+
+                     var row = document.createElement("tr");
+                        var cell = document.createElement("th");
+                        cell.onclick= function(){sortTable(0);} ; 
+                        var cellText = document.createTextNode("Name"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+
+                        var cell = document.createElement("th"); 
+                        cell.onclick = function(){sortTable(1);};   
+                        var cellText = document.createTextNode("Type"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+  
+                        var cell = document.createElement("th"); 
+                        cell.onclick = function(){sortTable(2);};   
+                        var cellText = document.createTextNode("Approve"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                         tblBody.appendChild(row);
+
+                           var cell = document.createElement("th");    
+                        var cellText = document.createTextNode("Delete"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                         tblBody.appendChild(row);
+                
+                    for (var j = 0; j <= cropArray.length-1; j++) {
+
+                        var row = document.createElement("tr");
+                        var cell = document.createElement("td");    
+                        var name = cropArray[j].Name;
+                        var cellText = document.createTextNode(cropArray[j].Name); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+
+                        var cell = document.createElement("td");    
+                        var cellText = document.createTextNode(cropArray[j].IType); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                    
+                         var cell = document.createElement("td");    
+                        var apr = document.createElement("button");
+                        apr.onclick = function() {
+                            approveItem(name);
+                        } 
+                        
+
+                        var approveText = document.createTextNode("Approve");
+                        apr.appendChild(approveText);
+
+                        cell.appendChild(apr);
+                        row.appendChild(cell);
+
+
+                        var cell = document.createElement("td");    
+                        var del = document.createElement("button");
+                        del.onclick = function(){
+                            deleteItem(name)
+                        }
+
+                        var deleteText = document.createTextNode("Delete");
+                        del.appendChild(deleteText);
+
+                        cell.appendChild(del);
+                        row.appendChild(cell);                    
+
+                        tblBody.appendChild(row);
+                }
+
+
+        // append the <tbody> inside the <table>
+        tbl.appendChild(tblBody);
+       
+        tbl.setAttribute("border", "2");
+
+                        //////////////////
+
+          console.log("Built crop list");
+      }
+
+      window.onload = function() {
+          console.log("Cookies" + document.cookie);
+          getItems();
+      }
+</script>
     <body> 
         <nav class="navbar navbar-expand-md bg-primary navbar-dark">
             <div class="container">
@@ -23,7 +185,7 @@
             <div class="container">
                 <div class="col-md-12">
                     <div style="font-size: 45px">Pending Approval Animals/Crops:
-                        <br>
+                        <table id="table"></table>
                     </div>
                 </div>
             </div>             
