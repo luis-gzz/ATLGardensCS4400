@@ -124,10 +124,8 @@
                         row.appendChild(cell);
                     
                          var cell = document.createElement("td");    
-                        var apr = document.createElement("button");
-                        apr.onclick = function() {
-                            approveItem(name);
-                        } 
+                        var apr = document.createElement("a");
+                        apr.href = "approveItem.html?item=" + name;
                         
 
                         var approveText = document.createTextNode("Approve");
@@ -138,10 +136,8 @@
 
 
                         var cell = document.createElement("td");    
-                        var del = document.createElement("button");
-                        del.onclick = function(){
-                            deleteItem(name)
-                        }
+                        var del = document.createElement("a");
+                        del.href= "delItem.html?item=" + name;
 
                         var deleteText = document.createTextNode("Delete");
                         del.appendChild(deleteText);
