@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
         <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css">
         <script src="webapp/js/md5.min.js"></script>
+        <script src="webapp/js/Cookies.js"></script>
         <script>
 
             function checkLogin() {
@@ -21,17 +22,34 @@
 
                 console.log(payload);
 
+
                 var xhr = new XMLHttpRequest();
                     xhr.onload = () => {
                         var data = xhr.responseText;
                         console.log("This is data" + data);
 
-                        if (data != "0") {
-                            document.cookie = "type=" + data + "; expires=Thu, 26 Apr 2018 12:00:00 UTC;";
-                            document.cookie = "email=" + email + "; expires=Thu, 26 Apr 2018 12:00:00 UTC;";
+                        if (data != "0" && data == 'Owner') {
+                            Cookies.set("type", data);
+                            Cookies.set("email", email);
 
                             window.location.replace("webapp/loginhome.html");
                             console.log("Next page");
+                        }
+
+                        else if (data != "0" && data == "Admin") {
+                            Cookies.set("type", data);
+                            Cookies.set("email", email);
+
+                            window.location.replace("webapp/adminhome.html");
+                            console.log("Next page");
+                        }
+                        else if (data != "0" && data == "Visitor") {
+                            Cookies.set("type", data);
+                            Cookies.set("email", email);
+
+                            window.location.replace("webapp/visitorloginhome.html");
+                            console.log("Next page");
+
                         }
                         else{
                             console.log("Login failed")
