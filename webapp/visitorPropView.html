@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
+  <script src="js/Cookies.js"></script>
   <script>
       current_item_list = [];
 
@@ -515,7 +516,7 @@
           let payload = {
               "what" : "visitorUnlog",
               "id": id,
-              "email": "awoods30@gatech.edu",
+              "email": Cookies.get("email"),
           }
           
             var xhr = new XMLHttpRequest();
@@ -558,7 +559,7 @@
           let payload = {
               "what" : "logVisit",
               "pID": id,
-              "email": "awoods30@gatech.edu",
+              "email": Cookies.get("email"),
                "date" : new Date().toISOString().slice(0, 19).replace('T', ' '),
                "rating": document.getElementById("rating_dropdown").value
           }
@@ -613,11 +614,9 @@
   <div class="py-5">
     <div class="container">
       <div class="col-md-12">
-        <div style="font-size: 45px"> Manage Property
+        <div style="font-size: 45px"> View Property
           <br>
-          <a style="font-size: 15px">( </a>
-          <a style="font-size:15px;color:red">* </a>
-          <a style="font-size:15px">= required fields )</a>
+         
         </div>
           <br>
           <div>
@@ -625,13 +624,13 @@
           </div>
           <div class="row">
             <div class="form-group ">Property Name: &nbsp;
-              <input id = "name" type="text" class="form-control" placeholder="*Property Name">
+              <input id = "name" disabled = "True" type="text" class="form-control" placeholder="*Property Name">
               <br> Street Address: &nbsp;
-              <input id = "address" type="text" class="form-control" placeholder="*Street Address">
+              <input id = "address" disabled = "True" type="text" class="form-control" placeholder="*Street Address">
               <br>
               <div class="row">
                Acres: &nbsp;
-                  <input id="size" type="text" class="form-control" placeholder="*Acres">
+                  <input id="size" disabled = "True" type="text" class="form-control" placeholder="*Acres">
               </div>
               <div class="row">
                 <div class="col-md-4">
@@ -694,7 +693,7 @@
                   <button id="unlog" class="btn btn-primary"  onClick="unLogVisit()"><a >Unlog Visit</a> </button>
                 </div>
                 <div class="col-md-4">
-                  <button type="reset" class="btn btn-primary"><a href = "loginhome.html">Cancel</a> </button>
+                  <button type="reset" class="btn btn-primary"><a href = "visitorHome.html">Cancel</a> </button>
                 </div>
               </div>
              
