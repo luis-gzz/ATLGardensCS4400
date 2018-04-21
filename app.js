@@ -201,6 +201,8 @@ app.post('/properties', function(req, res){
     var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial FROM `Property` WHERE Property.ApprovedBy IS NULL Group By Property.ID";
   } else if (type == "id") {
     var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial FROM `Property` WHERE Property.ID = ?";
+  } else {
+      console.log("Type not found");
   }
 
   console.log("Executing " + sql);
