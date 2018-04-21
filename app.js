@@ -572,6 +572,10 @@ app.post('/items', function(req, res){
     // All properties for owned by a user
     type = "Animal";
     var sql = "SELECT Name, IType FROM `FarmItem` WHERE IType != ? AND isApproved = ?";
+  } else if (type == "garden") {
+    var sql = "SELECT Name, IType FROM `FarmItem`WHERE IType = 'Nut' OR IType = 'Fruit';";
+  } else if (type == "orchard") {
+    var sql = "SELECT Name, IType FROM `FarmItem`WHERE IType = 'Vegetable' OR IType = 'Flower';";
   }
 
   console.log(type + confirmed);
