@@ -439,13 +439,18 @@ app.post('/manage', function(req, res){
   var public = req.body.public;
   var commercial = req.body.commercial;
   var items = req.body.items;
-  for (i = 0; i < items.length; i++) {
-    items[i].unshift(id);
-  }
+
+  console.log("Trying to insert the following list of items " + items);
+  
+  item_arr = []
+    // Something needs to be changed about this
+    for (i = 0; i < items.length; i++) {
+      item_arr[i] = [id, items[i]];
+    }
 
   var sql = "UPDATE Property SET Name = ?, Size = ?, Address = ?, IsPublic = ?, IsCommercial = ?, ApprovedBy = NULL WHERE ID = ?";
   var deletOldItems = "DELETE FROM Grows_Raises WHERE PId = ?";
-  var addNewItems = "INSERT INTO Grows_Raises(PId, IName) VALUES ?";
+  var addNewItems = "INSERT INTO Grows_Raises(PId, IName) VALUES (?)";
 
   connection.query(sql, [propName, acres, address, public, commercial, id],
     function(err, results, fields) {
@@ -459,19 +464,22 @@ app.post('/manage', function(req, res){
           console.log(err)
           if (err == null) {
             //After delete old items we update the list for the property
-            connection.query(addNewItems, [items],
-            function(err, results, fields) {
+            for (var i = 0; i < item_arr.length; i++) {
+                connection.query(addNewItems, [item_arr[i]],
+                function(err, results, fields) {
               //console.log(results)
-              console.log(err)
-              if (err == null) {
-                // 1 for success
-                res.write("1");
-              } else {
-                //failure
-                res.write("fail add item");
-              }
-              res.end();
-            });
+                    console.log(err)
+                    if (err == null) {
+                      // 1 for success
+                      //res.write("1");
+                    } else {
+                      //failure
+                      //res.write("fail add item");
+                    }
+                    //res.end();
+                });
+            }
+            
           } else {
             //failure
             res.write("fall remove item");
