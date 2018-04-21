@@ -5,7 +5,168 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
-  <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
+  <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css">
+    <script src="js/md5.min.js"></script>
+    <script>
+      function addToDB() {
+          items = [document.getElementById("crop_dropdown").value]
+
+          if (document.getElementById("type_dropdown").value == "Farm") {
+              items.push(document.getElementById("animal_dropdown").value);
+          }
+
+          let payload = {
+            "type" : "Owner",
+            "email":  document.getElementById("email").value,
+            "password" : md5(document.getElementById("password").value),
+            "username":  document.getElementById("username").value,
+            "property": document.getElementById("propName").value,
+            "address": document.getElementById("address").value,
+            "city": document.getElementById("city").value,
+            "zip": document.getElementById("zip").value,
+            "acres": document.getElementById("acres").value,
+            "public": document.getElementById("public_dropdown").value,
+            "commercial": document.getElementById("commercial_dropdown").value,
+            "propType": document.getElementById("type_dropdown").value,
+            "items" : items
+          }
+
+          console.log(payload);
+
+          var xhr = new XMLHttpRequest();
+                xhr.onload = () => {
+                    var data = xhr.responseText;
+
+                    //console.log("This is data " + data);
+                    //propertyArray = JSON.parse(data);
+
+                    if (data == "1") {
+                        window.location.replace("loginhome.html");
+                        console.log("Completed");
+                    } else {
+                      console.log(data);
+                      console.log("registration failed");
+                    }
+                }
+
+          xhr.open("POST", "http://localhost:3000/registration", true);
+          xhr.setRequestHeader("Content-Type", 'application/json');
+          xhr.send(JSON.stringify(payload));
+
+      }
+
+      function editMenus() {
+          var type = document.getElementById("type_dropdown").value;
+          var animal_dropdown = document.getElementById("animal_dropdown");
+
+          animal_dropdown.style.display = "block";
+
+          if (type != "Farm") {
+              animal_dropdown.style.display = "none";
+          }
+
+          console.log(animal_dropdown);
+      }
+
+      function getAnimals() {
+          let payload = {
+              "type": "animal",
+              "confirmed": 1
+          }
+
+          var xhr = new XMLHttpRequest();
+              xhr.onload = () => {
+              var data = xhr.responseText;
+
+              var animalArray = JSON.parse(data);
+              console.log("This is data" + animalArray);
+
+              // *******************************************************************
+              // ************* Move this when we figure out async stuff ************
+              // *******************************************************************
+              var animal_dropdown = document.getElementById("animal_dropdown");
+
+              for (var i = 0; i < animalArray.length; i++) {
+                var node = document.createElement("option");
+                node.text = animalArray[i].Name;
+                node.setAttribute("value", animalArray[i].Name);
+
+                animal_dropdown.add(node);
+              }
+
+              // *******************************************************************
+              // *********** End Move this *****************************************
+              // *******************************************************************
+
+              if (data != "1") {
+
+                  console.log(data);
+              } else {
+                  
+                  window.location.replace("webapp/loginhome.html");
+                  console.log("Completed");
+              }
+          }
+
+          xhr.open("POST", "http://localhost:3000/items", true);
+          xhr.setRequestHeader("Content-Type", 'application/json');
+          xhr.send(JSON.stringify(payload));
+      }
+
+      function getCrops() {
+          let payload = {
+              "type": "crop",
+              "confirmed": 1
+          }
+
+          var xhr = new XMLHttpRequest();
+              xhr.onload = () => {
+              var data = xhr.responseText;
+
+              var cropArray = JSON.parse(data);
+              console.log("This is data" + cropArray);
+
+              // *******************************************************************
+              // ************* Move this when we figure out async stuff ************
+              // *******************************************************************
+              var crop_dropdown = document.getElementById("crop_dropdown");
+
+              for (var i = 0; i < cropArray.length; i++) {
+                var node = document.createElement("option");
+                node.text = cropArray[i].Name;
+                node.setAttribute("value", cropArray[i].Name);
+
+                crop_dropdown.add(node);
+              }
+
+              // *******************************************************************
+              // *********** End Move this *****************************************
+              // *******************************************************************
+
+              if (data != "0") {
+                         //window.location.replace("webapp/loginhome.html");
+                  console.log("Completed");
+              }
+          }
+
+          xhr.open("POST", "http://localhost:3000/items", true);
+          xhr.setRequestHeader("Content-Type", 'application/json');
+          xhr.send(JSON.stringify(payload));
+      }
+
+      window.onload = function() {
+        // var payload = {
+  //  type = "animal" OR "crop"
+  //  confirmed = 1 OR 0
+  //}
+
+          getAnimals();
+          getCrops();
+      }
+  </script>
+
+
+    </head>
 
 <body>
   <nav class="navbar navbar-expand-md bg-primary navbar-dark">
@@ -38,93 +199,68 @@
             <a style="font-size:15px;color:red">* </a>
             <a style="font-size:15px">= required fields )</a>
           </div>
-          <form class="">
+
             <div class="row">
               <div class="form-group col-md-6">
-                <input id="firstname" type="text" class="form-control" placeholder="*First name"> </div>
+                <input id="username" type="text" class="form-control" placeholder="*Username" > </div>
               <div class="form-group col-md-6 ">
-                <input id="lastname" type="text" class="form-control" placeholder="*Last name"> </div>
+                <input id="password" type="text" class="form-control" placeholder="*Password" onblur="validatePassword(); checkPassword()" onkeyup="validatePasswords()" type="password"> </div>
             </div>
             <input type="email" class="form-control" placeholder="*Enter email" id="email">
             <br>
-            <input class="form-control" placeholder="*New password" id="password" onblur="validatePassword(); checkPassword()" onkeyup="validatePasswords()" type="password">
+            <input id="propName" type="text" class="form-control" placeholder="*Property Name">
             <br>
-            <input type="text" class="form-control" placeholder="*Property Name">
-            <br>
-            <input type="text" class="form-control" placeholder="*Street Address">
+            <input id="address" type="text" class="form-control" placeholder="*Street Address">
             <br>
             <div class="row">
               <div class="form-group col-md-4">
-                <input id="firstname" type="text" class="form-control" placeholder="*City"> </div>
+                <input id="city" type="text" class="form-control" placeholder="*City"> </div>
               <div class="form-group col-md-4 ">
-                <input id="lastname" type="text" class="form-control" placeholder="*Zip Code"> </div>
+                <input id="zip" type="text" class="form-control" placeholder="*Zip Code"> </div>
               <div class="form-group col-md-4 ">
-                <input id="lastname" type="text" class="form-control" placeholder="*Acres"> </div>
+                <input id="acres" type="text" class="form-control" placeholder="*Acres"> </div>
             </div>
-            <div class="row">
-              <div class="col-md-4">
-                <div class="btn-group">
-                  <text>&nbsp;&nbsp;Property Type*: &nbsp;&nbsp;</text>
-                  <button class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown"> Select </button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Separated link</a>
-                  </div>
+             <div class="row">
+                <div class="col-md-4">
+                  <p>Type</p>
+                  <select id="type_dropdown" onChange="editMenus()">
+                    <option value="Farm">Farm</option>
+                    <option value="Garden">Garden</option>
+                    <option value="Orchard">Orchard</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <p>Animal</p>
+                  <select id="animal_dropdown">
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <p>Crop</p>
+                  <select id="crop_dropdown">
+                  </select>
                 </div>
               </div>
-              <div class="col-md-4">
-                <div class="btn-group">
-                  <text>Animal*:&nbsp;&nbsp;</text>
-                  <button class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown"> Select </button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Separated link</a>
+              <br>
+              <div class="row">
+                <div class="col-md-4">
+                  <p>Public</p>
+                  <select id="public_dropdown">
+                    <option value="0">False</option>
+                    <option value="1">True</option>
+                  </select>
                   </div>
+                <div class="col-md-4">
+                  <p>Commercial</p>
+                  <select id="commercial_dropdown">
+                    <option value="0">False</option>
+                    <option value="1">True</option>
+                  </select>
                 </div>
               </div>
-              <div class="col-md-4">
-                <div class="btn-group">
-                  <text>Crop*:</text>&nbsp;&nbsp;
-                  <button class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown"> Select </button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Separated link</a>
-                  </div>
-                </div>
-              </div>
-            </div>
             <br>
-            <div class="row">
-              <div class="col-md-4">
-                <div class="btn-group">
-                  <text>&nbsp;&nbsp;Public?*: &nbsp;&nbsp;</text>
-                  <button class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown"> Select </button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Yes</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">No</a>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="btn-group">
-                  <text>Commercial?*:&nbsp;&nbsp;</text>
-                  <button class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown"> Select </button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Yes</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">No</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <br>
-            <button type="submit" class="btn btn-primary" onclick="storeinfo()">Create Account</button>
+            <button type="submit" class="btn btn-primary" onclick="addToDB()">Create Account</button>
             <button type="reset" class="btn btn-primary" onclick="clean()">Clear </button>
-          </form>
+
         </div>
       </div>
     </div>
