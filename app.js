@@ -573,9 +573,11 @@ app.post('/items', function(req, res){
     type = "Animal";
     var sql = "SELECT Name, IType FROM `FarmItem` WHERE IType != ? AND isApproved = ?";
   } else if (type == "garden") {
+
     var sql = "SELECT Name, IType FROM `FarmItem` WHERE IType = ('Nut' OR IType = 'Fruit') AND isApproved = ?;";
   } else if (type == "orchard") {
     var sql = "SELECT Name, IType FROM `FarmItem` WHERE IType = ('Vegetable' OR IType = 'Flower') AND isApproved = ?;";
+
   }
 
   console.log(type + confirmed);
