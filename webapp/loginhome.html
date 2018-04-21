@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css">
   <style>
       #myInput {
@@ -37,6 +38,11 @@
     background-color: #f1f1f1;
 }
   </style>
+
+  <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
+  <script src="js/Cookies.js"></script>
+
+  <script>
   
 
 
@@ -194,7 +200,7 @@
                         /////////////
 
                         var cell = document.createElement("td");
-                        var public = propertyArray[j].isPublic;
+                        var public = propertyArray[j].IsPublic;
                         var cellText = null;
                         if(public === 1){
                             cellText = document.createTextNode("True"); 
@@ -207,9 +213,9 @@
 
                         /////////////////
                          var cell = document.createElement("td");
-                        var public = propertyArray[j].isPublic;
+                        var commercial = propertyArray[j].IsCommercial;
                         var cellText = null;
-                        if(public === 1){
+                        if(commercial === 1){
                             cellText = document.createTextNode("True"); 
                             }
                         else {

@@ -310,6 +310,7 @@
                         if (data != "0") {
                             //window.location.replace("webapp/loginhome.html");
                             displayEditable(property_info[0]);
+                            getCrops(property_info[0].PType)
                             console.log("Completed");
                         }
                     }
@@ -360,46 +361,58 @@
           xhr.send(JSON.stringify(payload));
       }
 
-      function getCrops() {
-          let payload = {
-              "type": "crop",
-              "confirmed": 1
+       function getCrops(type) {
+           console.log(type)
+         let payload = {
+               "type": "crop",
+               "confirmed": 1
+            }
+         if(type == "farm"){
+            payload = {
+               "type": "crop",
+               "confirmed": 1
+            }
+          } else if( type == "orchard"){
+              payload = {
+               "type": "orchard",
+               "confirmed": 1
+            }
           }
-
+          else if( type == "garden"){
+              payload = {
+               "type": "garden",
+               "confirmed": 1
+            }
+          }
           var xhr = new XMLHttpRequest();
               xhr.onload = () => {
               var data = xhr.responseText;
-
               var cropArray = JSON.parse(data);
               console.log("This is data" + cropArray);
-
               // *******************************************************************
               // ************* Move this when we figure out async stuff ************
               // *******************************************************************
               var crop_dropdown = document.getElementById("crop_dropdown");
-
+              crop_dropdown.options.length = 0;
               for (var i = 0; i < cropArray.length; i++) {
                 var node = document.createElement("option");          
                 node.text = cropArray[i].Name;
                 node.setAttribute("value", cropArray[i].Name);
-
                 crop_dropdown.add(node);
               }
-
               // *******************************************************************
               // *********** End Move this *****************************************
               // *******************************************************************
-
               if (data != "0") {
                          //window.location.replace("webapp/loginhome.html");
                   console.log("Completed");
               }
           }
-
           xhr.open("POST", "http://localhost:3000/items", true);
           xhr.setRequestHeader("Content-Type", 'application/json');
           xhr.send(JSON.stringify(payload));
       }
+
 
       function addNewItem() {
           let payload = {
@@ -424,6 +437,9 @@
                             console.log("Completed");
                         }
                     }
+                function goBack() {
+                  window.history.back();
+                }    
 
                 xhr.open("POST", "http://localhost:3000/add", true);
                 xhr.setRequestHeader("Content-Type", 'application/json');
@@ -434,7 +450,6 @@
       
       window.onload = function() {
           getAnimals();
-          getCrops();
           processGet();
       }
   </script>
@@ -538,11 +553,12 @@
                 <div class="col-md-4">
                   <button  class="btn btn-primary" onclick="editDB()">Update Property</button>
                 </div>
+
                 <div class="col-md-4">
                   <button  class="btn btn-primary" onclick="deleteProperty()">Delete Property</button>
                 </div>
                 <div class="col-md-4">
-                  <button type="reset" class="btn btn-primary"><a href = "loginhome.html">Cancel</a> </button>
+                  <button type="reset" class="btn btn-primary"><a href = "loginhome.html" onclick="goBack()" >Cancel</a> </button>
                 </div>
               </div>
              

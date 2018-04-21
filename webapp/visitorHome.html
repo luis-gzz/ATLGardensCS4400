@@ -189,7 +189,7 @@
                         /////////////
 
                         var cell = document.createElement("td");
-                        var public = propertyArray[j].isPublic;
+                        var public = propertyArray[j].IsPublic;
                         var cellText = null;
                         if(public === 1){
                             cellText = document.createTextNode("True"); 
@@ -202,7 +202,8 @@
 
                         /////////////////
                          var cell = document.createElement("td");
-                        var public = propertyArray[j].isPublic;
+                        var public = propertyArray[j].IsCommercial;
+                        console.log(public)
                         var cellText = null;
                         if(public === 1){
                             cellText = document.createTextNode("True"); 
@@ -251,7 +252,9 @@
                          var link = document.createElement("a");
                         var cellText = document.createTextNode("View"); 
                         link.appendChild(cellText);
+
                         link.href = "visitorPropView.html?id=" + ID
+
                         cell.appendChild(link);
                         row.appendChild(cell);
 
