@@ -384,16 +384,16 @@ app.post('/add', function(req, res){
                 //res.write("1");
               } else {
                 // 0 for failure
-                res.write("failed crop");       
+                res.write("failed crop");
               }
             });
         }
         } else {
           // 0 for failure
           res.write("failed property");
-          
+
         }
-        
+
     });
     res.end();
   } else if (what == "addItem") {
