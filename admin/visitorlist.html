@@ -38,6 +38,10 @@
 }
   </style>
     <script>
+    function onBack () {
+        window.location.replace("/adminhome.html");
+    }
+        
     function listVisitors(visitorArray) {
   
           console.log("listing prop")
@@ -323,7 +327,7 @@
   </div>
     
   <div class="py-2">
-                <button class="btn ml-2 text-white btn-primary">Back</button>
+                <button class="btn ml-2 text-white btn-primary" onClick="onBack()">Back</button>
   </div>
     
  

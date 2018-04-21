@@ -382,8 +382,10 @@
 }
 
         function logout(){
+            Cookies.clear("email");
+            Cookies.clear("type");
             console.log("Going back to log in page")
-            window.location.replace("../login.html")
+            window.location.replace("login.html")
             }
 
   </script>
