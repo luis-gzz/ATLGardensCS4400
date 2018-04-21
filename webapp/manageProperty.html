@@ -21,18 +21,82 @@
           var new_animal = document.getElementById("animal_dropdown").value
 
           if (!current_item_list.includes(new_animal)) {
-            current_item_list.push(document.getElementById("animal_dropdown").value);
-            document.getElementById("animal_list").innerHTML = document.getElementById("animal_list").innerHTML + document.getElementById("animal_dropdown").value
+                  var elem = document.createElement("p");
+                  var text = document.createTextNode(new_animal);
+
+                  elem.setAttribute("id", new_animal + "_text")
+                  elem.appendChild(text);
+
+                  // Makes button
+                  var but = document.createElement("Button");
+                  var text = document.createTextNode("Remove");
+
+                  but.appendChild(text);
+
+                  but.setAttribute("onClick", "removeAnimal('" + new_animal + "')");
+                  but.setAttribute("id", new_animal + "_button")
+
+                  // Adds two elements
+                  var animal_div = document.getElementById("animal_list");
+
+                  animal_div.appendChild(elem);
+                  animal_div.appendChild(but);
           }
+
+          current_item_list.push(new_animal);
+      }
+
+      function removeAnimal(name) {
+          var text_name = document.getElementById(name + "_text");
+          var text_button = document.getElementById(name + "_button");
+
+          text_name.parentNode.removeChild(text_name);
+          text_button.parentNode.removeChild(text_button);
+
+
+          var index = current_item_list.indexOf(name);
+          current_item_list.splice(index, 1);
       }
 
       function addCrop() {
           var new_crop = document.getElementById("crop_dropdown").value
 
           if (!current_item_list.includes(new_crop)) {
-            current_item_list.push(document.getElementById("crop_dropdown").value);
-            document.getElementById("crop_list").innerHTML = document.getElementById("crop_list").innerHTML + document.getElementById("crop_dropdown").value
+                  var elem = document.createElement("p");
+                  var text = document.createTextNode(new_crop);
+
+                  elem.setAttribute("id", new_crop + "_text")
+                  elem.appendChild(text);
+
+                  // Makes button
+                  var but = document.createElement("Button");
+                  var text = document.createTextNode("Remove");
+
+                  but.appendChild(text);
+
+                  but.setAttribute("onClick", "removeAnimal('" + new_crop + "')");
+                  but.setAttribute("id", new_animal + "_button")
+
+                  // Adds two elements
+                  var crop_div = document.getElementById("crop_list");
+
+                  crop_div.appendChild(elem);
+                  crop_div.appendChild(but);
           }
+
+          current_item_list.push(new_crop);
+      }
+
+      function removeCrop(name) {
+          var text_name = document.getElementById(name + "_text");
+          var text_button = document.getElementById(name + "_button");
+
+          text_name.parentNode.removeChild(text_name);
+          text_button.parentNode.removeChild(text_button);
+
+
+          var index = current_item_list.indexOf(name);
+          current_item_list.splice(index, 1);
       }
 
       function editDB() {
@@ -104,9 +168,52 @@
 
           for (var i = 0; i < Items.length; i++) {
               if (Items[i][1] == "Animal") {
-                  document.getElementById("animal_list").innerHTML = document.getElementById("animal_list").innerHTML + Items[i][0]
+                  // Makes text
+                  var elem = document.createElement("p");
+                  var text = document.createTextNode(Items[i][0]);
+
+                  elem.setAttribute("id", Items[i][0] + "_text")
+                  elem.appendChild(text);
+
+                  // Makes button
+                  var but = document.createElement("Button");
+                  var text = document.createTextNode("Remove");
+
+                  but.appendChild(text);
+
+                  but.setAttribute("onClick", "removeAnimal('" + Items[i][0] + "')");
+                  but.setAttribute("id", Items[i][0] + "_button")
+
+                  // Adds two elements
+                  var animal_div = document.getElementById("animal_list");
+
+                  animal_div.appendChild(elem);
+                  animal_div.appendChild(but);
+
+
+                  //document.getElementById("animal_list").innerHTML = document.getElementById("animal_list").innerHTML + Items[i][0]
               } else {
-                  document.getElementById("crop_list").innerHTML = document.getElementById("crop_list").innerHTML + Items[i][0] + "\n"
+                                    // Makes text
+                  var elem = document.createElement("p");
+                  var text = document.createTextNode(Items[i][0]);
+
+                  elem.setAttribute("id", Items[i][0] + "_text")
+                  elem.appendChild(text);
+
+                  // Makes button
+                  var but = document.createElement("Button");
+                  var text = document.createTextNode("Remove");
+
+                  but.appendChild(text);
+
+                  but.setAttribute("onClick", "removeCrop('" + Items[i][0] + "')");
+                  but.setAttribute("id", Items[i][0] + "_button")
+
+                  // Adds two elements
+                  var animal_div = document.getElementById("crop_list");
+
+                  animal_div.appendChild(elem);
+                  animal_div.appendChild(but);
               }
 
               logItem(Items[i][0]);
@@ -280,14 +387,14 @@
                 </div>
                 <div class="col-md-4">
                   <p>Animal</p>
-                  <p id = "animal_list"></p>
+                  <div id = "animal_list"></div>
                   <select id="animal_dropdown" onChange="displayItemLog()">
                   </select>
                   <button id = "add_animal" onClick="addAnimal()">Add Animal</button>
                 </div>
                 <div class="col-md-4">
                   <p>Crop</p>
-                  <p id = "crop_list"></p>
+                  <div id = "crop_list"></div>
                   <select id="crop_dropdown" onChange="displayItemLog()">
                   </select>
                   <button id = "add_crop" onClick="addCrop()">Add Crop</button>
