@@ -5,7 +5,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
-
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css">
   <style>
       #myInput {
@@ -30,7 +29,7 @@
 
 #table tr {
     /* Add a bottom border to all table rows */
-    border-bottom: 1px solid #ddd; 
+    border-bottom: 1px solid #ddd;
 }
 
 #table tr.header, #table tr:hover {
@@ -39,18 +38,13 @@
 }
   </style>
 
-  <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
-  <script src="js/Cookies.js"></script>
-
-  <script>
-  
 
 
   <script src="js/Cookies.js"></script>
 
   <script>
     function listProperties(propertyArray) {
-  
+
           console.log("listing prop")
                     var tbl     = document.getElementById("table");
                     var tblBody = document.createElement("tbody");
@@ -58,108 +52,108 @@
 
                      var row = document.createElement("tr");
                         var cell = document.createElement("th");
-                        cell.onclick= function(){sortTable(0);} ; 
-                        var cellText = document.createTextNode("ID"); 
+                        cell.onclick= function(){sortTable(0);} ;
+                        var cellText = document.createTextNode("ID");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
 
-                        var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(1);};   
-                        var cellText = document.createTextNode("Name"); 
+                        var cell = document.createElement("th");
+                        cell.onclick = function(){sortTable(1);};
+                        var cellText = document.createTextNode("Name");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
-  
-                        var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
-                        var cellText = document.createTextNode("Address"); 
+
+                        var cell = document.createElement("th");
+                        cell.onclick = function(){sortTable(2);};
+                        var cellText = document.createTextNode("Address");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
-                         var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
-                        var cellText = document.createTextNode("City"); 
-                        cell.appendChild(cellText); 
-                        row.appendChild(cell);
-                         tblBody.appendChild(row);
-
-                         var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
-                        var cellText = document.createTextNode("Zip"); 
+                         var cell = document.createElement("th");
+                        cell.onclick = function(){sortTable(2);};
+                        var cellText = document.createTextNode("City");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
-                         var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
-                        var cellText = document.createTextNode("Size"); 
+                         var cell = document.createElement("th");
+                        cell.onclick = function(){sortTable(2);};
+                        var cellText = document.createTextNode("Zip");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
-                         var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
-                        var cellText = document.createTextNode("Type"); 
+                         var cell = document.createElement("th");
+                        cell.onclick = function(){sortTable(2);};
+                        var cellText = document.createTextNode("Size");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
-                         var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
-                        var cellText = document.createTextNode("Public"); 
+                         var cell = document.createElement("th");
+                        cell.onclick = function(){sortTable(2);};
+                        var cellText = document.createTextNode("Type");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
-                         var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
-                        var cellText = document.createTextNode("Commercial"); 
+                         var cell = document.createElement("th");
+                        cell.onclick = function(){sortTable(2);};
+                        var cellText = document.createTextNode("Public");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
-                         var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
-                        var cellText = document.createTextNode("isValid"); 
+                         var cell = document.createElement("th");
+                        cell.onclick = function(){sortTable(2);};
+                        var cellText = document.createTextNode("Commercial");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
-                         var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
-                        var cellText = document.createTextNode("Visits"); 
+                         var cell = document.createElement("th");
+                        cell.onclick = function(){sortTable(2);};
+                        var cellText = document.createTextNode("isValid");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
-                         var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
-                        var cellText = document.createTextNode("Average Rating"); 
+                         var cell = document.createElement("th");
+                        cell.onclick = function(){sortTable(2);};
+                        var cellText = document.createTextNode("Visits");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
-                         var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
-                        var cellText = document.createTextNode("Manage Property"); 
+                         var cell = document.createElement("th");
+                        cell.onclick = function(){sortTable(2);};
+                        var cellText = document.createTextNode("Average Rating");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
-                
+
+                         var cell = document.createElement("th");
+                        cell.onclick = function(){sortTable(2);};
+                        var cellText = document.createTextNode("Manage Property");
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                         tblBody.appendChild(row);
+
                     for (var j = 0; j <= propertyArray.length-1; j++) {
 
                         var row = document.createElement("tr");
-                        var cell = document.createElement("td");    
+                        var cell = document.createElement("td");
                         ID = propertyArray[j].ID
-                        var cellText = document.createTextNode(propertyArray[j].ID); 
+                        var cellText = document.createTextNode(propertyArray[j].ID);
                         cell.appendChild(cellText);
                         row.appendChild(cell);
 
-                        var cell = document.createElement("td");    
-                        var cellText = document.createTextNode(propertyArray[j].Name); 
+                        var cell = document.createElement("td");
+                        var cellText = document.createTextNode(propertyArray[j].Name);
                         cell.appendChild(cellText);
                         row.appendChild(cell);
-                    
+
                         ///////////////Address Manipulation
 
                         var full = propertyArray[j].Address;
@@ -168,18 +162,18 @@
                         for(var i = 0; i < full.length - 2; i++){
                             address = address + full[i] + " "
                         }
-                        var cell = document.createElement("td");    
-                        var cellText = document.createTextNode(address); 
+                        var cell = document.createElement("td");
+                        var cellText = document.createTextNode(address);
                         cell.appendChild(cellText);
                         row.appendChild(cell);
 
-                        var cell = document.createElement("td");    
-                        var cellText = document.createTextNode(full[full.length - 2]); 
+                        var cell = document.createElement("td");
+                        var cellText = document.createTextNode(full[full.length - 2]);
                         cell.appendChild(cellText);
                         row.appendChild(cell);
 
-                        var cell = document.createElement("td");    
-                        var cellText = document.createTextNode(full[full.length - 1]); 
+                        var cell = document.createElement("td");
+                        var cellText = document.createTextNode(full[full.length - 1]);
                         cell.appendChild(cellText);
                         row.appendChild(cell);
 
@@ -187,80 +181,80 @@
 
                         //////////////////
 
-                        var cell = document.createElement("td");    
-                        var cellText = document.createTextNode(propertyArray[j].Size); 
+                        var cell = document.createElement("td");
+                        var cellText = document.createTextNode(propertyArray[j].Size);
                         cell.appendChild(cellText);
                         row.appendChild(cell);
 
-                        var cell = document.createElement("td");    
-                        var cellText = document.createTextNode(propertyArray[j].PType); 
+                        var cell = document.createElement("td");
+                        var cellText = document.createTextNode(propertyArray[j].PType);
                         cell.appendChild(cellText);
                         row.appendChild(cell);
 
                         /////////////
 
                         var cell = document.createElement("td");
-                        var public = propertyArray[j].IsPublic;
+                        var public = propertyArray[j].isPublic;
                         var cellText = null;
                         if(public === 1){
-                            cellText = document.createTextNode("True"); 
+                            cellText = document.createTextNode("True");
                             }
                         else {
-                            cellText = document.createTextNode("False"); 
+                            cellText = document.createTextNode("False");
                         }
                         cell.appendChild(cellText);
                         row.appendChild(cell);
 
                         /////////////////
                          var cell = document.createElement("td");
-                        var commercial = propertyArray[j].IsCommercial;
+                        var public = propertyArray[j].isPublic;
                         var cellText = null;
-                        if(commercial === 1){
-                            cellText = document.createTextNode("True"); 
+                        if(public === 1){
+                            cellText = document.createTextNode("True");
                             }
                         else {
-                            cellText = document.createTextNode("False"); 
+                            cellText = document.createTextNode("False");
                         }
                         cell.appendChild(cellText);
                         row.appendChild(cell);
-                        
+
                         /////////////////
 
                           var cell = document.createElement("td");
                         var approve = propertyArray[j].ApprovedBy;
                         var cellText = null;
                         if(approve !== null){
-                            cellText = document.createTextNode("True"); 
+                            cellText = document.createTextNode("True");
                             }
                         else {
-                            cellText = document.createTextNode("False"); 
+                            cellText = document.createTextNode("False");
                         }
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                         /////////////
 
-                        var cell = document.createElement("td");    
-                        var cellText = document.createTextNode(propertyArray[j].Count); 
+                        var cell = document.createElement("td");
+                        var cellText = document.createTextNode(propertyArray[j].Count);
                         cell.appendChild(cellText);
                         row.appendChild(cell);
 
                         //////////
 
-                        var cell = document.createElement("td");    
+                        var cell = document.createElement("td");
                         var rating = 0;
                         if(propertyArray[j].Avg === null){
                             rating = "N/A"
                         } else{
                             rating =propertyArray[j].Avg;
                         }
-                        var cellText = document.createTextNode(rating); 
+                        var cellText = document.createTextNode(rating);
                         cell.appendChild(cellText);
                         row.appendChild(cell);
 
-                                       
-                         var cell = document.createElement("td");    
+
+                         var cell = document.createElement("td");
                          var link = document.createElement("a");
-                        var cellText = document.createTextNode("Manage"); 
+                        var cellText = document.createTextNode("Manage");
                         link.appendChild(cellText);
                         link.href = "manageproperty.html?id=" + ID
                         cell.appendChild(link);
@@ -272,7 +266,7 @@
 
         // append the <tbody> inside the <table>
         tbl.appendChild(tblBody);
-       
+
         tbl.setAttribute("border", "2");
 
                         //////////////////
@@ -296,7 +290,7 @@
                         var data = xhr.responseText;
 
                         propertyArray = JSON.parse(data);
-                      
+
                         console.log(data)
 
 
@@ -311,28 +305,28 @@
                 xhr.open("POST", "http://localhost:3000/properties", true);
                 xhr.setRequestHeader("Content-Type", 'application/json');
                 xhr.send(JSON.stringify(payload));
-               
+
 
       }
       window.onload = function() {
           console.log("Cookies" + document.cookie);
           var email = Cookies.get("email");
           var type = Cookies.get("type");
-        
+
           if (type == "Owner") {
               type = "ownerProps";
           }
-          
+
           getProperties(email, type);
       }
 
-     
+
     function sortTable(n) {
         console.log("sorting")
         var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
         table = document.getElementById("table");
         switching = true;
-        dir = "asc"; 
+        dir = "asc";
         while (switching) {
             switching = false;
             rows = table.getElementsByTagName("tr");
@@ -355,7 +349,7 @@
         if (shouldSwitch) {
             rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
             switching = true;
-            switchcount ++; 
+            switchcount ++;
         } else {
         if (switchcount == 0 && dir == "asc") {
             dir = "desc";
@@ -366,7 +360,7 @@
     }
 
     function searchFunc() {
-  // Declare variables 
+  // Declare variables
   console.log("searching");
   var input, filter, table, tr, td, i;
   input = document.getElementById("myInput");
@@ -383,9 +377,15 @@
       } else {
         tr[i].style.display = "none";
       }
-    } 
+    }
   }
 }
+
+        function logout(){
+            console.log("Going back to log in page")
+            window.location.replace("../login.html")
+            }
+
   </script>
 </head>
 
@@ -398,9 +398,9 @@
       </a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar2SupportedContent" aria-controls="navbar2SupportedContent" aria-expanded="false" aria-label="Toggle navigation"> </button>
       <div class="collapse navbar-collapse text-center justify-content-end" id="navbar2SupportedContent">
-        <form class="btn navbar-btn ml-2 text-white fa d-inline btn-primary"> 
-        </form>                     
-        <button class="btn-secondary btn text-white">LogOut</button>
+        <form class="btn navbar-btn ml-2 text-white fa d-inline btn-primary">
+          <a class="btn navbar-btn ml-2 text-white btn-secondary" href="login.html" onclick="logout()"> <i class="fa d-inline fa-lg fa-user-circle-o"></i> Log out</a>
+        </form>
       </div>
     </div>
   </nav>
@@ -415,8 +415,8 @@
             <font size="5px">Your Properties: </font> &nbsp; </div>
         </div>
           <div><i style="font-size:24px" class="fa">&#xf002;</i><input type="text" id="myInput" onkeyup="searchFunc()" placeholder="Search for names..">
-        
-          
+
+
           </div>
         <table id="table"></table>
       </div>
@@ -432,7 +432,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </div>
- 
+
 </body>
 
 </html>
