@@ -609,7 +609,7 @@ app.post('/visits', function(req, res){
   // }
 
   var email = req.body.email;
-  var sql = "SELECT Property.Name, VDate, AVG(Rating) AS Avg FROM Visits LEFT Join Property ON Property.ID = Visits.PId WHERE Visits.Email = ? Group by (Property.Name)"
+  var sql = "SELECT Property.Name AS Name, VDate, AVG(Rating) AS Avg FROM Visits LEFT Join Property ON Property.ID = Visits.PId WHERE Visits.Email = ? Group by (Property.Name)"
 
   connection.query(sql, [email],
       function(err, results, fields) {

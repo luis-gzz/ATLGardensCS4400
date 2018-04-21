@@ -54,6 +54,11 @@
           xhr.send(JSON.stringify(payload));
 
       }
+      
+      function logout(){
+            console.log("Going back to log in page")
+            window.location.replace("../login.html")
+          }
 
       function editMenus() {
           var type = document.getElementById("type_dropdown").value;
@@ -259,7 +264,7 @@
               </div>
             <br>
             <button type="submit" class="btn btn-primary" onclick="addToDB()">Create Account</button>
-            <button type="reset" class="btn btn-primary" onclick="clean()">Clear </button>
+            <button class="btn-secondary ml-2 text-white btn" onclick="logout()">Cancel </button>
 
         </div>
       </div>

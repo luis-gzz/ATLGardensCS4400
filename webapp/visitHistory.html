@@ -37,8 +37,9 @@
     background-color: #f1f1f1;
 }
   </style>
+    <script src="js/Cookies.js"></script>
     <script>
-    function listVisitors(visitorArray) {
+    function listProperties(visitsArray) {
   
           console.log("listing prop")
                     var tbl     = document.getElementById("table");
@@ -46,70 +47,50 @@
 
 
                      var row = document.createElement("tr");
+        
                         var cell = document.createElement("th");
                         cell.onclick= function(){sortTable(0);} ; 
-                        var cellText = document.createTextNode("Email"); 
+                        var cellText = document.createTextNode("Name"); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
 
                         var cell = document.createElement("th"); 
                         cell.onclick = function(){sortTable(1);};   
-                        var cellText = document.createTextNode("Username"); 
+                        var cellText = document.createTextNode("Date"); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
   
                         var cell = document.createElement("th"); 
                         cell.onclick = function(){sortTable(2);};   
-                        var cellText = document.createTextNode("Logged Visits"); 
+                        var cellText = document.createTextNode("Rating"); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
-                           var cell = document.createElement("th");    
-                        var cellText = document.createTextNode("Manage"); 
-                        cell.appendChild(cellText);
-                        row.appendChild(cell);
-                         tblBody.appendChild(row);
-                
-                    for (var j = 0; j <= visitorArray.length-1; j++) {
+                       
+                    for (var j = 0; j <= visitsArray.length-1; j++) {
 
                         var row = document.createElement("tr");
                         var cell = document.createElement("td");    
-                        var email = visitorArray[j].Email;
-                        var cellText = document.createTextNode(visitorArray[j].Email); 
+                        //ID = propertyArray[j].ID
+                        var cellText = document.createTextNode(visitsArray[j].Name); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
 
                         var cell = document.createElement("td");    
-                        var cellText = document.createTextNode(visitorArray[j].Username); 
+                        var cellText = document.createTextNode(visitsArray[j].VDate); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                     
-                         var cell = document.createElement("td");    
-                        var cellText = document.createTextNode(visitorArray[j].Count); 
-                        cell.appendChild(cellText);
-                        row.appendChild(cell);
-
                         var cell = document.createElement("td");    
-                        var del = document.createElement("a");
-                        del.href= "delAccount.html?email=" + email
-                       
-
-                        var log = document.createElement("a");
-                        log.href= "delLog.html?email=" + email
-
-                        var delText = document.createTextNode("Delete Account"); 
-                        var logText = document.createTextNode("Delete log files")
-
-                        del.appendChild(delText);
-                        log.appendChild(logText);
-                        cell.appendChild(del);
-                        cell.appendChild(document.createElement("br"));
-                        cell.appendChild(log)
+                        var cellText = document.createTextNode(visitsArray[j].Avg); 
+                        cell.appendChild(cellText);
                         row.appendChild(cell);
                     
 
-                        tblBody.appendChild(row);
+                        //////////
+
+                       tblBody.appendChild(row);
                 }
 
 
@@ -123,73 +104,14 @@
           console.log("Built property list");
       }
 
-      function deleteUser(email){
+
+      function getVisits() {
             let payload = {
-                "email": email,
-                "what": "deleteUser"
+                "email": Cookies.get("email"),
+    
             }
 
-           
-
-                console.log(payload);
-
-                var xhr = new XMLHttpRequest();
-                    xhr.onload = () => {
-                        var data = xhr.responseText;
-                    
-                    if(data == 1){
-                        alert("Delete success")
-                    } else {
-                        alert("Delete failed")
-                    }
-
-
-                    }
-
-                xhr.open("POST", "http://localhost:3000/delete", true);
-                xhr.setRequestHeader("Content-Type", 'application/json');
-                xhr.send(JSON.stringify(payload));
-               
-
-      
-      }
-         function deleteLog(email){
-            let payload = {
-                "email": email,
-                "what": "adminUnlog"
-            }
-
-           
-
-                console.log(payload);
-
-                var xhr = new XMLHttpRequest();
-                    xhr.onload = () => {
-                        var data = xhr.responseText;
-                    
-                    if(data == 1){
-                        alert("Unlog success")
-                    } else {
-                        alert("Unlog failed")
-                    }
-
-
-                    }
-
-                xhr.open("POST", "http://localhost:3000/delete", true);
-                xhr.setRequestHeader("Content-Type", 'application/json');
-                xhr.send(JSON.stringify(payload));
-               
-
-      
-      }
-      function getVisitors(email, ownerType) {
-            let payload = {
-                "email": email,
-                "type": "visitor"
-            }
-
-            var propertyArray;
+            var visitsArray;
 
                 console.log(payload);
 
@@ -197,7 +119,7 @@
                     xhr.onload = () => {
                         var data = xhr.responseText;
 
-                        visitorArray = JSON.parse(data);
+                        visitsArray = JSON.parse(data);
                       
                         console.log(data)
 
@@ -206,11 +128,11 @@
                         if (data != "0") {
                             //window.location.replace("webapp/loginhome.html");
                             console.log("Completed");
-                            listVisitors(visitorArray);
+                            listProperties(visitsArray);
                         }
                     }
 
-                xhr.open("POST", "http://localhost:3000/users", true);
+                xhr.open("POST", "http://localhost:3000/visits", true);
                 xhr.setRequestHeader("Content-Type", 'application/json');
                 xhr.send(JSON.stringify(payload));
                
@@ -218,7 +140,7 @@
       }
       window.onload = function() {
           console.log("Cookies" + document.cookie);
-          getVisitors("farmerJoe@gmail.com", "ownerProps");
+          getVisits();
       }
 
      
@@ -303,29 +225,30 @@
   <div class="py-5">
     <div class="container">
       <div>
-        <div style="font-size: 50px"> All visitors in system </div>
+        <div style="font-size: 50px"> Your Visits </div>
         <br>
         <br>
         <div class="row">
-          
+          <div class="form-group ">
+            
+        </div>
           <div><i style="font-size:24px" class="fa">&#xf002;</i><input type="text" id="myInput" onkeyup="searchFunc()" placeholder="Search for names..">
         
           
           </div>
         <table id="table"></table>
+          
+          <br>
+          <div class="col-md-4">
+                  <button type="reset" class="btn btn-primary"><a href = "visitorHome.html">Back</a> </button>
+            </div>
       </div>
-      <div class="row">
-      </div>
+      
     </div>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </div>
-    
-  <div class="py-2">
-                <button class="btn ml-2 text-white btn-primary">Back</button>
-  </div>
-    
  
 </body>
 

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+
+        <script>
+
+             function deleteUser(email){
+          var url_string = window.location.href;
+
+          var url = new URL(url_string);
+          var email = url.searchParams.get("email");
+
+            let payload = {
+                "email": email,
+                "what": "deleteUser"
+            }
+
+           
+
+                console.log(payload);
+
+                var xhr = new XMLHttpRequest();
+                    xhr.onload = () => {
+                        var data = xhr.responseText;
+                    
+                    if(data == 1){
+                        alert("Delete success")
+                    } else {
+                        alert("Delete failed")
+                    }
+
+
+                    }
+
+                xhr.open("POST", "http://localhost:3000/delete", true);
+                xhr.setRequestHeader("Content-Type", 'application/json');
+                xhr.send(JSON.stringify(payload));
+               
+
+      
+      }
+
+        window.onload = function() {
+          deleteUser();
+          window.history.back();
+      }
+        </script>
+    </head>
+    <body>
+        
+    </body>
+</html>
