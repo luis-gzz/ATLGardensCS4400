@@ -235,6 +235,8 @@ app.post('/info', function(req, res){
 
   var id = req.body.id;
 
+  console.log("getting info for property id: ", id);
+
   var sql = "SELECT Property.Name, Property.Ownedby, COUNT(Visits.Email) AS Count, Property.Address, AVG(Visits.Rating) AS Avg, Property.Size, Property.PType, Property.IsPublic, Property.IsCommercial, Property.ID, Grows_Raises.IName FROM Property " +
     "LEFT JOIN Visits ON Property.ID = Visits.PId " +
     "LEFT JOIN Grows_Raises ON Property.ID = Grows_Raises.PId WHERE Property.ID = ? Group by (Property.ID)"
