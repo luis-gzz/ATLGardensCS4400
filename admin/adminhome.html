@@ -42,6 +42,12 @@
 
             }
 
+            function logout(){
+                console.log("Going back to log in page")
+                window.location.replace("../login.html")
+            }
+
+
 
 
         </script>
@@ -52,11 +58,9 @@
                 <a class="navbar-brand" href="#"> <i class="fa d-inline fa-lg fa-cloud"></i> <b>Atlanta Farm Orchard Garden Database</b> </a>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar2SupportedContent" aria-controls="navbar2SupportedContent" aria-expanded="false" aria-label="Toggle navigation"> </button>
                 <div class="collapse navbar-collapse text-center justify-content-end" id="navbar2SupportedContent">
-                    <div class="py-2">
-                    <button class="btn btn-secondary ml-2 text-white" onclick="changeWindowConProperties()" >
-                         Log Out
-                        </button>
-                    </div>
+                    <form class="btn navbar-btn ml-2 text-white fa d-inline btn-primary">
+                        <a class="btn navbar-btn ml-2 text-white btn-secondary" href="login.html" onclick="logout()"> <i class="fa d-inline fa-lg fa-user-circle-o"></i> Log out</a>
+                    </form>
                 </div>
             </div>
         </nav>
@@ -75,7 +79,6 @@
         </div>
 
         <div>
-
             <div class="py-2" href="login.html">
                 <button class="btn-secondary ml-2 text-white btn" onclick="changeWindowViewVisitor()">
                 View Visitors List
@@ -83,12 +86,10 @@
                 <button class="btn-secondary ml-2 text-white btn" onclick="changeWindowViewOwners()">
                 View Owners List
                 </button>
-
             </div>
         </div>
 
         <div class="py-2">
-
             <button class="btn btn-secondary ml-2 text-white" onclick="changeWindowConProperties()" >
             View Confirmed Properties
             </button>
@@ -96,7 +97,6 @@
             <button class="btn btn-secondary ml-2 text-white" onclick="changeWindowUnProperties()">
             View Unconfirmed Properties
             </button>
-
         </div>
         <div class="py-2">
 
