@@ -17,6 +17,8 @@
           console.log(current_item_list);
       }
 
+
+
       function addAnimal() {
           var new_animal = document.getElementById("animal_dropdown").value
 
@@ -75,7 +77,7 @@
                   but.appendChild(text);
 
                   but.setAttribute("onClick", "removeAnimal('" + new_crop + "')");
-                  but.setAttribute("id", new_animal + "_button")
+                  but.setAttribute("id", new_crop + "_button")
 
                   // Adds two elements
                   var crop_div = document.getElementById("crop_list");
@@ -97,6 +99,48 @@
 
           var index = current_item_list.indexOf(name);
           current_item_list.splice(index, 1);
+      }
+
+      function deleteProperty() {
+        // Will delete information requested by the front end
+  // Users, properties, crops, visits
+  // var payload = {
+  //  what =  "visitorUnlog" OR "adminUnlog" OR "deleteUser" OR "deleteItem" OR "deleteProp"
+  //  email = user email
+  //  id = property id OR item name
+  //  propName = property name for unlogging visit
+  // }
+          var url_string = window.location.href;
+
+          var url = new URL(url_string);
+          var id = url.searchParams.get("id");
+
+          let payload = {
+              "what": "deleteProp",
+              "email": "None",
+              "id": id,
+              "propName": document.getElementById("name").value
+          }
+
+          var xhr = new XMLHttpRequest();
+                xhr.onload = () => {
+                    var data = xhr.responseText;
+
+                    //console.log("This is data " + data);
+                    //propertyArray = JSON.parse(data);
+
+                    if (data != "0") {
+                            //window.location.replace("webapp/loginhome.html");
+                        console.log("Completed");
+                        window.location.replace("loginhome.html");
+                    }
+                }
+
+          xhr.open("POST", "http://localhost:3000/delete", true);
+          xhr.setRequestHeader("Content-Type", 'application/json');
+          xhr.send(JSON.stringify(payload));
+
+
       }
 
       function editDB() {
@@ -138,6 +182,23 @@
           xhr.send(JSON.stringify(payload));
 
       }
+
+      function editMenus(PType) {
+          var animal_dropdown = document.getElementById("animal_dropdown");
+          //var animal_div = document.getElementById("animal_div");
+          var animal_but = document.getElementById("add_animal");
+
+          animal_dropdown.style.display = "block";
+
+          if (PType != "Farm") { 
+              animal_dropdown.style.display = "none";
+              //animal_div.style.display = "none";
+              animal_but.style.display = "none";
+          } 
+
+          console.log(animal_dropdown);
+      }
+
       function displayEditable(property_info) {
           ID = property_info.ID;
           Name = property_info.Name;
@@ -153,6 +214,8 @@
           document.getElementById("address").value = Address;
           document.getElementById("size").value = Size;
           document.getElementById("property_type").innerHTML = "Type: " + Type;
+
+          editMenus(Type);
 
           var public_dropdown = document.getElementById("public_dropdown");
 
@@ -422,7 +485,9 @@
                 <div class="col-md-4">
                   <button  class="btn btn-primary" onclick="editDB()">Update Property</button>
                 </div>
-                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                  <button  class="btn btn-primary" onclick="deleteProperty()">Delete Property</button>
+                </div>
                 <div class="col-md-4">
                   <button type="reset" class="btn btn-primary" onclick="clean()">Cancel </button>
                 </div>
