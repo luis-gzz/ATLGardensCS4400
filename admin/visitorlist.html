@@ -48,13 +48,13 @@
                      var row = document.createElement("tr");
                         var cell = document.createElement("th");
                         cell.onclick= function(){sortTable(0);} ; 
-                        var cellText = document.createTextNode("Username"); 
+                        var cellText = document.createTextNode("Email"); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
 
                         var cell = document.createElement("th"); 
                         cell.onclick = function(){sortTable(1);};   
-                        var cellText = document.createTextNode("Email"); 
+                        var cellText = document.createTextNode("Username"); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
   
@@ -91,18 +91,20 @@
                         row.appendChild(cell);
 
                         var cell = document.createElement("td");    
-                        var del = document.createElement("button");
-                        del.onclick = function(){
-                            deleteUser(email)
-                        }
+                        var del = document.createElement("a");
+                        del.href= "delAccount.html?email=" + email
+                       
 
-                        var log = document.createElement("button");
+                        var log = document.createElement("a");
+                        log.href= "delLog.html?email=" + email
+
                         var delText = document.createTextNode("Delete Account"); 
                         var logText = document.createTextNode("Delete log files")
 
                         del.appendChild(delText);
                         log.appendChild(logText);
                         cell.appendChild(del);
+                        cell.appendChild(document.createElement("br"));
                         cell.appendChild(log)
                         row.appendChild(cell);
                     
