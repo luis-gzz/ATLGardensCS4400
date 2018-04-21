@@ -289,7 +289,7 @@
         var url = new URL(url_string);
         var id = url.searchParams.get("id");
         
-        let payload = {
+            let payload = {
                 "id": id
             }
 
@@ -401,6 +401,37 @@
           xhr.send(JSON.stringify(payload));
       }
 
+      function addNewItem() {
+          let payload = {
+              "what" : "addItem",
+              "iType": document.getElementById("newItem_dropdown").value,
+              "iName": document.getElementById("newItem").value
+          }
+          
+          console.log(payload);
+
+                var xhr = new XMLHttpRequest();
+                    xhr.onload = () => {
+                        var data = xhr.responseText;
+                      
+                        console.log(data);
+
+                        property_info = JSON.parse(data);
+
+                        if (data != "0") {
+                            //window.location.replace("webapp/loginhome.html");
+                            
+                            console.log("Completed");
+                        }
+                    }
+
+                xhr.open("POST", "http://localhost:3000/add", true);
+                xhr.setRequestHeader("Content-Type", 'application/json');
+                xhr.send(JSON.stringify(payload));
+          
+          
+      }
+      
       window.onload = function() {
           getAnimals();
           getCrops();
@@ -484,6 +515,26 @@
               </div>
               <br>
               <div class="row">
+               New Item: &nbsp;
+                  <input id="newItem" type="text" class="form-control" placeholder="New Item">
+                  
+                  <select id="newItem_dropdown">
+                    <option value="Fruit">Fruit</option>
+                    <option value="Nut">Nut</option>
+                    <option value="vegetable">Vegetable</option>
+                    <option value="Flower">Flower</option>
+                    <option value="Animal">Animal</option>
+                    
+                  </select>
+                  <button  class="btn btn-primary" onclick="addNewItem()">Add Item</button>
+                  </div>
+              </div>
+                <br>
+                
+                  
+                <br>
+                
+              <div class="row">
                 <div class="col-md-4">
                   <button  class="btn btn-primary" onclick="editDB()">Update Property</button>
                 </div>
@@ -494,6 +545,7 @@
                   <button type="reset" class="btn btn-primary"><a href = "loginhome.html">Cancel</a> </button>
                 </div>
               </div>
+             
               <br>
               <div class="btn-toolbar"> &nbsp;&nbsp; </div>
             </div>
