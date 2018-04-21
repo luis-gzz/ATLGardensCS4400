@@ -640,6 +640,8 @@ app.post('/approve', function(req, res){
   var admin = req.body.admin;
   var sql;
 
+  console.log("approving");
+
   if (what == "approveProp") {
     sql = "UPDATE Property SET ApprovedBy = ? WHERE ID = ?";
   } else if (what == "approveItem") {
