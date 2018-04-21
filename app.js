@@ -87,7 +87,6 @@ app.post('/registration', function(req, res){
   var password = req.body.password;
   var username = req.body.username;
   var type = req.body.type;
-  var email = req.body.email;
 
   var id = Math.floor(Math.random()*90000) + 10000;
   var propName = req.body.property;
@@ -100,9 +99,15 @@ app.post('/registration', function(req, res){
   var commercial = req.body.commercial;
   var items = req.body.items;
   // TODO: Fix?
-  for (i = 0; i < items.length; i++) {
-    items[i].unshift(id);
-  }
+    item_arr = []
+    // Something needs to be changed about this
+    for (i = 0; i < items.length; i++) {
+      item_arr[i] = [id, items[i]];
+    }
+
+  // for (i = 0; i < items.length; i++) {
+  //   items[i].unshift(id);
+  // }
 
   console.log("Registering user " + username);
 
@@ -116,12 +121,17 @@ app.post('/registration', function(req, res){
           res.end()
         } else {
           // Insert the new user
+          console.log(username);
+          console.log(email);
+          console.log(password);
+          console.log(type);
           connection.query(
             'INSERT INTO User(Username, Email, Password, UType) VALUES (?, ?, ?, ?)', [username, email, password, type],
             function(err, results, fields) {
               if (err == null) {
                 // Success the new entry was added
                 if (type == "Owner") {
+                  console.log("At owner")
                     // =======================
                     // Succces adding owner so add new property
                     connection.query(
@@ -130,13 +140,14 @@ app.post('/registration', function(req, res){
                       console.log(err)
 
                       if (err == null) {
+                        console.log(items);
                         connection.query(
-                        'INSERT INTO Grows_Raises(PId, IName) VALUES ?', [items],
+                        'INSERT INTO Grows_Raises(PId, IName) VALUES ?', [item_arr],
                         function(err, results, fields) {
                           if (err == null) {
                             // Success the new entry was added to property
-                           res.write("1");
-                          res.end()
+                            res.write("1");
+                            res.end()
 
                           } else {
                             // failed due to error adding property

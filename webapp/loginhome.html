@@ -37,7 +37,12 @@
     background-color: #f1f1f1;
 }
   </style>
-    <script>
+  
+
+
+  <script src="js/Cookies.js"></script>
+
+  <script>
     function listProperties(propertyArray) {
   
           console.log("listing prop")
@@ -305,7 +310,14 @@
       }
       window.onload = function() {
           console.log("Cookies" + document.cookie);
-          getProperties("farmerJoe@gmail.com", "ownerProps");
+          var email = Cookies.get("email");
+          var type = Cookies.get("type");
+        
+          if (type == "Owner") {
+              type = "ownerProps";
+          }
+          
+          getProperties(email, type);
       }
 
      
@@ -408,6 +420,8 @@
           <a class="btn btn-primary" href="viewotherprop.html">View other properties </a>
         </div>
       </div>
+      <a href="viewotherprop.html">View other properties</a>
+      <a href="addNewProperty.html">Add property</a>
     </div>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

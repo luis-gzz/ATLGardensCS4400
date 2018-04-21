@@ -4,7 +4,48 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
-        <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> 
+        <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css">
+        <script>
+            function changeWindowViewVisitor(){
+                console.log("Replacing Window")
+                window.location.replace("visitorlist.html");
+
+            }
+
+            function changeWindowViewOwners(){
+                console.log("Replacing Window")
+                window.location.replace("ownerlist.html");
+
+            }
+
+            function changeWindowConProperties(){
+                console.log("Replacing Window")
+                window.location.replace("confirmedproperties.html");
+
+            }
+
+            function changeWindowUnProperties(){
+                console.log("Replacing Window")
+                window.location.replace("unconfirmedproperties.html");
+
+            }
+
+            function changeWindowViewApp(){
+                console.log("Replacing Window")
+                window.location.replace("approvedcrops.html");
+
+            }
+
+            function changeWindowViewPend(){
+                console.log("Replacing Window")
+                window.location.replace("pendingcrops.html");
+
+            }
+
+
+
+
+        </script>
     </head>
     <body>
         <nav class="navbar navbar-expand-md bg-primary navbar-dark">
@@ -12,8 +53,8 @@
                 <a class="navbar-brand" href="#"> <i class="fa d-inline fa-lg fa-cloud"></i> <b>Atlanta Farm Orchard Garden Database</b> </a>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar2SupportedContent" aria-controls="navbar2SupportedContent" aria-expanded="false" aria-label="Toggle navigation"> </button>
                 <div class="collapse navbar-collapse text-center justify-content-end" id="navbar2SupportedContent">
-                    <form class="btn navbar-btn ml-2 text-white fa d-inline btn-primary"> 
-                        <a class="btn navbar-btn ml-2 text-white btn-secondary" href="login.html"> <i class="fa d-inline fa-lg fa-user-circle-o"></i> Log out</a> 
+                    <form class="btn navbar-btn ml-2 text-white fa d-inline btn-primary">
+                        <a class="btn navbar-btn ml-2 text-white btn-secondary" href="login.html"> <i class="fa d-inline fa-lg fa-user-circle-o"></i> Log out</a>
                     </form>
                 </div>
             </div>
@@ -23,30 +64,45 @@
                 <div>
                     <div style="font-size: 50px">Welcome Back Admin!</div>
                 </div>
-            </div>             
+            </div>
 
-            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>             
+            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
 
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" crossorigin="anonymous"></script>             
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" crossorigin="anonymous"></script>
 
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
         </div>
-        <pingendo onclick="window.open('https://pingendo.com/', '_blank')" style="cursor:pointer;position: fixed;bottom: 10px;right:10px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:180px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white">Made with Pingendo&nbsp;&nbsp;
-            <img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block" alt="Pingendo logo" height="16">
-        </pingendo>
+
         <div>
-            <div class="py-2" href="login.html"> 
-                <a class="btn ml-2 text-white btn-secondary">View Visitors List</a> 
-                <a class="btn ml-2 text-white btn-secondary">View Owners List</a>                  
+            <div class="py-2" href="login.html">
+                <button class="btn-secondary ml-2 text-white btn" onclick="changeWindowViewVisitor()">
+                View Visitors List
+                </button>
+                <button class="btn-secondary ml-2 text-white btn" onclick="changeWindowViewOwners()">
+                View Owners List
+                </button>
             </div>
         </div>
+
         <div class="py-2">
-            <button class="btn btn-secondary ml-2 text-white">View Confirmed Properties</button>
-            <button class="btn btn-secondary ml-2 text-white">View Unconfirmed Properties</button>
+            <button class="btn btn-secondary ml-2 text-white" onclick="changeWindowConProperties()" >
+            View Confirmed Properties
+            </button>
+
+            <button class="btn btn-secondary ml-2 text-white" onclick="changeWindowUnProperties()">
+            View Unconfirmed Properties
+            </button>
         </div>
         <div class="py-2">
-            <button class="btn btn-secondary ml-2 text-white">View Approved Animals and Crops</button>
-            <button class="btn btn-secondary ml-2 text-white">View Pending Animals and Crops</button>
+
+            <button class="btn btn-secondary ml-2 text-white" onclick="changeWindowViewApp()">
+            View Approved Animals and Crops
+            </button>
+
+            <button class="btn btn-secondary ml-2 text-white" onclick="changeWindowViewPend()">
+            View Pending Animals and Crops
+            </button>
+
         </div>
     </body>
 </html>
