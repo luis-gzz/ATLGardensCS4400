@@ -7,6 +7,142 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
   <script>
+      current_item_list = [];
+
+      function logItem(item) {
+          current_item_list.push(item);
+      }
+
+      function displayItemLog() {
+          console.log(current_item_list);
+      }
+
+
+
+      function addAnimal() {
+          var new_animal = document.getElementById("animal_dropdown").value
+
+          if (!current_item_list.includes(new_animal)) {
+                  var elem = document.createElement("p");
+                  var text = document.createTextNode(new_animal);
+
+                  elem.setAttribute("id", new_animal + "_text")
+                  elem.appendChild(text);
+
+                  // Makes button
+                  var but = document.createElement("Button");
+                  var text = document.createTextNode("Remove");
+
+                  but.appendChild(text);
+
+                  but.setAttribute("onClick", "removeAnimal('" + new_animal + "')");
+                  but.setAttribute("id", new_animal + "_button")
+
+                  // Adds two elements
+                  var animal_div = document.getElementById("animal_list");
+
+                  animal_div.appendChild(elem);
+                  animal_div.appendChild(but);
+          }
+
+          current_item_list.push(new_animal);
+      }
+
+      function removeAnimal(name) {
+          var text_name = document.getElementById(name + "_text");
+          var text_button = document.getElementById(name + "_button");
+
+          text_name.parentNode.removeChild(text_name);
+          text_button.parentNode.removeChild(text_button);
+
+
+          var index = current_item_list.indexOf(name);
+          current_item_list.splice(index, 1);
+      }
+
+      function addCrop() {
+          var new_crop = document.getElementById("crop_dropdown").value
+
+          if (!current_item_list.includes(new_crop)) {
+                  var elem = document.createElement("p");
+                  var text = document.createTextNode(new_crop);
+
+                  elem.setAttribute("id", new_crop + "_text")
+                  elem.appendChild(text);
+
+                  // Makes button
+                  var but = document.createElement("Button");
+                  var text = document.createTextNode("Remove");
+
+                  but.appendChild(text);
+
+                  but.setAttribute("onClick", "removeAnimal('" + new_crop + "')");
+                  but.setAttribute("id", new_crop + "_button")
+
+                  // Adds two elements
+                  var crop_div = document.getElementById("crop_list");
+
+                  crop_div.appendChild(elem);
+                  crop_div.appendChild(but);
+          }
+
+          current_item_list.push(new_crop);
+      }
+
+      function removeCrop(name) {
+          var text_name = document.getElementById(name + "_text");
+          var text_button = document.getElementById(name + "_button");
+
+          text_name.parentNode.removeChild(text_name);
+          text_button.parentNode.removeChild(text_button);
+
+
+          var index = current_item_list.indexOf(name);
+          current_item_list.splice(index, 1);
+      }
+
+      function deleteProperty() {
+        // Will delete information requested by the front end
+  // Users, properties, crops, visits
+  // var payload = {
+  //  what =  "visitorUnlog" OR "adminUnlog" OR "deleteUser" OR "deleteItem" OR "deleteProp"
+  //  email = user email
+  //  id = property id OR item name
+  //  propName = property name for unlogging visit
+  // }
+          var url_string = window.location.href;
+
+          var url = new URL(url_string);
+          var id = url.searchParams.get("id");
+
+          let payload = {
+              "what": "deleteProp",
+              "email": "None",
+              "id": id,
+              "propName": document.getElementById("name").value
+          }
+
+          var xhr = new XMLHttpRequest();
+                xhr.onload = () => {
+                    var data = xhr.responseText;
+
+                    //console.log("This is data " + data);
+                    //propertyArray = JSON.parse(data);
+
+                    if (data != "0") {
+                            //window.location.replace("webapp/loginhome.html");
+                        console.log("Completed");
+                        window.location.replace("loginhome.html");
+                    }
+                }
+
+          xhr.open("POST", "http://localhost:3000/delete", true);
+          xhr.setRequestHeader("Content-Type", 'application/json');
+          xhr.send(JSON.stringify(payload));
+
+
+      }
+
       function editDB() {
           var url_string = window.location.href;
 
@@ -23,7 +159,7 @@
             "acres": document.getElementById("size").value,
             "public": document.getElementById("public_dropdown").value,
             "commercial": document.getElementById("commercial_dropdown").value,
-            "items" : items
+            "items" : current_item_list
           }
 
           console.log(payload);
@@ -46,6 +182,23 @@
           xhr.send(JSON.stringify(payload));
 
       }
+
+      function editMenus(PType) {
+          var animal_dropdown = document.getElementById("animal_dropdown");
+          //var animal_div = document.getElementById("animal_div");
+          var animal_but = document.getElementById("add_animal");
+
+          animal_dropdown.style.display = "block";
+
+          if (PType != "Farm") { 
+              animal_dropdown.style.display = "none";
+              //animal_div.style.display = "none";
+              animal_but.style.display = "none";
+          } 
+
+          console.log(animal_dropdown);
+      }
+
       function displayEditable(property_info) {
           ID = property_info.ID;
           Name = property_info.Name;
@@ -62,6 +215,8 @@
           document.getElementById("size").value = Size;
           document.getElementById("property_type").innerHTML = "Type: " + Type;
 
+          editMenus(Type);
+
           var public_dropdown = document.getElementById("public_dropdown");
 
           if (Public) {
@@ -76,10 +231,55 @@
 
           for (var i = 0; i < Items.length; i++) {
               if (Items[i][1] == "Animal") {
-                  document.getElementById("animal_list").innerHTML = document.getElementById("animal_list").innerHTML + Items[i][0]
+                  // Makes text
+                  var elem = document.createElement("p");
+                  var text = document.createTextNode(Items[i][0]);
+
+                  elem.setAttribute("id", Items[i][0] + "_text")
+                  elem.appendChild(text);
+
+                  // Makes button
+                  var but = document.createElement("Button");
+                  var text = document.createTextNode("Remove");
+
+                  but.appendChild(text);
+
+                  but.setAttribute("onClick", "removeAnimal('" + Items[i][0] + "')");
+                  but.setAttribute("id", Items[i][0] + "_button")
+
+                  // Adds two elements
+                  var animal_div = document.getElementById("animal_list");
+
+                  animal_div.appendChild(elem);
+                  animal_div.appendChild(but);
+
+
+                  //document.getElementById("animal_list").innerHTML = document.getElementById("animal_list").innerHTML + Items[i][0]
               } else {
-                  document.getElementById("crop_list").innerHTML = document.getElementById("crop_list").innerHTML + Items[i][0] + "\n"
+                                    // Makes text
+                  var elem = document.createElement("p");
+                  var text = document.createTextNode(Items[i][0]);
+
+                  elem.setAttribute("id", Items[i][0] + "_text")
+                  elem.appendChild(text);
+
+                  // Makes button
+                  var but = document.createElement("Button");
+                  var text = document.createTextNode("Remove");
+
+                  but.appendChild(text);
+
+                  but.setAttribute("onClick", "removeCrop('" + Items[i][0] + "')");
+                  but.setAttribute("id", Items[i][0] + "_button")
+
+                  // Adds two elements
+                  var animal_div = document.getElementById("crop_list");
+
+                  animal_div.appendChild(elem);
+                  animal_div.appendChild(but);
               }
+
+              logItem(Items[i][0]);
           }
       }
 
@@ -108,6 +308,7 @@
                         if (data != "0") {
                             //window.location.replace("webapp/loginhome.html");
                             displayEditable(property_info[0]);
+                            getCrops(property_info[0].PType)
                             console.log("Completed");
                         }
                     }
@@ -158,50 +359,61 @@
           xhr.send(JSON.stringify(payload));
       }
 
-      function getCrops() {
-          let payload = {
-              "type": "crop",
-              "confirmed": 1
+       function getCrops(type) {
+           console.log(type)
+         let payload = {
+               "type": "crop",
+               "confirmed": 1
+            }
+         if(type == "farm"){
+            payload = {
+               "type": "crop",
+               "confirmed": 1
+            }
+          } else if( type == "orchard"){
+              payload = {
+               "type": "orchard",
+               "confirmed": 1
+            }
           }
-
+          else if( type == "garden"){
+              payload = {
+               "type": "garden",
+               "confirmed": 1
+            }
+          }
           var xhr = new XMLHttpRequest();
               xhr.onload = () => {
               var data = xhr.responseText;
-
               var cropArray = JSON.parse(data);
               console.log("This is data" + cropArray);
-
               // *******************************************************************
               // ************* Move this when we figure out async stuff ************
               // *******************************************************************
               var crop_dropdown = document.getElementById("crop_dropdown");
-
+              crop_dropdown.options.length = 0;
               for (var i = 0; i < cropArray.length; i++) {
                 var node = document.createElement("option");          
                 node.text = cropArray[i].Name;
                 node.setAttribute("value", cropArray[i].Name);
-
                 crop_dropdown.add(node);
               }
-
               // *******************************************************************
               // *********** End Move this *****************************************
               // *******************************************************************
-
               if (data != "0") {
                          //window.location.replace("webapp/loginhome.html");
                   console.log("Completed");
               }
           }
-
           xhr.open("POST", "http://localhost:3000/items", true);
           xhr.setRequestHeader("Content-Type", 'application/json');
           xhr.send(JSON.stringify(payload));
       }
 
+
       window.onload = function() {
           getAnimals();
-          getCrops();
           processGet();
       }
   </script>
@@ -250,15 +462,15 @@
                 </div>
                 <div class="col-md-4">
                   <p>Animal</p>
-                  <p id = "animal_list"></p>
-                  <select id="animal_dropdown">
+                  <div id = "animal_list"></div>
+                  <select id="animal_dropdown" onChange="displayItemLog()">
                   </select>
                   <button id = "add_animal" onClick="addAnimal()">Add Animal</button>
                 </div>
                 <div class="col-md-4">
                   <p>Crop</p>
-                  <p id = "crop_list"></p>
-                  <select id="crop_dropdown">
+                  <div id = "crop_list"></div>
+                  <select id="crop_dropdown" onChange="displayItemLog()">
                   </select>
                   <button id = "add_crop" onClick="addCrop()">Add Crop</button>
                 </div>
@@ -285,7 +497,9 @@
                 <div class="col-md-4">
                   <button  class="btn btn-primary" onclick="editDB()">Update Property</button>
                 </div>
-                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                  <button  class="btn btn-primary" onclick="deleteProperty()">Delete Property</button>
+                </div>
                 <div class="col-md-4">
                   <button type="reset" class="btn btn-primary" onclick="clean()">Cancel </button>
                 </div>

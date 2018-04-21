@@ -7,8 +7,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
+  <script src="js/Cookies.js"></script>
   <script>
       function addToDB() {
+          console.log("Cookies" + document.cookie);
+          var email = Cookies.get("email");
+          
           items = [document.getElementById("crop_dropdown").value] 
 
           if (document.getElementById("type_dropdown").value == "Farm") {
@@ -17,7 +21,7 @@
 
           let payload = {
             "what" : "addProp",
-            "email": "farmerJoe@gmail.com",
+            "email": email,
             "property": document.getElementById("name").value,
             "address": document.getElementById("address").value,
             "city": document.getElementById("city").value,
@@ -51,19 +55,32 @@
       }
 
       function editMenus() {
+          
           var type = document.getElementById("type_dropdown").value;
           var animal_dropdown = document.getElementById("animal_dropdown");
+           var crop_dropdown = document.getElementById("crop_dropdown");
 
-          animal_dropdown.style.display = "block";
+          if(type == "Farm"){
+            console.log("farm");
+            animal_dropdown.style.display = "block";
+            getCrops("Farm")
 
-          if (type != "Farm") { 
+         } else if (type == "Orchard") { 
+             console.log("orchard");
               animal_dropdown.style.display = "none";
-          } 
+              getCrops("orchard")
+
+          } else if (type == "Garden"){
+               console.log("garden");
+               animal_dropdown.style.display = "none";
+               getCrops("garden")
+          }
 
           console.log(animal_dropdown);
       }
 
       function getAnimals() {
+          
           let payload = {
               "type": "animal",
               "confirmed": 1
@@ -104,55 +121,63 @@
           xhr.send(JSON.stringify(payload));
       }
 
-      function getCrops() {
-          let payload = {
-              "type": "crop",
-              "confirmed": 1
+     function getCrops(type) {
+         let payload = {
+               "type": "crop",
+               "confirmed": 1
+            }
+         if(type == "farm"){
+            payload = {
+               "type": "crop",
+               "confirmed": 1
+            }
+          } else if( type == "orchard"){
+              payload = {
+               "type": "orchard",
+               "confirmed": 1
+            }
           }
-
+          else if( type == "garden"){
+              payload = {
+               "type": "garden",
+               "confirmed": 1
+            }
+          }
           var xhr = new XMLHttpRequest();
               xhr.onload = () => {
               var data = xhr.responseText;
-
               var cropArray = JSON.parse(data);
               console.log("This is data" + cropArray);
-
               // *******************************************************************
               // ************* Move this when we figure out async stuff ************
               // *******************************************************************
               var crop_dropdown = document.getElementById("crop_dropdown");
-
+              crop_dropdown.options.length = 0;
               for (var i = 0; i < cropArray.length; i++) {
                 var node = document.createElement("option");          
                 node.text = cropArray[i].Name;
                 node.setAttribute("value", cropArray[i].Name);
-
                 crop_dropdown.add(node);
               }
-
               // *******************************************************************
               // *********** End Move this *****************************************
               // *******************************************************************
-
               if (data != "0") {
                          //window.location.replace("webapp/loginhome.html");
                   console.log("Completed");
               }
           }
-
           xhr.open("POST", "http://localhost:3000/items", true);
           xhr.setRequestHeader("Content-Type", 'application/json');
           xhr.send(JSON.stringify(payload));
       }
-
       window.onload = function() {
         // var payload = {
   //  type = "animal" OR "crop"
   //  confirmed = 1 OR 0
   //}
-
           getAnimals();
-          getCrops();
+          getCrops("farm");
       }
   </script>
 <body>
