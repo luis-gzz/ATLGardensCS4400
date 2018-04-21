@@ -42,7 +42,7 @@
                   var animal_div = document.getElementById("animal_list");
 
                   animal_div.appendChild(elem);
-                  
+                  animal_div.appendChild(but);
           }
 
           current_item_list.push(new_animal);
@@ -83,7 +83,7 @@
                   var crop_div = document.getElementById("crop_list");
 
                   crop_div.appendChild(elem);
-                  
+                  crop_div.appendChild(but);
           }
 
           current_item_list.push(new_crop);
@@ -217,16 +217,16 @@
 
           editMenus(Type);
 
-         
+          var public_dropdown = document.getElementById("public_dropdown");
 
           if (Public) {
-              document.getElementById("public_value").innerHTML = "Public: True";
+              public_dropdown.options[1].selected = true;
           }
 
-         
+          var commercial_dropdown = document.getElementById("commercial_dropdown");
 
           if (Commercial) {
-              document.getElementById("commercial_value").innerHTML = "Commerical: True";
+              commercial_dropdown.options[1].selected = true;
           }
 
           for (var i = 0; i < Items.length; i++) {
@@ -251,7 +251,7 @@
                   var animal_div = document.getElementById("animal_list");
 
                   animal_div.appendChild(elem);
-                 
+                  //animal_div.appendChild(but);
 
 
                   //document.getElementById("animal_list").innerHTML = document.getElementById("animal_list").innerHTML + Items[i][0]
@@ -276,11 +276,8 @@
                   var animal_div = document.getElementById("crop_list");
 
                   animal_div.appendChild(elem);
-                 
+                  //animal_div.appendChild(but);
               }
-
-              document.getElementById("animal_dropdown").style.display = "none";
-              document.getElementById("crop_dropdown").style.display = "none"
 
               logItem(Items[i][0]);
           }
@@ -292,7 +289,7 @@
         var url = new URL(url_string);
         var id = url.searchParams.get("id");
         
-        let payload = {
+            let payload = {
                 "id": id
             }
 
@@ -361,6 +358,12 @@
           xhr.open("POST", "http://localhost:3000/items", true);
           xhr.setRequestHeader("Content-Type", 'application/json');
           xhr.send(JSON.stringify(payload));
+
+          document.getElementById("crop_dropdown").style.display = "none"
+          document.getElementById("add_crop").style.display = "none"
+          document.getElementById("animal_dropdown").style.display = "none"
+          document.getElementById("add_animal").style.display = "none"
+          
       }
 
       function getCrops() {
@@ -404,6 +407,37 @@
           xhr.send(JSON.stringify(payload));
       }
 
+      function addNewItem() {
+          let payload = {
+              "what" : "addItem",
+              "iType": document.getElementById("newItem_dropdown").value,
+              "iName": document.getElementById("newItem").value
+          }
+          
+          console.log(payload);
+
+                var xhr = new XMLHttpRequest();
+                    xhr.onload = () => {
+                        var data = xhr.responseText;
+                      
+                        console.log(data);
+
+                        property_info = JSON.parse(data);
+
+                        if (data != "0") {
+                            //window.location.replace("webapp/loginhome.html");
+                            
+                            console.log("Completed");
+                        }
+                    }
+
+                xhr.open("POST", "http://localhost:3000/add", true);
+                xhr.setRequestHeader("Content-Type", 'application/json');
+                xhr.send(JSON.stringify(payload));
+          
+          
+      }
+      
       window.onload = function() {
           getAnimals();
           getCrops();
@@ -429,7 +463,7 @@
   <div class="py-5">
     <div class="container">
       <div class="col-md-12">
-        <div style="font-size: 45px"> View Property
+        <div style="font-size: 45px"> Manage Property
           <br>
           <a style="font-size: 15px">( </a>
           <a style="font-size:15px;color:red">* </a>
@@ -458,32 +492,46 @@
                   <div id = "animal_list"></div>
                   <select id="animal_dropdown" onChange="displayItemLog()">
                   </select>
-                  
+                  <button id = "add_animal" onClick="addAnimal()">Add Animal</button>
                 </div>
                 <div class="col-md-4">
                   <p>Crop</p>
                   <div id = "crop_list"></div>
                   <select id="crop_dropdown" onChange="displayItemLog()">
                   </select>
-                  
+                  <button id = "add_crop" onClick="addCrop()">Add Crop</button>
                 </div>
               </div>
               <br>
               <div class="row">
                 <div class="col-md-4">
-                  <p id = "public_value">Public : False</p>
-                  
+                  <p>Public</p>
+                  <select id="public_dropdown">
+                    <option value="0">False</option>
+                    <option value="1">True</option>
+                  </select>
                   </div>
                 <div class="col-md-4">
-                  <p id="commercial_value">Commercial : False</p>
+                  <p>Commercial</p>
+                  <select id="commercial_dropdown">
+                    <option value="0">False</option>
+                    <option value="1">True</option>
+                  </select>
                 </div>
               </div>
               <br>
-              <div class="row">
+             
+                <br>
+                
+                  
+                <br>
+                
+            
                 <div class="col-md-4">
                   <button type="reset" class="btn btn-primary"><a href = "loginhome.html">Cancel</a> </button>
                 </div>
               </div>
+             
               <br>
               <div class="btn-toolbar"> &nbsp;&nbsp; </div>
             </div>
