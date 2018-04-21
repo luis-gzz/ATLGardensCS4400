@@ -107,26 +107,7 @@
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
-                         var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
-                        var cellText = document.createTextNode("isValid"); 
-                        cell.appendChild(cellText);
-                        row.appendChild(cell);
-                         tblBody.appendChild(row);
-
-                         var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
-                        var cellText = document.createTextNode("Visits"); 
-                        cell.appendChild(cellText);
-                        row.appendChild(cell);
-                         tblBody.appendChild(row);
-
-                         var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
-                        var cellText = document.createTextNode("Average Rating"); 
-                        cell.appendChild(cellText);
-                        row.appendChild(cell);
-                         tblBody.appendChild(row);
+                     
 
                          var cell = document.createElement("th"); 
                         cell.onclick = function(){sortTable(2);};   
@@ -215,36 +196,10 @@
                         
                         /////////////////
 
-                          var cell = document.createElement("td");
-                        var approve = propertyArray[j].ApprovedBy;
-                        var cellText = null;
-                        if(approve !== null){
-                            cellText = document.createTextNode("True"); 
-                            }
-                        else {
-                            cellText = document.createTextNode("False"); 
-                        }
-                        cell.appendChild(cellText);
-                        row.appendChild(cell);
-                        /////////////
-
-                        var cell = document.createElement("td");    
-                        var cellText = document.createTextNode(propertyArray[j].Count); 
-                        cell.appendChild(cellText);
-                        row.appendChild(cell);
 
                         //////////
 
-                        var cell = document.createElement("td");    
-                        var rating = 0;
-                        if(propertyArray[j].Avg === null){
-                            rating = "N/A"
-                        } else{
-                            rating =propertyArray[j].Avg;
-                        }
-                        var cellText = document.createTextNode(rating); 
-                        cell.appendChild(cellText);
-                        row.appendChild(cell);
+                        
 
                                        
                          var cell = document.createElement("td");    
@@ -273,7 +228,7 @@
       function getProperties(email, ownerType) {
             let payload = {
                 "email": email,
-                "type": ownerType
+                "type": "conf"
             }
 
             var propertyArray;
@@ -390,13 +345,11 @@
   <div class="py-5">
     <div class="container">
       <div>
-        <div style="font-size: 50px"> Welcome Back! User </div>
+        <div style="font-size: 50px"> Confirmed Properties </div>
         <br>
         <br>
         <div class="row">
-          <div class="form-group ">
-            <font size="5px">Your Properties: </font> &nbsp; </div>
-        </div>
+          
           <div><i style="font-size:24px" class="fa">&#xf002;</i><input type="text" id="myInput" onkeyup="searchFunc()" placeholder="Search for names..">
         
           
@@ -404,9 +357,6 @@
         <table id="table"></table>
       </div>
       <div class="row">
-        <div class="col-md-12">
-          <a class="btn btn-primary" href="viewotherprop.html">View other properties </a>
-        </div>
       </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
