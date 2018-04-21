@@ -130,7 +130,7 @@
 
                          var cell = document.createElement("th"); 
                         cell.onclick = function(){sortTable(2);};   
-                        var cellText = document.createTextNode("Manage Property"); 
+                        var cellText = document.createTextNode("View Property"); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
@@ -249,9 +249,9 @@
                                        
                          var cell = document.createElement("td");    
                          var link = document.createElement("a");
-                        var cellText = document.createTextNode("Manage"); 
+                        var cellText = document.createTextNode("View"); 
                         link.appendChild(cellText);
-                        link.href = "manageproperty.html?id=" + ID
+                        link.href = "visitorPropView.html?id=" + ID
                         cell.appendChild(link);
                         row.appendChild(cell);
 
