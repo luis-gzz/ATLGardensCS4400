@@ -188,7 +188,7 @@
           //var animal_div = document.getElementById("animal_div");
           var animal_but = document.getElementById("add_animal");
 
-          animal_dropdown.style.display = "block";
+         
 
           if (PType != "Farm") { 
               animal_dropdown.style.display = "none";
@@ -251,7 +251,7 @@
                   var animal_div = document.getElementById("animal_list");
 
                   animal_div.appendChild(elem);
-                  animal_div.appendChild(but);
+                  //animal_div.appendChild(but);
 
 
                   //document.getElementById("animal_list").innerHTML = document.getElementById("animal_list").innerHTML + Items[i][0]
@@ -276,7 +276,7 @@
                   var animal_div = document.getElementById("crop_list");
 
                   animal_div.appendChild(elem);
-                  animal_div.appendChild(but);
+                  //animal_div.appendChild(but);
               }
 
               logItem(Items[i][0]);
@@ -310,7 +310,6 @@
                         if (data != "0") {
                             //window.location.replace("webapp/loginhome.html");
                             displayEditable(property_info[0]);
-                            getCrops(property_info[0].PType)
                             console.log("Completed");
                         }
                     }
@@ -359,60 +358,54 @@
           xhr.open("POST", "http://localhost:3000/items", true);
           xhr.setRequestHeader("Content-Type", 'application/json');
           xhr.send(JSON.stringify(payload));
+
+          document.getElementById("crop_dropdown").style.display = "none"
+          document.getElementById("add_crop").style.display = "none"
+          document.getElementById("animal_dropdown").style.display = "none"
+          document.getElementById("add_animal").style.display = "none"
+          
       }
 
-       function getCrops(type) {
-           console.log(type)
-         let payload = {
-               "type": "crop",
-               "confirmed": 1
-            }
-         if(type == "farm"){
-            payload = {
-               "type": "crop",
-               "confirmed": 1
-            }
-          } else if( type == "orchard"){
-              payload = {
-               "type": "orchard",
-               "confirmed": 1
-            }
+      function getCrops() {
+          let payload = {
+              "type": "crop",
+              "confirmed": 1
           }
-          else if( type == "garden"){
-              payload = {
-               "type": "garden",
-               "confirmed": 1
-            }
-          }
+
           var xhr = new XMLHttpRequest();
               xhr.onload = () => {
               var data = xhr.responseText;
+
               var cropArray = JSON.parse(data);
               console.log("This is data" + cropArray);
+
               // *******************************************************************
               // ************* Move this when we figure out async stuff ************
               // *******************************************************************
               var crop_dropdown = document.getElementById("crop_dropdown");
-              crop_dropdown.options.length = 0;
+
               for (var i = 0; i < cropArray.length; i++) {
                 var node = document.createElement("option");          
                 node.text = cropArray[i].Name;
                 node.setAttribute("value", cropArray[i].Name);
+
                 crop_dropdown.add(node);
               }
+
               // *******************************************************************
               // *********** End Move this *****************************************
               // *******************************************************************
+
               if (data != "0") {
                          //window.location.replace("webapp/loginhome.html");
                   console.log("Completed");
               }
           }
+
           xhr.open("POST", "http://localhost:3000/items", true);
           xhr.setRequestHeader("Content-Type", 'application/json');
           xhr.send(JSON.stringify(payload));
       }
-
 
       function addNewItem() {
           let payload = {
@@ -437,9 +430,6 @@
                             console.log("Completed");
                         }
                     }
-                function goBack() {
-                  window.history.back();
-                }    
 
                 xhr.open("POST", "http://localhost:3000/add", true);
                 xhr.setRequestHeader("Content-Type", 'application/json');
@@ -450,6 +440,7 @@
       
       window.onload = function() {
           getAnimals();
+          getCrops();
           processGet();
       }
   </script>
@@ -529,36 +520,15 @@
                 </div>
               </div>
               <br>
-              <div class="row">
-               New Item: &nbsp;
-                  <input id="newItem" type="text" class="form-control" placeholder="New Item">
-                  
-                  <select id="newItem_dropdown">
-                    <option value="Fruit">Fruit</option>
-                    <option value="Nut">Nut</option>
-                    <option value="vegetable">Vegetable</option>
-                    <option value="Flower">Flower</option>
-                    <option value="Animal">Animal</option>
-                    
-                  </select>
-                  <button  class="btn btn-primary" onclick="addNewItem()">Add Item</button>
-                  </div>
-              </div>
+             
                 <br>
                 
                   
                 <br>
                 
-              <div class="row">
+            
                 <div class="col-md-4">
-                  <button  class="btn btn-primary" onclick="editDB()">Update Property</button>
-                </div>
-
-                <div class="col-md-4">
-                  <button  class="btn btn-primary" onclick="deleteProperty()">Delete Property</button>
-                </div>
-                <div class="col-md-4">
-                  <button type="reset" class="btn btn-primary"><a href = "loginhome.html" onclick="goBack()" >Cancel</a> </button>
+                  <button type="reset" class="btn btn-primary"><a href = "viewOtherProp.html">Cancel</a> </button>
                 </div>
               </div>
              

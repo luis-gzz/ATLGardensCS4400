@@ -40,14 +40,18 @@
                             Cookies.set("type", data);
                             Cookies.set("email", email);
 
-                            window.location.replace("webapp/adminhome.html");
+
+                            window.location.replace("admin/adminhome.html");
+
                             console.log("Next page");
                         }
                         else if (data != "0" && data == "Visitor") {
                             Cookies.set("type", data);
                             Cookies.set("email", email);
 
-                            window.location.replace("webapp/visitorloginhome.html");
+
+                            window.location.replace("webapp/visitorhome.html");
+
                             console.log("Next page");
 
                         }
@@ -100,11 +104,11 @@
                 <a href="visitorsignup.html"> </a>
                 <a href="">
                     <button type="submit" class="btn btn-primary" onclick="storeinfo()">
-                        <a href="ownersignup.html" class="text-white">New Owner Registration</a>
+                        <a href="webapp/ownersignup.html" class="text-white">New Owner Registration</a>
                     </button>
                 </a>
-                <button type="submit" class="btn btn-primary ml-3 text-white" onclick="storeinfo()">
-                    <a href="visitorsignup.html" class="text-white">New Visitor Registration</a>
+                <button type="submit" class="btn btn-primary ml-3 text-white">
+                    <a href="webapp/visitorsignup.html" class="text-white">New Visitor Registration</a>
                 </button>
                 <a href="">  </a>
             </div>

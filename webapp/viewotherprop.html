@@ -97,6 +97,12 @@
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
+                         var cell = document.createElement("th"); 
+                        cell.onclick = function(){sortTable(2);};   
+                        var cellText = document.createTextNode("View"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                         tblBody.appendChild(row);
                       
                 
                     for (var j = 0; j <= propertyArray.length-1; j++) {
@@ -204,6 +210,15 @@
                         cell.appendChild(cellText);
                         row.appendChild(cell);
 
+                        ///////////
+
+                        var cell = document.createElement("td");    
+                         var link = document.createElement("a");
+                        var cellText = document.createTextNode("Manage"); 
+                        link.appendChild(cellText);
+                        link.href = "viewProperties.html?id=" + ID
+                        cell.appendChild(link);
+                        row.appendChild(cell);
                                        
                      
 
