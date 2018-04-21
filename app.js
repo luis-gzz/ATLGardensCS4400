@@ -186,16 +186,16 @@ app.post('/properties', function(req, res){
   var sql;
   if (type == "ownerProps") {
     // All properties for owned by a user
-    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email), AVG(Rating) FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.OwnedBy = ? Group By Property.ID";
+    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email) AS Count, AVG(Rating) AS Avg FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.OwnedBy = ? Group By Property.ID";
   } else if (type == "notOwner") {
     // All properties not owned by a user
-    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email), AVG(Rating) FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.OwnedBy != ? AND Property.ApprovedBy IS NOT NULL Group By Property.ID";
+    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email) AS Count, AVG(Rating) AS Avg FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.OwnedBy != ? AND Property.ApprovedBy IS NOT NULL Group By Property.ID";
   } else if (type == "public") {
     // All public and confirmed properties
-    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email), AVG(Rating) FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.IsPublic = 1 AND Property.ApprovedBy IS NOT NULL Group By Property.ID";
+    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email) AS Count, AVG(Rating) AS Avg FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.IsPublic = 1 AND Property.ApprovedBy IS NOT NULL Group By Property.ID";
   } else if (type == "conf") {
     // All confirmed properties
-    var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email), AVG(Rating) FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.ApprovedBy IS NOT NULL Group By Property.ID";
+    var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email) AS Count, AVG(Rating) AS Avg FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.ApprovedBy IS NOT NULL Group By Property.ID";
   } else if (type == "unconf") {
     // All unonfrimed properties
     var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial FROM `Property` WHERE Property.ApprovedBy IS NULL Group By Property.ID";
@@ -233,7 +233,7 @@ app.post('/info', function(req, res){
 
   var id = req.body.id;
 
-  var sql = "SELECT Property.Name, Property.Ownedby, COUNT(Visits.Email), Property.Address, AVG(Visits.Rating), Property.Size, Property.PType, Property.IsPublic, Property.IsCommercial, Property.ID, Grows_Raises.IName FROM Property " +
+  var sql = "SELECT Property.Name, Property.Ownedby, COUNT(Visits.Email) AS Count, Property.Address, AVG(Visits.Rating) AS Avg, Property.Size, Property.PType, Property.IsPublic, Property.IsCommercial, Property.ID, Grows_Raises.IName FROM Property " +
     "LEFT JOIN Visits ON Property.ID = Visits.PId " +
     "LEFT JOIN Grows_Raises ON Property.ID = Grows_Raises.PId WHERE Property.ID = ? Group by (Property.ID)"
 
@@ -384,16 +384,16 @@ app.post('/add', function(req, res){
                 //res.write("1");
               } else {
                 // 0 for failure
-                res.write("failed crop");       
+                res.write("failed crop");
               }
             });
         }
         } else {
           // 0 for failure
           res.write("failed property");
-          
+
         }
-        
+
     });
     res.end();
   } else if (what == "addItem") {
@@ -439,13 +439,18 @@ app.post('/manage', function(req, res){
   var public = req.body.public;
   var commercial = req.body.commercial;
   var items = req.body.items;
-  for (i = 0; i < items.length; i++) {
-    items[i].unshift(id);
-  }
+
+  console.log("Trying to insert the following list of items " + items);
+
+  item_arr = []
+    // Something needs to be changed about this
+    for (i = 0; i < items.length; i++) {
+      item_arr[i] = [id, items[i]];
+    }
 
   var sql = "UPDATE Property SET Name = ?, Size = ?, Address = ?, IsPublic = ?, IsCommercial = ?, ApprovedBy = NULL WHERE ID = ?";
   var deletOldItems = "DELETE FROM Grows_Raises WHERE PId = ?";
-  var addNewItems = "INSERT INTO Grows_Raises(PId, IName) VALUES ?";
+  var addNewItems = "INSERT INTO Grows_Raises(PId, IName) VALUES (?)";
 
   connection.query(sql, [propName, acres, address, public, commercial, id],
     function(err, results, fields) {
@@ -459,19 +464,22 @@ app.post('/manage', function(req, res){
           console.log(err)
           if (err == null) {
             //After delete old items we update the list for the property
-            connection.query(addNewItems, [items],
-            function(err, results, fields) {
+            for (var i = 0; i < item_arr.length; i++) {
+                connection.query(addNewItems, [item_arr[i]],
+                function(err, results, fields) {
               //console.log(results)
-              console.log(err)
-              if (err == null) {
-                // 1 for success
-                res.write("1");
-              } else {
-                //failure
-                res.write("fail add item");
-              }
-              res.end();
-            });
+                    console.log(err)
+                    if (err == null) {
+                      // 1 for success
+                      //res.write("1");
+                    } else {
+                      //failure
+                      //res.write("fail add item");
+                    }
+                    //res.end();
+                });
+            }
+
           } else {
             //failure
             res.write("fall remove item");
@@ -504,11 +512,11 @@ app.post('/users', function(req, res){
   if (type == "visitor") {
     // All properties for owned by a user
     type = "Visitor";
-    var sql = "SELECT User.Email, User.Username, COUNT(Visits.Email) FROM User LEFT JOIN Visits ON User.Email = Visits.Email WHERE User.UType = ? Group by (User.Email)";
+    var sql = "SELECT User.Email, User.Username, COUNT(Visits.Email) AS Count FROM User LEFT JOIN Visits ON User.Email = Visits.Email WHERE User.UType = ? Group by (User.Email)";
   } else if (type == "owner") {
     // All properties for owned by a user
     type = "Owner";
-    var sql = "SELECT User.Username, User.Email, COUNT(User.Email) FROM User LEFT JOIN Property ON User.Email = Property.OwnedBy WHERE User.UType = ? Group by (User.Email)";
+    var sql = "SELECT User.Username, User.Email, COUNT(User.Email) AS Count FROM User LEFT JOIN Property ON User.Email = Property.OwnedBy WHERE User.UType = ? Group by (User.Email)";
   }
 
   connection.query(sql, [type],
@@ -580,7 +588,7 @@ app.post('/visits', function(req, res){
   // }
 
   var email = req.body.email;
-  var sql = "SELECT Property.Name, VDate, AVG(Rating) FROM Visits LEFT Join Property ON Property.ID = Visits.PId WHERE Visits.Email = ? Group by (Property.Name)"
+  var sql = "SELECT Property.Name, VDate, AVG(Rating) AS Avg FROM Visits LEFT Join Property ON Property.ID = Visits.PId WHERE Visits.Email = ? Group by (Property.Name)"
 
   connection.query(sql, [email],
       function(err, results, fields) {

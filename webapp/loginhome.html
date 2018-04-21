@@ -9,7 +9,7 @@
   <script>
       function listProperties(propertyArray) {
   
-
+          console.log("listing prop")
                     var tbl     = document.getElementById("table");
                     var tblBody = document.createElement("tbody");
 
@@ -33,11 +33,82 @@
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
+
+                         var cell = document.createElement("th"); 
+                        cell.onclick = function(){sortTable(2);};   
+                        var cellText = document.createTextNode("City"); 
+                        cell.appendChild(cellText); 
+                        row.appendChild(cell);
+                         tblBody.appendChild(row);
+
+                         var cell = document.createElement("th"); 
+                        cell.onclick = function(){sortTable(2);};   
+                        var cellText = document.createTextNode("Zip"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                         tblBody.appendChild(row);
+
+                         var cell = document.createElement("th"); 
+                        cell.onclick = function(){sortTable(2);};   
+                        var cellText = document.createTextNode("Size"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                         tblBody.appendChild(row);
+
+                         var cell = document.createElement("th"); 
+                        cell.onclick = function(){sortTable(2);};   
+                        var cellText = document.createTextNode("Type"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                         tblBody.appendChild(row);
+
+                         var cell = document.createElement("th"); 
+                        cell.onclick = function(){sortTable(2);};   
+                        var cellText = document.createTextNode("Public"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                         tblBody.appendChild(row);
+
+                         var cell = document.createElement("th"); 
+                        cell.onclick = function(){sortTable(2);};   
+                        var cellText = document.createTextNode("Commercial"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                         tblBody.appendChild(row);
+
+                         var cell = document.createElement("th"); 
+                        cell.onclick = function(){sortTable(2);};   
+                        var cellText = document.createTextNode("isValid"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                         tblBody.appendChild(row);
+
+                         var cell = document.createElement("th"); 
+                        cell.onclick = function(){sortTable(2);};   
+                        var cellText = document.createTextNode("Visits"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                         tblBody.appendChild(row);
+
+                         var cell = document.createElement("th"); 
+                        cell.onclick = function(){sortTable(2);};   
+                        var cellText = document.createTextNode("Average Rating"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                         tblBody.appendChild(row);
+
+                         var cell = document.createElement("th"); 
+                        cell.onclick = function(){sortTable(2);};   
+                        var cellText = document.createTextNode("Manage Property"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                         tblBody.appendChild(row);
                 
                     for (var j = 0; j <= propertyArray.length-1; j++) {
 
                         var row = document.createElement("tr");
                         var cell = document.createElement("td");    
+                        ID = propertyArray[j].ID
                         var cellText = document.createTextNode(propertyArray[j].ID); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
@@ -47,12 +118,106 @@
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                     
+                        ///////////////Address Manipulation
+
+                        var full = propertyArray[j].Address;
+                        full = full.split(" ");
+                        var address = "";
+                        for(var i = 0; i < full.length - 2; i++){
+                            address = address + full[i] + " "
+                        }
                         var cell = document.createElement("td");    
-                        var cellText = document.createTextNode(propertyArray[j].Address); 
+                        var cellText = document.createTextNode(address); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
 
-           
+                        var cell = document.createElement("td");    
+                        var cellText = document.createTextNode(full[full.length - 2]); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+
+                        var cell = document.createElement("td");    
+                        var cellText = document.createTextNode(full[full.length - 1]); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+
+
+
+                        //////////////////
+
+                        var cell = document.createElement("td");    
+                        var cellText = document.createTextNode(propertyArray[j].Size); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+
+                        var cell = document.createElement("td");    
+                        var cellText = document.createTextNode(propertyArray[j].PType); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+
+                        /////////////
+
+                        var cell = document.createElement("td");
+                        var public = propertyArray[j].isPublic;
+                        var cellText = null;
+                        if(public === 1){
+                            cellText = document.createTextNode("True"); 
+                            }
+                        else {
+                            cellText = document.createTextNode("False"); 
+                        }
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+
+                        /////////////////
+                         var cell = document.createElement("td");
+                        var public = propertyArray[j].isPublic;
+                        var cellText = null;
+                        if(public === 1){
+                            cellText = document.createTextNode("True"); 
+                            }
+                        else {
+                            cellText = document.createTextNode("False"); 
+                        }
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                        
+                        /////////////////
+
+                          var cell = document.createElement("td");
+                        var approve = propertyArray[j].ApprovedBy;
+                        var cellText = null;
+                        if(approve !== null){
+                            cellText = document.createTextNode("True"); 
+                            }
+                        else {
+                            cellText = document.createTextNode("False"); 
+                        }
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                        /////////////
+
+                        var cell = document.createElement("td");    
+                        var cellText = document.createTextNode(propertyArray[j].Avg); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+
+                        //////////
+
+                        var cell = document.createElement("td");    
+                        var cellText = document.createTextNode(propertyArray[j].Count); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+
+                                       
+                         var cell = document.createElement("td");    
+                         var link = document.createElement("a");
+                        var cellText = document.createTextNode("Manage"); 
+                        link.appendChild(cellText);
+                        link.href = "manageproperty.html?id=" + ID
+                        cell.appendChild(link);
+                        row.appendChild(cell);
+
                         tblBody.appendChild(row);
                 }
 
@@ -178,10 +343,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block" alt="Pingendo logo" height="16"> </div>
-  <pingendo onclick="window.open('https://pingendo.com/', '_blank')" style="cursor:pointer;position: fixed;bottom: 10px;right:10px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:180px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white">Made with Pingendo&nbsp;&nbsp;
-    <img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block" alt="Pingendo logo" height="16">
-  </pingendo>
+
 </body>
 
 </html>
