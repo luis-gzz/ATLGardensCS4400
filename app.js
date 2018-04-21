@@ -233,7 +233,7 @@ app.post('/info', function(req, res){
 
   var id = req.body.id;
 
-  var sql = "SELECT Property.Name, Property.Ownedby, COUNT(Visits.Email), Property.Address, AVG(Visits.Rating), Property.Size, Property.PType, Property.IsPublic, Property.IsCommercial, Property.ID, Grows_Raises.IName FROM Property " +
+  var sql = "SELECT Property.Name, Property.Ownedby, COUNT(Visits.Email) AS Count, Property.Address, AVG(Visits.Rating) AS Avg, Property.Size, Property.PType, Property.IsPublic, Property.IsCommercial, Property.ID, Grows_Raises.IName FROM Property " +
     "LEFT JOIN Visits ON Property.ID = Visits.PId " +
     "LEFT JOIN Grows_Raises ON Property.ID = Grows_Raises.PId WHERE Property.ID = ? Group by (Property.ID)"
 
@@ -441,7 +441,7 @@ app.post('/manage', function(req, res){
   var items = req.body.items;
 
   console.log("Trying to insert the following list of items " + items);
-  
+
   item_arr = []
     // Something needs to be changed about this
     for (i = 0; i < items.length; i++) {
@@ -479,7 +479,7 @@ app.post('/manage', function(req, res){
                     //res.end();
                 });
             }
-            
+
           } else {
             //failure
             res.write("fall remove item");
@@ -512,11 +512,11 @@ app.post('/users', function(req, res){
   if (type == "visitor") {
     // All properties for owned by a user
     type = "Visitor";
-    var sql = "SELECT User.Email, User.Username, COUNT(Visits.Email) FROM User LEFT JOIN Visits ON User.Email = Visits.Email WHERE User.UType = ? Group by (User.Email)";
+    var sql = "SELECT User.Email, User.Username, COUNT(Visits.Email) AS Count FROM User LEFT JOIN Visits ON User.Email = Visits.Email WHERE User.UType = ? Group by (User.Email)";
   } else if (type == "owner") {
     // All properties for owned by a user
     type = "Owner";
-    var sql = "SELECT User.Username, User.Email, COUNT(User.Email) FROM User LEFT JOIN Property ON User.Email = Property.OwnedBy WHERE User.UType = ? Group by (User.Email)";
+    var sql = "SELECT User.Username, User.Email, COUNT(User.Email) AS Count FROM User LEFT JOIN Property ON User.Email = Property.OwnedBy WHERE User.UType = ? Group by (User.Email)";
   }
 
   connection.query(sql, [type],
@@ -588,7 +588,7 @@ app.post('/visits', function(req, res){
   // }
 
   var email = req.body.email;
-  var sql = "SELECT Property.Name, VDate, AVG(Rating) FROM Visits LEFT Join Property ON Property.ID = Visits.PId WHERE Visits.Email = ? Group by (Property.Name)"
+  var sql = "SELECT Property.Name, VDate, AVG(Rating) AS Avg FROM Visits LEFT Join Property ON Property.ID = Visits.PId WHERE Visits.Email = ? Group by (Property.Name)"
 
   connection.query(sql, [email],
       function(err, results, fields) {

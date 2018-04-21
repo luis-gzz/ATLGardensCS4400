@@ -28,12 +28,28 @@
                         var data = xhr.responseText;
                         console.log("This is data" + data);
 
-                        if (data != "0") {
+                        if (data != "0" && data == 'Owner') {
                             Cookies.set("type", data);
                             Cookies.set("email", email);
 
                             window.location.replace("webapp/loginhome.html");
                             console.log("Next page");
+                        }
+
+                        else if (data != "0" && data == "Admin") {
+                            Cookies.set("type", data);
+                            Cookies.set("email", email);
+
+                            window.location.replace("webapp/adminhome.html");
+                            console.log("Next page");
+                        }
+                        else if (data != "0" && data == "Visitor") {
+                            Cookies.set("type", data);
+                            Cookies.set("email", email);
+
+                            window.location.replace("webapp/visitorloginhome.html");
+                            console.log("Next page");
+
                         }
                         else{
                             console.log("Login failed")
