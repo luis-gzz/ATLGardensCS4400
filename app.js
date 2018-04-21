@@ -613,10 +613,12 @@ app.post('/visits', function(req, res){
 
   connection.query(sql, [email],
       function(err, results, fields) {
+        console.log("Visit Results");
         console.log(results)
         console.log(err)
-        if (results.length > 0 ) {
+        if (err == null) {
           // 1 for success
+            console.log("=====HERE-----");
           res.write(JSON.stringify(results));
         } else {
           // 0 for failure
@@ -641,6 +643,8 @@ app.post('/approve', function(req, res){
   var id = req.body.id;
   var admin = req.body.admin;
   var sql;
+
+  console.log("approving");
 
   if (what == "approveProp") {
     sql = "UPDATE Property SET ApprovedBy = ? WHERE ID = ?";
