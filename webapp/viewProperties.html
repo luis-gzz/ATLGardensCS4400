@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
+  <script>
+      current_item_list = [];
+
+      function logItem(item) {
+          current_item_list.push(item);
+      }
+
+      function displayItemLog() {
+          console.log(current_item_list);
+      }
+
+
+
+      function addAnimal() {
+          var new_animal = document.getElementById("animal_dropdown").value
+
+          if (!current_item_list.includes(new_animal)) {
+                  var elem = document.createElement("p");
+                  var text = document.createTextNode(new_animal);
+
+                  elem.setAttribute("id", new_animal + "_text")
+                  elem.appendChild(text);
+
+                  // Makes button
+                  var but = document.createElement("Button");
+                  var text = document.createTextNode("Remove");
+
+                  but.appendChild(text);
+
+                  but.setAttribute("onClick", "removeAnimal('" + new_animal + "')");
+                  but.setAttribute("id", new_animal + "_button")
+
+                  // Adds two elements
+                  var animal_div = document.getElementById("animal_list");
+
+                  animal_div.appendChild(elem);
+                  
+          }
+
+          current_item_list.push(new_animal);
+      }
+
+      function removeAnimal(name) {
+          var text_name = document.getElementById(name + "_text");
+          var text_button = document.getElementById(name + "_button");
+
+          text_name.parentNode.removeChild(text_name);
+          text_button.parentNode.removeChild(text_button);
+
+
+          var index = current_item_list.indexOf(name);
+          current_item_list.splice(index, 1);
+      }
+
+      function addCrop() {
+          var new_crop = document.getElementById("crop_dropdown").value
+
+          if (!current_item_list.includes(new_crop)) {
+                  var elem = document.createElement("p");
+                  var text = document.createTextNode(new_crop);
+
+                  elem.setAttribute("id", new_crop + "_text")
+                  elem.appendChild(text);
+
+                  // Makes button
+                  var but = document.createElement("Button");
+                  var text = document.createTextNode("Remove");
+
+                  but.appendChild(text);
+
+                  but.setAttribute("onClick", "removeAnimal('" + new_crop + "')");
+                  but.setAttribute("id", new_crop + "_button")
+
+                  // Adds two elements
+                  var crop_div = document.getElementById("crop_list");
+
+                  crop_div.appendChild(elem);
+                  
+          }
+
+          current_item_list.push(new_crop);
+      }
+
+      function removeCrop(name) {
+          var text_name = document.getElementById(name + "_text");
+          var text_button = document.getElementById(name + "_button");
+
+          text_name.parentNode.removeChild(text_name);
+          text_button.parentNode.removeChild(text_button);
+
+
+          var index = current_item_list.indexOf(name);
+          current_item_list.splice(index, 1);
+      }
+
+      function deleteProperty() {
+        // Will delete information requested by the front end
+  // Users, properties, crops, visits
+  // var payload = {
+  //  what =  "visitorUnlog" OR "adminUnlog" OR "deleteUser" OR "deleteItem" OR "deleteProp"
+  //  email = user email
+  //  id = property id OR item name
+  //  propName = property name for unlogging visit
+  // }
+          var url_string = window.location.href;
+
+          var url = new URL(url_string);
+          var id = url.searchParams.get("id");
+
+          let payload = {
+              "what": "deleteProp",
+              "email": "None",
+              "id": id,
+              "propName": document.getElementById("name").value
+          }
+
+          var xhr = new XMLHttpRequest();
+                xhr.onload = () => {
+                    var data = xhr.responseText;
+
+                    //console.log("This is data " + data);
+                    //propertyArray = JSON.parse(data);
+
+                    if (data != "0") {
+                            //window.location.replace("webapp/loginhome.html");
+                        console.log("Completed");
+                        window.location.replace("loginhome.html");
+                    }
+                }
+
+          xhr.open("POST", "http://localhost:3000/delete", true);
+          xhr.setRequestHeader("Content-Type", 'application/json');
+          xhr.send(JSON.stringify(payload));
+
+
+      }
+
+      function editDB() {
+          var url_string = window.location.href;
+
+          var url = new URL(url_string);
+          var id = url.searchParams.get("id");
+
+          items = [];
+
+          let payload = {
+            "email": "farmerJoe@gmail.com",
+            "id": id, 
+            "property": document.getElementById("name").value,
+            "address": document.getElementById("address").value,
+            "acres": document.getElementById("size").value,
+            "public": document.getElementById("public_dropdown").value,
+            "commercial": document.getElementById("commercial_dropdown").value,
+            "items" : current_item_list
+          }
+
+          console.log(payload);
+
+          var xhr = new XMLHttpRequest();
+                xhr.onload = () => {
+                    var data = xhr.responseText;
+
+                    //console.log("This is data " + data);
+                    //propertyArray = JSON.parse(data);
+
+                    if (data != "0") {
+                            //window.location.replace("webapp/loginhome.html");
+                        console.log("Completed");
+                    }
+                }
+
+          xhr.open("POST", "http://localhost:3000/manage", true);
+          xhr.setRequestHeader("Content-Type", 'application/json');
+          xhr.send(JSON.stringify(payload));
+
+      }
+
+      function editMenus(PType) {
+          var animal_dropdown = document.getElementById("animal_dropdown");
+          //var animal_div = document.getElementById("animal_div");
+          var animal_but = document.getElementById("add_animal");
+
+          animal_dropdown.style.display = "block";
+
+          if (PType != "Farm") { 
+              animal_dropdown.style.display = "none";
+              //animal_div.style.display = "none";
+              animal_but.style.display = "none";
+          } 
+
+          console.log(animal_dropdown);
+      }
+
+      function displayEditable(property_info) {
+          ID = property_info.ID;
+          Name = property_info.Name;
+          Address = property_info.Address;
+          Size = property_info.Size;
+          Type = property_info.PType;
+          Public = property_info.IsPublic;
+          Commercial = property_info.IsCommercial;
+          Items = property_info.IName;
+
+          document.getElementById("id_text").innerHTML = "ID: " + ID;
+          document.getElementById("name").value = Name;
+          document.getElementById("address").value = Address;
+          document.getElementById("size").value = Size;
+          document.getElementById("property_type").innerHTML = "Type: " + Type;
+
+          editMenus(Type);
+
+         
+
+          if (Public) {
+              document.getElementById("public_value").innerHTML = "Public: True";
+          }
+
+         
+
+          if (Commercial) {
+              document.getElementById("commercial_value").innerHTML = "Commerical: True";
+          }
+
+          for (var i = 0; i < Items.length; i++) {
+              if (Items[i][1] == "Animal") {
+                  // Makes text
+                  var elem = document.createElement("p");
+                  var text = document.createTextNode(Items[i][0]);
+
+                  elem.setAttribute("id", Items[i][0] + "_text")
+                  elem.appendChild(text);
+
+                  // Makes button
+                  var but = document.createElement("Button");
+                  var text = document.createTextNode("Remove");
+
+                  but.appendChild(text);
+
+                  but.setAttribute("onClick", "removeAnimal('" + Items[i][0] + "')");
+                  but.setAttribute("id", Items[i][0] + "_button")
+
+                  // Adds two elements
+                  var animal_div = document.getElementById("animal_list");
+
+                  animal_div.appendChild(elem);
+                 
+
+
+                  //document.getElementById("animal_list").innerHTML = document.getElementById("animal_list").innerHTML + Items[i][0]
+              } else {
+                                    // Makes text
+                  var elem = document.createElement("p");
+                  var text = document.createTextNode(Items[i][0]);
+
+                  elem.setAttribute("id", Items[i][0] + "_text")
+                  elem.appendChild(text);
+
+                  // Makes button
+                  var but = document.createElement("Button");
+                  var text = document.createTextNode("Remove");
+
+                  but.appendChild(text);
+
+                  but.setAttribute("onClick", "removeCrop('" + Items[i][0] + "')");
+                  but.setAttribute("id", Items[i][0] + "_button")
+
+                  // Adds two elements
+                  var animal_div = document.getElementById("crop_list");
+
+                  animal_div.appendChild(elem);
+                 
+              }
+
+              document.getElementById("animal_dropdown").style.display = "none";
+              document.getElementById("crop_dropdown").style.display = "none"
+
+              logItem(Items[i][0]);
+          }
+      }
+
+      function processGet() {
+        var url_string = window.location.href;
+
+        var url = new URL(url_string);
+        var id = url.searchParams.get("id");
+        
+        let payload = {
+                "id": id
+            }
+
+            var propertyArray;
+
+                console.log(payload);
+
+                var xhr = new XMLHttpRequest();
+                    xhr.onload = () => {
+                        var data = xhr.responseText;
+                      
+                        console.log(data);
+
+                        property_info = JSON.parse(data);
+
+                        console.log("property info" + property_info);
+
+                        if (data != "0") {
+                            //window.location.replace("webapp/loginhome.html");
+                            displayEditable(property_info[0]);
+                            console.log("Completed");
+                        }
+                    }
+
+                xhr.open("POST", "http://localhost:3000/info", true);
+                xhr.setRequestHeader("Content-Type", 'application/json');
+                xhr.send(JSON.stringify(payload));
+      }
+
+      function getAnimals() {
+          let payload = {
+              "type": "animal",
+              "confirmed": 1
+          }
+
+          var xhr = new XMLHttpRequest();
+              xhr.onload = () => {
+              var data = xhr.responseText;
+
+              var animalArray = JSON.parse(data);
+              console.log("This is data" + animalArray);
+
+              // *******************************************************************
+              // ************* Move this when we figure out async stuff ************
+              // *******************************************************************
+              var animal_dropdown = document.getElementById("animal_dropdown");
+
+              for (var i = 0; i < animalArray.length; i++) {
+                var node = document.createElement("option");          
+                node.text = animalArray[i].Name;
+                node.setAttribute("value", animalArray[i].Name);
+
+                animal_dropdown.add(node);
+              }
+
+              // *******************************************************************
+              // *********** End Move this *****************************************
+              // *******************************************************************
+
+              if (data != "0") {
+                         //window.location.replace("webapp/loginhome.html");
+                  console.log("Completed");
+              }
+          }
+
+          xhr.open("POST", "http://localhost:3000/items", true);
+          xhr.setRequestHeader("Content-Type", 'application/json');
+          xhr.send(JSON.stringify(payload));
+      }
+
+      function getCrops() {
+          let payload = {
+              "type": "crop",
+              "confirmed": 1
+          }
+
+          var xhr = new XMLHttpRequest();
+              xhr.onload = () => {
+              var data = xhr.responseText;
+
+              var cropArray = JSON.parse(data);
+              console.log("This is data" + cropArray);
+
+              // *******************************************************************
+              // ************* Move this when we figure out async stuff ************
+              // *******************************************************************
+              var crop_dropdown = document.getElementById("crop_dropdown");
+
+              for (var i = 0; i < cropArray.length; i++) {
+                var node = document.createElement("option");          
+                node.text = cropArray[i].Name;
+                node.setAttribute("value", cropArray[i].Name);
+
+                crop_dropdown.add(node);
+              }
+
+              // *******************************************************************
+              // *********** End Move this *****************************************
+              // *******************************************************************
+
+              if (data != "0") {
+                         //window.location.replace("webapp/loginhome.html");
+                  console.log("Completed");
+              }
+          }
+
+          xhr.open("POST", "http://localhost:3000/items", true);
+          xhr.setRequestHeader("Content-Type", 'application/json');
+          xhr.send(JSON.stringify(payload));
+      }
+
+      window.onload = function() {
+          getAnimals();
+          getCrops();
+          processGet();
+      }
+  </script>
+<body>
+  <nav class="navbar navbar-expand-md bg-primary navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <i class="fa d-inline fa-lg fa-cloud"></i>
+        <b>Atlanta Farm Orchard Garden Database</b>
+      </a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar2SupportedContent" aria-controls="navbar2SupportedContent" aria-expanded="false" aria-label="Toggle navigation"> </button>
+      <div class="collapse navbar-collapse text-center justify-content-end" id="navbar2SupportedContent">
+        <form class="btn navbar-btn ml-2 text-white fa d-inline  btn-primary">
+          <a class="btn navbar-btn ml-2 text-white btn-secondary">
+            <i class="fa d-inline fa-lg fa-user-circle-o"></i> Log out</a>
+        </form>
+      </div>
+    </div>
+  </nav>
+  <div class="py-5">
+    <div class="container">
+      <div class="col-md-12">
+        <div style="font-size: 45px"> View Property
+          <br>
+          <a style="font-size: 15px">( </a>
+          <a style="font-size:15px;color:red">* </a>
+          <a style="font-size:15px">= required fields )</a>
+        </div>
+          <br>
+          <div>
+            <p id="id_text">ID: 000000</p>
+          </div>
+          <div class="row">
+            <div class="form-group ">Property Name: &nbsp;
+              <input id = "name" type="text" class="form-control" placeholder="*Property Name">
+              <br> Street Address: &nbsp;
+              <input id = "address" type="text" class="form-control" placeholder="*Street Address">
+              <br>
+              <div class="row">
+               Acres: &nbsp;
+                  <input id="size" type="text" class="form-control" placeholder="*Acres">
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <p id="property_type">Type</p>
+                </div>
+                <div class="col-md-4">
+                  <p>Animal</p>
+                  <div id = "animal_list"></div>
+                  <select id="animal_dropdown" onChange="displayItemLog()">
+                  </select>
+                  
+                </div>
+                <div class="col-md-4">
+                  <p>Crop</p>
+                  <div id = "crop_list"></div>
+                  <select id="crop_dropdown" onChange="displayItemLog()">
+                  </select>
+                  
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-md-4">
+                  <p id = "public_value">Public : False</p>
+                  
+                  </div>
+                <div class="col-md-4">
+                  <p id="commercial_value">Commercial : False</p>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-md-4">
+                  <button type="reset" class="btn btn-primary"><a href = "loginhome.html">Cancel</a> </button>
+                </div>
+              </div>
+              <br>
+              <div class="btn-toolbar"> &nbsp;&nbsp; </div>
+            </div>
+          </div>
+          <br>
+          <br> 
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <pingendo onclick="window.open('https://pingendo.com/', '_blank')" style="cursor:pointer;position: fixed;bottom: 10px;right:10px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:180px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white">Made with Pingendo&nbsp;&nbsp;
+    <img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block" alt="Pingendo logo" height="16">
+  </pingendo>
+</body>
+
+</html>
