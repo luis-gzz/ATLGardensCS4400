@@ -87,7 +87,6 @@ app.post('/registration', function(req, res){
   var password = req.body.password;
   var username = req.body.username;
   var type = req.body.type;
-  var email = req.body.email;
 
   var id = Math.floor(Math.random()*90000) + 10000;
   var propName = req.body.property;
@@ -100,9 +99,15 @@ app.post('/registration', function(req, res){
   var commercial = req.body.commercial;
   var items = req.body.items;
   // TODO: Fix?
-  for (i = 0; i < items.length; i++) {
-    items[i].unshift(id);
-  }
+   item_arr = []
+    // Something needs to be changed about this
+    for (i = 0; i < items.length; i++) {
+      item_arr[i] = [id, items[i]];
+    }
+
+  // for (i = 0; i < items.length; i++) {
+  //   items[i].unshift(id);
+  // }
 
   console.log("Registering user " + username);
 
