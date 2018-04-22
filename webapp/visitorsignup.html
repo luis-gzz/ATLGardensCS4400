@@ -23,7 +23,51 @@
   //  "propType": "Farm",
   //  "items" : [["Pig"], ["Peruvian Lily"]]
   // }
+  var emailcomments = false;
+function validateEmail() {
+    console.log("validate email")
+    // this method is called when the user click out of the input box.
+	// check if the emial is a validate one on the client side. More checking should be done on the server side as well.
+	// generates a error message when the email address is not valid.
+    var x = document.getElementById("emailSignUp").value;
+    var atpos = x.indexOf("@");
+    var dotpos = x.lastIndexOf(".");
+    emailcomments = false;
+    if(document.getElementById("emailcomments")!= null){
+        emailcomments = true;
+    }
+    
+    
+    if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(x)))   {
+    	
+        var para = document.createElement("p");
+        var node = document.createTextNode("Not a valid e-mail address");
+        para.appendChild(node);
+        para.style.color = "red";
+        para.id = "emailcomments";
+        if (!emailcomments) {
+            $("input#emailSignUp").after(para);
+            emailcomments = true;
+            
+            
+        }
+      
+    }
+    else {
+    	
+
+        if (emailcomments) {
+            $("#emailcomments").remove();
+        }
+        emailval = true;
+    }
+
+}
       function insertUser() {
+          if(emailcomments == true ){
+              window.alert("Invalid email");
+              return;
+          }
           if (document.getElementById("password").value != document.getElementById("confirm_password").value) {
               window.alert("passwords don't match fool");
               return;
@@ -86,8 +130,8 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse text-center justify-content-end" id="navbar2SupportedContent">
-        <form class="btn navbar-btn ml-2 text-white fa d-inline fa-lg fa-user-circle-o btn-light" style="background-image: url('../../../farm.jpg');"> Email:
-          <input type="email" name="fname"> Password:
+        <form class="btn navbar-btn ml-2 text-white fa d-inline fa-lg fa-user-circle-o btn-light" "> Email:
+          <input type="email"  name="fname"> Password:
           <input type="password" name="lname">
           <a class="btn navbar-btn ml-2 text-white btn-secondary">
             <i class="fa d-inline fa-lg fa-user-circle-o"></i> Sign in</a>
@@ -110,7 +154,7 @@
             <div class="form-group col-md-6">
               <input id="username" type="text" class="form-control" placeholder="*Username"> </div>
             <div class="form-group">
-              <input id="email" type="email" class="form-control"placeholder="*Enter email"> </div>
+              <input id="emailSignUp" onblur="validateEmail()" type="email" class="form-control"placeholder="*Enter email"> </div>
             <div class="form-group">
               <input id="password" type="password" class="form-control" placeholder="*New password">
               <input id="confirm_password" type="password" class="form-control" placeholder="*Confirm password"> </div>
@@ -127,9 +171,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   <img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block" alt="Pingendo logo" height="16">
-  <pingendo onclick="window.open('https://pingendo.com/', '_blank')" style="cursor:pointer;position: fixed;bottom: 10px;right:10px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:180px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white">Made with Pingendo&nbsp;&nbsp;
-    <img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block" alt="Pingendo logo" height="16">
-  </pingendo>
+
 </body>
 
 </html>
