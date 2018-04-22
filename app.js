@@ -382,7 +382,7 @@ app.post('/add', function(req, res){
 
     console.log(item_arr);
 
-    connection.query(sql, [id, propName, acres, address + city + zip, public, commercial, email, propType],
+    connection.query(sql, [id, propName, acres, address + " " + city + " " + zip, public, commercial, email, propType],
       function(err, results, fields) {
         console.log(results)
         console.log(err)
