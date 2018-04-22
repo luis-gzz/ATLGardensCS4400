@@ -604,8 +604,8 @@ app.post('/items', function(req, res){
     var sql = "SELECT Name, IType FROM `FarmItem` WHERE IType != ? AND isApproved = ?";
   } else if (type == "garden") {
     var sql = "SELECT Name, IType FROM `FarmItem` WHERE (IType = 'Vegetables' OR IType = 'Flower') AND isApproved = 1;";
-  } else if (type == "orchard") {
-    var sql = "SELECT Name, IType FROM `FarmItem` WHERE (IType = 'Fruits' OR IType = 'Nuts') AND isApproved = 1;";
+} else if (type == "orchard") {
+    var sql = "SELECT Name, IType FROM `FarmItem` WHERE (IType = 'Fruit' OR IType = 'Nut') AND isApproved = 1;";
   } else if (type == "unapproved") {
     var sql = "SELECT Name, IType FROM `FarmItem` WHERE isApproved = 0";
   } else if (type == "approved") {
