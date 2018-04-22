@@ -74,14 +74,13 @@
                          tblBody.appendChild(row);
 
                          var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
+                        cell.onclick = function(){sortTable(3);};   
                         var cellText = document.createTextNode("City"); 
                         cell.appendChild(cellText); 
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
                          var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
                         var cellText = document.createTextNode("Zip"); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
@@ -94,6 +93,7 @@
                          tblBody.appendChild(row);
 
                          var cell = document.createElement("th");  
+                         cell.onclick = function(){sortTable(6);};   
                         var cellText = document.createTextNode("Type"); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
@@ -112,6 +112,7 @@
                          tblBody.appendChild(row);
 
                           var cell = document.createElement("th"); 
+                          cell.onclick = function(){sortTable(9);};   
                         var cellText = document.createTextNode("Rating"); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
@@ -291,13 +292,13 @@
           getProperties("farmerJoe@gmail.com", "ownerProps");
       }
 
-     
+   
     function sortTable(n) {
         console.log("sorting")
         var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
         table = document.getElementById("table");
         switching = true;
-        dir = "asc"; 
+        dir = "asc";
         while (switching) {
             switching = false;
             rows = table.getElementsByTagName("tr");
@@ -306,21 +307,37 @@
             x = rows[i].getElementsByTagName("td")[n];
             y = rows[i + 1].getElementsByTagName("td")[n];
             if (dir == "asc") {
-                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                shouldSwitch= true;
-                break;
+                if(n == 9){ // if sorting should be in integer
+                    if (parseFloat(x.innerHTML) > parseFloat(y.innerHTML)) {
+                    shouldSwitch= true;
+                    break;
+                }
+                } else {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    shouldSwitch= true;
+                    break;
+                }
+                
             }
-        } else if (dir == "desc") {
-            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-            shouldSwitch= true;
-            break;
+        } else if (dir == "desc")  {
+                if(n ==  9){ // if sorting should be in integer
+                    if (parseFloat(x.innerHTML) < parseFloats(y.innerHTML)) {
+                    shouldSwitch= true;
+                    break;
+                    }
+                } else {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                    shouldSwitch= true;
+                    break;
+                }
+                
             }
-        }
+        } 
         }
         if (shouldSwitch) {
             rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
             switching = true;
-            switchcount ++; 
+            switchcount ++;
         } else {
         if (switchcount == 0 && dir == "asc") {
             dir = "desc";
@@ -329,27 +346,66 @@
         }
         }
     }
+   function searchFunc() {
+  // Declare variables
+    var n = 1;
+    var type = document.getElementById("searchby");
+    var value = type.value;
 
-    function searchFunc() {
-  // Declare variables 
-  console.log("searching");
+    if(value == "Name"){
+        
+        document.getElementById("lowbound").disabled ="true";
+        document.getElementById("highbound").disabled = "true";
+        n = 1;
+    }   else if (value == "Size"){
+        console.log("in visit")
+        var low = document.getElementById("lowbound");
+        low.disabled = false;
+        var high = document.getElementById("highbound");
+        high.disabled = false
+        n= 5
+    }
+    
+  var low = document.getElementById("lowbound").value;
+  var high  = document.getElementById("highbound").value
+    if(document.getElementById("lowbound").value=="" || document.getElementById("highbound").value ==""){
+        return;
+    }
+
   var input, filter, table, tr, td, i;
   input = document.getElementById("myInput");
   filter = input.value.toUpperCase();
   table = document.getElementById("table");
   tr = table.getElementsByTagName("tr");
+  var low = document.getElementById("lowbound").value;
+  var high  = document.getElementById("highbound").value
 
   // Loop through all table rows, and hide those who don't match the search query
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[1];
+  if(n == 5){
+        
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[n];
+            if (td && td.innerHTML !="N/A") {
+                if (parseFloat(td.innerHTML)>=low && parseFloat(td.innerHTML) <=high ) {
+                tr[i].style.display = "";
+            } else {
+            tr[i].style.display = "none";
+         }
+        }
+    }
+  } else{
+        for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[n];
     if (td) {
       if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
         tr[i].style.display = "";
       } else {
         tr[i].style.display = "none";
       }
-    } 
+    }
   }
+  }
+
 }
   </script>
 </head>
@@ -377,9 +433,16 @@
         <br>
         <div class="row">
           
-          <div><i style="font-size:24px" class="fa">&#xf002;</i><input type="text" id="myInput" onkeyup="searchFunc()" placeholder="Search for names..">
-        
-          
+          <div>
+            <select id="searchby" onchange ="searchFunc()">
+                    <option value="Name">Name</option>
+                    <option value="Visits">Size</option>
+                  </select>
+          </div>
+          <div><input id="lowbound" onkeyup ="searchFunc()"disabled = "true"placeholder="Lower Bound"></input><input id="highbound" onkeyup ="searchFunc()" disabled="true"placeholder="Higher Bound"></input></div>
+          <div><i style="font-size:24px" class="fa">&#xf002;</i><input type="text" id="myInput" onkeyup="searchFunc()" placeholder="Search ...">
+
+
           </div>
         <table id="table"></table>
       </div>
