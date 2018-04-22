@@ -318,6 +318,27 @@
         }
         }
     }
+      function searchFunc() {
+  // Declare variables
+  console.log("searching");
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("table");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
   </script>
 </head>
 
@@ -345,6 +366,8 @@
           <div class="form-group ">
             <font size="5px">Other Properties: </font> &nbsp; </div>
         </div>
+        <div><i style="font-size:24px" class="fa">&#xf002;</i><input type="text" id="myInput" onkeyup="searchFunc()" placeholder="Search for names..">
+          </div>
         <table id="table"></table>
       </div><br><br><br><br><br>
       <div class="col-md-12">
