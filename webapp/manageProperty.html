@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
   <script>
       current_item_list = [];
+      var animal_count = 0;
+      var crop_count = 0;
 
       function logItem(item) {
           current_item_list.push(item);
@@ -42,7 +44,7 @@
 
                   but.setAttribute("onClick", "removeAnimal('" + new_animal + "')");
                   but.setAttribute("id", new_animal + "_button")
-                  but.setAttribute("class", "remove_button");
+                  but.setAttribute("class", "remove_button remove_animal");
 
                   // Adds two elements
                   var animal_div = document.getElementById("animal_list");
@@ -51,6 +53,10 @@
                   animal_div.appendChild(but);
 
                   current_item_list.push(new_animal);
+
+                  animal_count++;
+
+                  checkList();
           }
 
           
@@ -66,6 +72,8 @@
 
           var index = current_item_list.indexOf(name);
           current_item_list.splice(index, 1);
+
+          animal_count--;
 
           checkList();
       }
@@ -86,9 +94,9 @@
 
                   but.appendChild(text);
 
-                  but.setAttribute("onClick", "removeAnimal('" + new_crop + "')");
+                  but.setAttribute("onClick", "removeCrop('" + new_crop + "')");
                   but.setAttribute("id", new_crop + "_button")
-                  but.setAttribute("class", "remove_button");
+                  but.setAttribute("class", "remove_button remove_crop");
 
                   // Adds two elements
                   var crop_div = document.getElementById("crop_list");
@@ -97,6 +105,10 @@
                   crop_div.appendChild(but);
 
                   current_item_list.push(new_crop);
+
+                  crop_count++;
+
+                  checkList();
           }
 
           
@@ -112,6 +124,8 @@
 
           var index = current_item_list.indexOf(name);
           current_item_list.splice(index, 1);
+
+          crop_count--;
 
           checkList();
       }
@@ -291,7 +305,7 @@
 
                   but.setAttribute("onClick", "removeAnimal('" + Items[i][0] + "')");
                   but.setAttribute("id", Items[i][0] + "_button")
-                  but.setAttribute("class", "remove_button");
+                  but.setAttribute("class", "remove_button remove_animal");
 
                   // Adds two elements
                   var animal_div = document.getElementById("animal_list");
@@ -299,7 +313,7 @@
                   animal_div.appendChild(elem);
                   animal_div.appendChild(but);
 
-
+                  animal_count++;
                   //document.getElementById("animal_list").innerHTML = document.getElementById("animal_list").innerHTML + Items[i][0]
               } else {
                                     // Makes text
@@ -317,17 +331,21 @@
 
                   but.setAttribute("onClick", "removeCrop('" + Items[i][0] + "')");
                   but.setAttribute("id", Items[i][0] + "_button")
-                  but.setAttribute("class", "remove_button");
+                  but.setAttribute("class", "remove_button remove_crop");
 
                   // Adds two elements
-                  var animal_div = document.getElementById("crop_list");
+                  var crop_div = document.getElementById("crop_list");
 
-                  animal_div.appendChild(elem);
-                  animal_div.appendChild(but);
+                  crop_div.appendChild(elem);
+                  crop_div.appendChild(but);
+
+                  crop_count++;
               }
 
               logItem(Items[i][0]);
           }
+
+          //console.log(animal_count + " " + crop_count + document.getElementsByClassName("remove_animal").length);
       }
 
       function processGet() {
@@ -409,7 +427,8 @@
       }
 
        function getCrops(type) {
-         console.log("type = " + type)
+         console.log("getting crops")
+         //console.log("type = " + type)
          let payload = {
                "type": "crop",
                "confirmed": 1
@@ -446,7 +465,10 @@
                 node.text = cropArray[i].Name;
                 node.setAttribute("value", cropArray[i].Name);
                 crop_dropdown.add(node);
+                console.log(node.text)
               }
+
+              checkList();
               // *******************************************************************
               // *********** End Move this *****************************************
               // *******************************************************************
@@ -504,19 +526,36 @@
       }
 
       function checkList() {
-          console.log("Checking list");
+          console.log("Checking list- crops count: " +  document.getElementsByClassName("remove_crop").length);
 
-          var button_arr = document.getElementsByClassName("remove_button");
+          if ( document.getElementsByClassName("remove_crop").length < 2) {
+              var crops = document.getElementsByClassName("remove_crop");
 
-          console.log(button_arr);
+              for (var i = 0; i < crops.length; i++) {
+                  crops[i].disabled = true;
+              }
+          } else {
+             var crops = document.getElementsByClassName("remove_crop");
 
-          if (current_item_list.length <= 1) {
-              console.log("Not enough items");
-              for (var i = 0; i < button_arr.length; i++) {
-                  button_arr[i].disabled = true;
-                  console.log("disabling");
+              for (var i = 0; i < crops.length; i++) {
+                  crops[i].disabled = false;
               }
           }
+
+          if (document.getElementsByClassName("remove_animal").length < 2) {
+              var animals = document.getElementsByClassName("remove_animal");
+
+              for (var i = 0; i < animals.length; i++) {
+                  animals[i].disabled = true;
+              }
+          } else {
+              var animals = document.getElementsByClassName("remove_animal");
+
+              for (var i = 0; i < animals.length; i++) {
+                  animals[i].disabled = false;
+              }
+          }
+
       }
       
       window.onload = function() {
