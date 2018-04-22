@@ -214,6 +214,7 @@
           Public = property_info.IsPublic;
           Commercial = property_info.IsCommercial;
           Items = property_info.IName;
+          AvgRating = property_info.Avg;
 
           document.getElementById("id_text").innerHTML = "ID: " + pad(ID, 5);
           document.getElementById("name").value = Name;
@@ -221,7 +222,12 @@
           document.getElementById("size").value = Size;
           document.getElementById("property_type").innerHTML = "Type: " + Type;
 
+
           editMenus(Type);
+
+          if (AvgRating != null) {
+              document.getElementById("avg_rating").innerHTML = "Average Rating: " + AvgRating;
+          }
 
           var public_dropdown = document.getElementById("public_dropdown");
 
@@ -631,6 +637,7 @@
               <br> Street Address: &nbsp;
               <input id = "address" disabled = "True" type="text" class="form-control" placeholder="*Street Address">
               <br>
+              <p id="avg_rating">No visits</p>
               <div class="row">
                Acres: &nbsp;
                   <input id="size" disabled = "True" type="text" class="form-control" placeholder="*Acres">
