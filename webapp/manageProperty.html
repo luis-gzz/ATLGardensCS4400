@@ -467,8 +467,12 @@
               "iName": document.getElementById("newItem").value
           }
           
+          let canAdd = true;
+          if (payload.iName == null || payload.iName == "") {
+              canAdd = false;
+          }
           console.log(payload);
-
+          if (canAdd) {
                 var xhr = new XMLHttpRequest();
                     xhr.onload = () => {
                         var data = xhr.responseText;
@@ -491,6 +495,10 @@
                 xhr.open("POST", "http://localhost:3000/add", true);
                 xhr.setRequestHeader("Content-Type", 'application/json');
                 xhr.send(JSON.stringify(payload));
+          } else {
+              console.log("here")
+              alert("You must enter an item name");
+          }
           
           
       }
@@ -623,7 +631,7 @@
                   <button  class="btn btn-primary" onclick="deleteProperty()">Delete Property</button>
                 </div>
                 <div class="col-md-4">
-                  <button type="reset" class="btn btn-primary"><a href = "loginhome.html" onclick="goBack()" >Cancel</a> </button>
+                  <button type="reset" class="btn btn-primary"><a class="text-white" href = "loginhome.html" onclick="goBack()" >Cancel</a> </button>
                 </div>
               </div>
              
