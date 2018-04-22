@@ -8,7 +8,60 @@
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css">
     <script src="js/md5.min.js"></script>
     <script>
+        var emailcomments = false;
+function validateEmail() {
+    console.log("validate email")
+    // this method is called when the user click out of the input box.
+	// check if the emial is a validate one on the client side. More checking should be done on the server side as well.
+	// generates a error message when the email address is not valid.
+    var x = document.getElementById("emailSignUp").value;
+    var atpos = x.indexOf("@");
+    var dotpos = x.lastIndexOf(".");
+    emailcomments = false;
+    if(document.getElementById("emailcomments")!= null){
+        emailcomments = true;
+    }
+    
+    
+    if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(x)))   {
+    	
+        var para = document.createElement("p");
+        var node = document.createTextNode("Not a valid e-mail address");
+        para.appendChild(node);
+        para.style.color = "red";
+        para.id = "emailcomments";
+        if (!emailcomments) {
+            $("input#emailSignUp").after(para);
+            emailcomments = true;
+            
+            
+        }
+      
+    }
+    else {
+    	
+
+        if (emailcomments) {
+            $("#emailcomments").remove();
+        }
+        emailval = false;
+    }
+
+}
       function addToDB() {
+          if(emailcomments == true){
+              alert("Invalid Email")
+              return;
+          }
+            if (document.getElementById("password").value != document.getElementById("confirm_password").value) {
+              window.alert("passwords don't match fool");
+              return;
+          }
+
+          if (document.getElementById("password").value.length < 8) {
+              window.alert("password needs to be 8 characters");
+              return;
+          }
           items = [document.getElementById("crop_dropdown").value]
 
           if (document.getElementById("type_dropdown").value == "Farm") {
@@ -184,7 +237,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse text-center justify-content-end" id="navbar2SupportedContent">
-        <form class="btn navbar-btn ml-2 text-white fa d-inline fa-lg fa-user-circle-o btn-light" style="background-image: url('../../../farm.jpg');"> Email:
+        <form class="btn navbar-btn ml-2 text-white fa d-inline fa-lg fa-user-circle-o btn-light"> Email:
           <input type="text" name="fname"> Password:
           <input type="text" name="lname">
           <a class="btn navbar-btn ml-2 text-white btn-secondary">
@@ -206,12 +259,15 @@
           </div>
 
             <div class="row">
-              <div class="form-group col-md-6">
-                <input id="username" type="text" class="form-control" placeholder="*Username" > </div>
-              <div class="form-group col-md-6 ">
-                <input id="password" type="text" class="form-control" placeholder="*Password" onblur="validatePassword(); checkPassword()" onkeyup="validatePasswords()" type="password"> </div>
+              <div class="form-group col-md-4">
+                <input id="username"  type="text" class="form-control" placeholder="*Username" > </div>
+              <div class="form-group col-md-4 ">
+                <input id="password" type="text" class="form-control" placeholder="*Password" type="password"> </div>
+                
+              <div class="form-group col-md-4 ">
+                <input id="confirm_password" type="text" class="form-control" placeholder="*Confirm Password" type="password"> </div>
             </div>
-            <input type="email" class="form-control" placeholder="*Enter email" id="email">
+            <input type="email" onblur="validateEmail()" class="form-control" placeholder="*Enter email" id="emailSignUp">
             <br>
             <input id="propName" type="text" class="form-control" placeholder="*Property Name">
             <br>

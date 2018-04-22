@@ -64,70 +64,66 @@
                         row.appendChild(cell);
 
                         var cell = document.createElement("th");
-                        cell.onclick = function(){sortTable(2);};
                         var cellText = document.createTextNode("Address");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
                          var cell = document.createElement("th");
-                        cell.onclick = function(){sortTable(2);};
+                        cell.onclick = function(){sortTable(3);};
                         var cellText = document.createTextNode("City");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
                          var cell = document.createElement("th");
-                        cell.onclick = function(){sortTable(2);};
+                        cell.onclick = function(){sortTable(4);};
                         var cellText = document.createTextNode("Zip");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
                          var cell = document.createElement("th");
-                        cell.onclick = function(){sortTable(2);};
+                        cell.onclick = function(){sortTable(5);};
                         var cellText = document.createTextNode("Size");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
                          var cell = document.createElement("th");
-                        cell.onclick = function(){sortTable(2);};
+                        cell.onclick = function(){sortTable(6);};
                         var cellText = document.createTextNode("Type");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
                          var cell = document.createElement("th");
-                        cell.onclick = function(){sortTable(2);};
                         var cellText = document.createTextNode("Public");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
                          var cell = document.createElement("th");
-                        cell.onclick = function(){sortTable(2);};
                         var cellText = document.createTextNode("Commercial");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
                          var cell = document.createElement("th");
-                        cell.onclick = function(){sortTable(2);};
                         var cellText = document.createTextNode("isValid");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
                          var cell = document.createElement("th");
-                        cell.onclick = function(){sortTable(2);};
+                        cell.onclick = function(){sortTable(10);};
                         var cellText = document.createTextNode("Visits");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
                          var cell = document.createElement("th");
-                        cell.onclick = function(){sortTable(2);};
+                        cell.onclick = function(){sortTable(11);};
                         var cellText = document.createTextNode("Average Rating");
                         cell.appendChild(cellText);
                         row.appendChild(cell);
@@ -317,7 +313,7 @@
               type = "ownerProps";
           }
 
-          getProperties(email, type);
+          getProperties(email,type);
       }
 
 
@@ -335,16 +331,32 @@
             x = rows[i].getElementsByTagName("td")[n];
             y = rows[i + 1].getElementsByTagName("td")[n];
             if (dir == "asc") {
-                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                shouldSwitch= true;
-                break;
+                if(n == 5 || n== 10 || n == 11){ // if sorting should be in integer
+                    if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
+                    shouldSwitch= true;
+                    break;
+                }
+                } else {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    shouldSwitch= true;
+                    break;
+                }
+                
             }
-        } else if (dir == "desc") {
-            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-            shouldSwitch= true;
-            break;
+        } else if (dir == "desc")  {
+                if(n == 5 || n== 10 || n == 11){ // if sorting should be in integer
+                    if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
+                    shouldSwitch= true;
+                    break;
+                    }
+                } else {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                    shouldSwitch= true;
+                    break;
+                }
+                
             }
-        }
+        } 
         }
         if (shouldSwitch) {
             rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
