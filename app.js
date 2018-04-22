@@ -721,6 +721,9 @@ app.post('/delete', function(req, res){
   } else if (what == "deleteProp") {
     sql = "DELETE FROM Property WHERE ID = ?"
     values = [id];
+  } else if (what == "deletePropVisits") {
+    sql = "DELETE FROM Visits WHERE PId = ?"
+    values = [id];
   }
 
   connection.query(sql, values,
