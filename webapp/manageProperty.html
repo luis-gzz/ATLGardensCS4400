@@ -181,6 +181,29 @@
           xhr.open("POST", "http://localhost:3000/manage", true);
           xhr.setRequestHeader("Content-Type", 'application/json');
           xhr.send(JSON.stringify(payload));
+          
+          
+          payload = {
+            "what": "deletePropVisits",
+            "id": id, 
+          }
+          
+          var xhr = new XMLHttpRequest();
+                xhr.onload = () => {
+                    var data = xhr.responseText;
+
+                    //console.log("This is data " + data);
+                    //propertyArray = JSON.parse(data);
+
+                    if (data != "0") {
+                            //window.location.replace("webapp/loginhome.html");
+                        console.log("Completed");
+                    }
+                }
+
+          xhr.open("POST", "http://localhost:3000/delete", true);
+          xhr.setRequestHeader("Content-Type", 'application/json');
+          xhr.send(JSON.stringify(payload));
 
       }
 
