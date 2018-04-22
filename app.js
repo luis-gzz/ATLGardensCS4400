@@ -603,9 +603,9 @@ app.post('/items', function(req, res){
     type = "Animal";
     var sql = "SELECT Name, IType FROM `FarmItem` WHERE IType != ? AND isApproved = ?";
   } else if (type == "garden") {
-    var sql = "SELECT Name, IType FROM `FarmItem` WHERE (IType = 'Nut' OR IType = 'Fruit') AND isApproved = 1;";
+    var sql = "SELECT Name, IType FROM `FarmItem` WHERE (IType = 'Vegetables' OR IType = 'Flower') AND isApproved = 1;";
   } else if (type == "orchard") {
-    var sql = "SELECT Name, IType FROM `FarmItem` WHERE (IType = 'Vegetable' OR IType = 'Flower') AND isApproved = 1;";
+    var sql = "SELECT Name, IType FROM `FarmItem` WHERE (IType = 'Fruits' OR IType = 'Nuts') AND isApproved = 1;";
   } else if (type == "unapproved") {
     var sql = "SELECT Name, IType FROM `FarmItem` WHERE isApproved = 0";
   } else if (type == "approved") {
