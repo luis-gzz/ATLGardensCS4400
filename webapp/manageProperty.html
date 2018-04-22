@@ -201,6 +201,29 @@
           xhr.open("POST", "http://localhost:3000/manage", true);
           xhr.setRequestHeader("Content-Type", 'application/json');
           xhr.send(JSON.stringify(payload));
+          
+          
+          payload = {
+            "what": "deletePropVisits",
+            "id": id, 
+          }
+          
+          var xhr = new XMLHttpRequest();
+                xhr.onload = () => {
+                    var data = xhr.responseText;
+
+                    //console.log("This is data " + data);
+                    //propertyArray = JSON.parse(data);
+
+                    if (data != "0") {
+                            //window.location.replace("webapp/loginhome.html");
+                        console.log("Completed");
+                    }
+                }
+
+          xhr.open("POST", "http://localhost:3000/delete", true);
+          xhr.setRequestHeader("Content-Type", 'application/json');
+          xhr.send(JSON.stringify(payload));
 
       }
 
@@ -507,8 +530,6 @@
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar2SupportedContent" aria-controls="navbar2SupportedContent" aria-expanded="false" aria-label="Toggle navigation"> </button>
       <div class="collapse navbar-collapse text-center justify-content-end" id="navbar2SupportedContent">
         <form class="btn navbar-btn ml-2 text-white fa d-inline  btn-primary">
-          <a class="btn navbar-btn ml-2 text-white btn-secondary">
-            <i class="fa d-inline fa-lg fa-user-circle-o"></i> Log out</a>
         </form>
       </div>
     </div>
