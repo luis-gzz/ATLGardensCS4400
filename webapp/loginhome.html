@@ -43,6 +43,12 @@
   <script src="js/Cookies.js"></script>
 
   <script>
+    function pad(n, width, z) {
+      z = z || '0';
+      n = n + '';
+      return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+    }
+
     function listProperties(propertyArray) {
 
           console.log("listing prop")
@@ -138,7 +144,7 @@
                         var row = document.createElement("tr");
                         var cell = document.createElement("td");
                         ID = propertyArray[j].ID
-                        var cellText = document.createTextNode(propertyArray[j].ID);
+                        var cellText = document.createTextNode(pad(propertyArray[j].ID, 5));
                         cell.appendChild(cellText);
                         row.appendChild(cell);
 
