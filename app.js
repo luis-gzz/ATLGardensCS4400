@@ -115,19 +115,19 @@ app.post('/registration', function(req, res){
   connection.query(
       'SELECT Email, Username FROM `User` WHERE Email = ? OR Username = ?', [email, username],
       function(err, results, fields) {
+        console.log(err)
+        console.log(results)
         if (results.length > 0) {
           // failure because the user already exists
           res.write("exists");
           res.end()
         } else {
           // Insert the new user
-          console.log(username);
-          console.log(email);
-          console.log(password);
-          console.log(type);
-          connection.query(
+            // Owner registration
+            connection.query(
             'INSERT INTO User(Username, Email, Password, UType) VALUES (?, ?, ?, ?)', [username, email, password, type],
             function(err, results, fields) {
+              console.log(err)
               if (err == null) {
                 // Success the new entry was added
                 if (type == "Owner") {
@@ -157,9 +157,22 @@ app.post('/registration', function(req, res){
                         });
 
                       } else {
-                        // failed due to error adding property
-                        res.write("failed to add property");
-                        res.end()
+                        // failed to add property so delete user
+                           connection.query(
+                            "DELETE FROM User WHERE Email = ?", [email],
+                            function(err, results, fields) {
+                            if (err == null) {
+                                // Success the new entry was added to property
+                                res.write("failed to add property");
+                                res.end()
+
+                            } else {
+                                // failed due to error adding property
+                                res.write("failed to remove user on failed property");
+                                res.end()
+                            }
+                            });
+
                       }
                     });
 
@@ -174,8 +187,7 @@ app.post('/registration', function(req, res){
                 res.write("failed to add user");
                 res.end()
               }
-
-          });
+            });
         }
     });
 
