@@ -70,7 +70,7 @@ function validateEmail() {
 
           let payload = {
             "type" : "Owner",
-            "email":  document.getElementById("email").value,
+            "email":  document.getElementById("emailSignUp").value,
             "password" : md5(document.getElementById("password").value),
             "username":  document.getElementById("username").value,
             "property": document.getElementById("propName").value,
@@ -98,6 +98,7 @@ function validateEmail() {
                         console.log("Completed");
                     } else {
                       console.log(data);
+                      alert("Something wrong, Try again")
                       console.log("registration failed");
                     }
                 }
@@ -238,7 +239,7 @@ function validateEmail() {
       </button>
       <div class="collapse navbar-collapse text-center justify-content-end" id="navbar2SupportedContent">
         <form class="btn navbar-btn ml-2 text-white fa d-inline fa-lg fa-user-circle-o btn-light"> Email:
-          <input type="text" name="fname"> Password:
+          <input type="password" name="fname"> Password:
           <input type="text" name="lname">
           <a class="btn navbar-btn ml-2 text-white btn-secondary">
             <i class="fa d-inline fa-lg fa-user-circle-o"></i> Sign in</a>
@@ -262,10 +263,10 @@ function validateEmail() {
               <div class="form-group col-md-4">
                 <input id="username"  type="text" class="form-control" placeholder="*Username" > </div>
               <div class="form-group col-md-4 ">
-                <input id="password" type="text" class="form-control" placeholder="*Password" type="password"> </div>
+                <input id="password" type="password" class="form-control" placeholder="*Password" > </div>
                 
               <div class="form-group col-md-4 ">
-                <input id="confirm_password" type="text" class="form-control" placeholder="*Confirm Password" type="password"> </div>
+                <input id="confirm_password" type="password" class="form-control" placeholder="*Confirm Password" type="password"> </div>
             </div>
             <input type="email" onblur="validateEmail()" class="form-control" placeholder="*Enter email" id="emailSignUp">
             <br>

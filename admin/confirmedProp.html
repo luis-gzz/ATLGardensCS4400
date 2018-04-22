@@ -52,14 +52,16 @@
                         cell.appendChild(cellText);
                         row.appendChild(cell);
 
+
+
                         var cell = document.createElement("th"); 
                         cell.onclick = function(){sortTable(1);};   
                         var cellText = document.createTextNode("Name"); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
   
-                        var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
+
+                        var cell = document.createElement("th");  
                         var cellText = document.createTextNode("Address"); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
@@ -80,34 +82,41 @@
                          tblBody.appendChild(row);
 
                          var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
                         var cellText = document.createTextNode("Size"); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
-                         var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
+                         var cell = document.createElement("th");  
                         var cellText = document.createTextNode("Type"); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
-                         var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
+                         var cell = document.createElement("th");   
                         var cellText = document.createTextNode("Public"); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
-                         var cell = document.createElement("th"); 
-                        cell.onclick = function(){sortTable(2);};   
+                         var cell = document.createElement("th");    
                         var cellText = document.createTextNode("Commercial"); 
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                          tblBody.appendChild(row);
 
+                          var cell = document.createElement("th"); 
+                        var cellText = document.createTextNode("Rating"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                         tblBody.appendChild(row);
                      
+
+                           var cell = document.createElement("th");  
+                        var cellText = document.createTextNode("Approved By"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                         tblBody.appendChild(row);
 
                          var cell = document.createElement("th"); 
                         cell.onclick = function(){sortTable(2);};   
@@ -196,10 +205,23 @@
                         
                         /////////////////
 
+                          var cell = document.createElement("td");
+                        var rating = 0;
+                        if(propertyArray[j].Avg === null){
+                            rating = "N/A"
+                        } else{
+                            rating =propertyArray[j].Avg;
+                        }
+                        var cellText = document.createTextNode(rating);
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
 
                         //////////
 
-                        
+                         var cell = document.createElement("td");    
+                        var cellText = document.createTextNode(propertyArray[j].ApprovedBy); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
 
                                        
                          var cell = document.createElement("td");    
@@ -368,7 +390,7 @@
                     <span style="background-color: rgb(18, 187, 173);">Search Properties</span>
                 </button>
                 <button class="btn ml-2 text-white btn-primary">Manage Selected Property</button>
-                <button class="btn ml-2 text-white btn-primary">Back</button>
+                <a class="btn ml-2 text-white btn-primary" href ="adminhome.html">Back</a>
             </div>
  
 </body>
