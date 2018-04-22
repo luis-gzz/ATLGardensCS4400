@@ -6,6 +6,182 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
         <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> 
     </head>
+    <script>
+        function addNewItem(item) {
+            let payload = {
+                "what": "addApprovedItem",
+                "iName": document.getElementById("new_item").value,
+                "iType": document.getElementById("type_dropdown").value
+            }
+
+            console.log(payload);
+
+                var xhr = new XMLHttpRequest();
+                    xhr.onload = () => {
+                        var data = xhr.responseText;
+
+                        itemArray = JSON.parse(data);
+                      
+                        console.log(data)
+
+
+
+                        if (data != "0") {
+                            //window.location.replace("webapp/loginhome.html");
+                            console.log("Completed");
+                            listItems(itemArray);
+
+                            window.location.reload();
+                        }
+                    }
+
+                xhr.open("POST", "http://localhost:3000/add", true);
+                xhr.setRequestHeader("Content-Type", 'application/json');
+                xhr.send(JSON.stringify(payload));
+        }
+
+        function approveItem(name) {
+            // var payload = {
+              //  what =  "approveProp" OR "approveItem" OR "approveUser"
+              //  id = propId OR item name OR user email
+              //  admin = the admin's email
+              // }
+
+            let payload = {
+                "what": "approveItem",
+                "id": name,
+                "admin": "who_cares"
+            }
+
+            console.log(payload);
+
+                var xhr = new XMLHttpRequest();
+                    xhr.onload = () => {
+                        var data = xhr.responseText;
+
+                        itemArray = JSON.parse(data);
+                      
+                        console.log(data)
+
+
+
+                        if (data != "0") {
+                            //window.location.replace("webapp/loginhome.html");
+                            console.log("Completed");
+                            listItems(itemArray);
+                        }
+                    }
+
+                xhr.open("POST", "http://localhost:3000/approve", true);
+                xhr.setRequestHeader("Content-Type", 'application/json');
+                xhr.send(JSON.stringify(payload));
+        }
+
+        function getItems() {
+            let payload = {
+                "type": "approved",
+                "confirmed": "0"
+            }
+
+            var itemArray;
+
+                console.log(payload);
+
+                var xhr = new XMLHttpRequest();
+                    xhr.onload = () => {
+                        var data = xhr.responseText;
+
+                        itemArray = JSON.parse(data);
+                      
+                        console.log(data)
+
+
+
+                        if (data != "0") {
+                            //window.location.replace("webapp/loginhome.html");
+                            console.log("Completed");
+                            listItems(itemArray);
+                        }
+                    }
+
+                xhr.open("POST", "http://localhost:3000/items", true);
+                xhr.setRequestHeader("Content-Type", 'application/json');
+                xhr.send(JSON.stringify(payload));
+        }
+
+        function listItems(cropArray) {
+  
+          console.log("listing crop")
+                    var tbl     = document.getElementById("table");
+                    var tblBody = document.createElement("tbody");
+
+
+                     var row = document.createElement("tr");
+                        var cell = document.createElement("th");
+                        cell.onclick= function(){sortTable(0);} ; 
+                        var cellText = document.createTextNode("Name"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+
+                        var cell = document.createElement("th"); 
+                        cell.onclick = function(){sortTable(1);};   
+                        var cellText = document.createTextNode("Type"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+
+                           var cell = document.createElement("th");    
+                        var cellText = document.createTextNode("Delete"); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                         tblBody.appendChild(row);
+                
+                    for (var j = 0; j <= cropArray.length-1; j++) {
+
+                        var row = document.createElement("tr");
+                        var cell = document.createElement("td");    
+                        var name = cropArray[j].Name;
+                        var cellText = document.createTextNode(cropArray[j].Name); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+
+                        var cell = document.createElement("td");    
+                        var cellText = document.createTextNode(cropArray[j].IType); 
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                    
+                         var cell = document.createElement("td");    
+                        var apr = document.createElement("a");
+                        apr.href = "approveItem.html?item=" + name;
+                        
+                        var cell = document.createElement("td");    
+                        var del = document.createElement("a");
+                        del.href= "delItem.html?item=" + name;
+
+                        var deleteText = document.createTextNode("Delete");
+                        del.appendChild(deleteText);
+
+                        cell.appendChild(del);
+                        row.appendChild(cell);                    
+
+                        tblBody.appendChild(row);
+                }
+
+
+        // append the <tbody> inside the <table>
+        tbl.appendChild(tblBody);
+       
+        tbl.setAttribute("border", "2");
+
+                        //////////////////
+
+          console.log("Built crop list");
+      }
+
+      window.onload = function() {
+          console.log("Cookies" + document.cookie);
+          getItems();
+      }
+</script>
     <body> 
         <nav class="navbar navbar-expand-md bg-primary navbar-dark">
             <div class="container">
@@ -18,33 +194,46 @@
                 </div>
             </div>
         </nav>         
+
         <div class="py-5">
             <div class="container">
                 <div class="col-md-12">
                     <div style="font-size: 45px">Approved Animals/Crops:
-                        <br>
+                        <table id="table"></table>
                     </div>
                 </div>
-            </div>
-            <div class="pg-empty-placeholder"></div>
+            </div>             
+
+            <div class="pg-empty-placeholder"></div>                          
+
             <div class="py-2">
-                <button class="btn btn-outline-primary dropdown-toggle ml-2">Search by&nbsp;</button>
-                <button class="btn ml-2 text-white btn-primary">Search</button>
+                <button class="btn ml-2 text-white btn-primary">
+                    <span style="background-color: rgb(18, 187, 173);">Approve Selection</span>
+                </button>
+                <button class="btn ml-2 text-white btn-primary">Delete Selection</button>
+                <button class="btn ml-2 text-white btn-primary">Back</button>
             </div>
-            <div class="py-2">
-                <button class="btn btn-outline-primary dropdown-toggle ml-2">Type&nbsp;</button>
-                <button class="btn ml-2 text-white btn-primary">Add to Approved List</button>
-            </div>
-            <div>
-                <button class="btn btn-primary ml-2 text-white">Delete Selection</button>                                &nbsp;
-                <a href="">
-                    <button class="btn btn-primary ml-2 text-white">Back</button>
-                </a>
-            </div>
-        </div>         
+        </div>   
+
+        <div class="form-group col-md-6">
+              <input id="new_item" type="text" class="form-control" placeholder="*New Item Here"> </div>
+              <p>Type:</p>
+              <select id="type_dropdown">
+                    <option value="Animal">Animal</option>
+                    <option value="Nut">Nut</option>
+                    <option value="Vegetable">Vegetable</option>
+                    <option value="Flower">Flower</option>
+                    <option value="Fruit">Fruit</option>
+                  </select>
+              <button onClick = "addNewItem()">Create and Approve</button>
+        <div class="form-group">      
+
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>         
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>         
+
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>         
+
         <pingendo onclick="window.open('https://pingendo.com/', '_blank')" style="cursor:pointer;position: fixed;bottom: 10px;right:10px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:180px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white">Made with Pingendo&nbsp;&nbsp;
             <img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block" alt="Pingendo logo" height="16">
         </pingendo>         

@@ -428,6 +428,24 @@ app.post('/add', function(req, res){
         res.end();
     });
 
+  } else if (what == "addApprovedItem") {
+      console.log("Adding into approved item");
+      console.log(iName, iType);
+      sql = "INSERT INTO FarmItem(Name, IType, isApproved) VALUES (?, ?, ?)";
+      connection.query(sql, [iName, iType, 1],
+      function(err, results, fields) {
+        console.log(results)
+        console.log(err)
+        if (err == null) {
+          // 1 for success
+          res.write("1");
+        } else {
+          // 0 for failure
+          res.write("0");
+        }
+
+        res.end();
+    });
   }
 });
 
@@ -578,6 +596,8 @@ app.post('/items', function(req, res){
     var sql = "SELECT Name, IType FROM `FarmItem` WHERE IType = ('Vegetable' OR IType = 'Flower') AND isApproved = ?;";
   } else if (type == "unapproved") {
     var sql = "SELECT Name, IType FROM `FarmItem` WHERE isApproved = 0";
+  } else if (type == "approved") {
+    var sql = "SELECT Name, IType FROM `FarmItem` WHERE isApproved = 1";
   }
 
   console.log(type + confirmed);

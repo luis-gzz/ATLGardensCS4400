@@ -10,6 +10,19 @@
   <script>
       current_item_list = [];
 
+      function checkList() {
+          console.log("Checking list");
+
+          var button_arr = document.getElementsByClassName("remove_button");
+
+          if (current_item_list.length <= 1) {
+              console.log("Not enough items");
+              for (var i = 0; i < button_arr.length; i++) {
+                  button_arr[i].disabled = true;
+              }
+          }
+      }
+
       function logItem(item) {
           current_item_list.push(item);
       }
@@ -38,6 +51,7 @@
 
                   but.setAttribute("onClick", "removeAnimal('" + new_animal + "')");
                   but.setAttribute("id", new_animal + "_button")
+                  but.setAttribute("class", "remove_button");
 
                   // Adds two elements
                   var animal_div = document.getElementById("animal_list");
@@ -59,6 +73,8 @@
 
           var index = current_item_list.indexOf(name);
           current_item_list.splice(index, 1);
+
+          checkList();
       }
 
       function addCrop() {
@@ -78,7 +94,8 @@
                   but.appendChild(text);
 
                   but.setAttribute("onClick", "removeAnimal('" + new_crop + "')");
-                  but.setAttribute("id", new_crop + "_button")
+                  but.setAttribute("id", new_crop + "_button");
+                  but.setAttribute("class", "remove_button");
 
                   // Adds two elements
                   var crop_div = document.getElementById("crop_list");
@@ -100,6 +117,8 @@
 
           var index = current_item_list.indexOf(name);
           current_item_list.splice(index, 1);
+
+          checkList();
       }
 
       function deleteProperty() {
@@ -275,6 +294,7 @@
 
                   but.setAttribute("onClick", "removeAnimal('" + Items[i][0] + "')");
                   but.setAttribute("id", Items[i][0] + "_button")
+                  but.setAttribute("class", "remove_button");
 
                   // Adds two elements
                   var animal_div = document.getElementById("animal_list");
@@ -300,6 +320,7 @@
 
                   but.setAttribute("onClick", "removeCrop('" + Items[i][0] + "')");
                   but.setAttribute("id", Items[i][0] + "_button")
+                  but.setAttribute("class", "remove_button");
 
                   // Adds two elements
                   var animal_div = document.getElementById("crop_list");
