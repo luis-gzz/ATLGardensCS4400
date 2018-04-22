@@ -17,6 +17,11 @@
           console.log(current_item_list);
       }
 
+      function pad(n, width, z) {
+        z = z || '0';
+        n = n + '';
+        return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+      }
 
 
       function addAnimal() {
@@ -37,15 +42,18 @@
 
                   but.setAttribute("onClick", "removeAnimal('" + new_animal + "')");
                   but.setAttribute("id", new_animal + "_button")
+                  but.setAttribute("class", "remove_button");
 
                   // Adds two elements
                   var animal_div = document.getElementById("animal_list");
 
                   animal_div.appendChild(elem);
                   animal_div.appendChild(but);
+
+                  current_item_list.push(new_animal);
           }
 
-          current_item_list.push(new_animal);
+          
       }
 
       function removeAnimal(name) {
@@ -58,6 +66,8 @@
 
           var index = current_item_list.indexOf(name);
           current_item_list.splice(index, 1);
+
+          checkList();
       }
 
       function addCrop() {
@@ -78,15 +88,18 @@
 
                   but.setAttribute("onClick", "removeAnimal('" + new_crop + "')");
                   but.setAttribute("id", new_crop + "_button")
+                  but.setAttribute("class", "remove_button");
 
                   // Adds two elements
                   var crop_div = document.getElementById("crop_list");
 
                   crop_div.appendChild(elem);
                   crop_div.appendChild(but);
+
+                  current_item_list.push(new_crop);
           }
 
-          current_item_list.push(new_crop);
+          
       }
 
       function removeCrop(name) {
@@ -99,6 +112,8 @@
 
           var index = current_item_list.indexOf(name);
           current_item_list.splice(index, 1);
+
+          checkList();
       }
 
       function deleteProperty() {
@@ -163,6 +178,11 @@
             "items" : current_item_list
           }
 
+          if (isNaN(payload.acres)) {
+              alert("Zip or acres invalid");
+              return;
+          }
+
           console.log(payload);
 
           var xhr = new XMLHttpRequest();
@@ -210,7 +230,7 @@
           Commercial = property_info.IsCommercial;
           Items = property_info.IName;
 
-          document.getElementById("id_text").innerHTML = "ID: " + ID;
+          document.getElementById("id_text").innerHTML = "ID: " + pad(ID, 5);
           document.getElementById("name").value = Name;
           document.getElementById("address").value = Address;
           document.getElementById("size").value = Size;
@@ -242,11 +262,13 @@
                   // Makes button
                   var but = document.createElement("Button");
                   var text = document.createTextNode("Remove");
+                  
 
                   but.appendChild(text);
 
                   but.setAttribute("onClick", "removeAnimal('" + Items[i][0] + "')");
                   but.setAttribute("id", Items[i][0] + "_button")
+                  but.setAttribute("class", "remove_button");
 
                   // Adds two elements
                   var animal_div = document.getElementById("animal_list");
@@ -272,6 +294,7 @@
 
                   but.setAttribute("onClick", "removeCrop('" + Items[i][0] + "')");
                   but.setAttribute("id", Items[i][0] + "_button")
+                  but.setAttribute("class", "remove_button");
 
                   // Adds two elements
                   var animal_div = document.getElementById("crop_list");
@@ -363,23 +386,23 @@
       }
 
        function getCrops(type) {
-           console.log(type)
+         console.log("type = " + type)
          let payload = {
                "type": "crop",
                "confirmed": 1
             }
-         if(type == "farm"){
+         if(type == "Farm"){
             payload = {
                "type": "crop",
                "confirmed": 1
             }
-          } else if( type == "orchard"){
+          } else if( type == "Orchard"){
               payload = {
                "type": "orchard",
                "confirmed": 1
             }
           }
-          else if( type == "garden"){
+          else if( type == "Garden"){
               payload = {
                "type": "garden",
                "confirmed": 1
@@ -413,7 +436,6 @@
           xhr.setRequestHeader("Content-Type", 'application/json');
           xhr.send(JSON.stringify(payload));
       }
-
 
       function addNewItem() {
           let payload = {
@@ -449,11 +471,29 @@
           
           
       }
+
+      function checkList() {
+          console.log("Checking list");
+
+          var button_arr = document.getElementsByClassName("remove_button");
+
+          console.log(button_arr);
+
+          if (current_item_list.length <= 1) {
+              console.log("Not enough items");
+              for (var i = 0; i < button_arr.length; i++) {
+                  button_arr[i].disabled = true;
+                  console.log("disabling");
+              }
+          }
+      }
       
       window.onload = function() {
           getAnimals();
           processGet();
-          checkLogin();
+
+          checkList();
+          //checkLogin();
       }
   </script>
     </head>

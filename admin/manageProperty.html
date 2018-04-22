@@ -8,6 +8,12 @@
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
   <script src="js/Cookies.js"></script>
   <script>
+      function pad(n, width, z) {
+        z = z || '0';
+        n = n + '';
+        return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+      }
+
       current_item_list = [];
 
       function checkList() {
@@ -58,9 +64,11 @@
 
                   animal_div.appendChild(elem);
                   animal_div.appendChild(but);
+
+                  current_item_list.push(new_animal);
           }
 
-          current_item_list.push(new_animal);
+          
       }
 
       function removeAnimal(name) {
@@ -102,9 +110,11 @@
 
                   crop_div.appendChild(elem);
                   crop_div.appendChild(but);
+
+                  current_item_list.push(new_crop);
           }
 
-          current_item_list.push(new_crop);
+          
       }
 
       function removeCrop(name) {
@@ -182,6 +192,11 @@
             "items" : current_item_list
           }
 
+          if (isNaN(payload.acres)) {
+              alert("Zip or acres invalid");
+              return;
+          }
+
           console.log(payload);
 
           var xhr = new XMLHttpRequest();
@@ -244,6 +259,8 @@
               animal_but.style.display = "none";
           } 
 
+          getCrops(PType);
+
           console.log(animal_dropdown);
       }
 
@@ -257,7 +274,7 @@
           Commercial = property_info.IsCommercial;
           Items = property_info.IName;
 
-          document.getElementById("id_text").innerHTML = "ID: " + ID;
+          document.getElementById("id_text").innerHTML = "ID: " + pad(ID, 5);
           document.getElementById("name").value = Name;
           document.getElementById("address").value = Address;
           document.getElementById("size").value = Size;
@@ -410,42 +427,53 @@
           xhr.send(JSON.stringify(payload));
       }
 
-      function getCrops() {
-          let payload = {
-              "type": "crop",
-              "confirmed": 1
+      function getCrops(type) {
+         console.log("type = " + type)
+         let payload = {
+               "type": "crop",
+               "confirmed": 1
+            }
+         if(type == "Farm"){
+            payload = {
+               "type": "crop",
+               "confirmed": 1
+            }
+          } else if( type == "Orchard"){
+              payload = {
+               "type": "orchard",
+               "confirmed": 1
+            }
           }
-
+          else if( type == "Garden"){
+              payload = {
+               "type": "garden",
+               "confirmed": 1
+            }
+          }
           var xhr = new XMLHttpRequest();
               xhr.onload = () => {
               var data = xhr.responseText;
-
               var cropArray = JSON.parse(data);
               console.log("This is data" + cropArray);
-
               // *******************************************************************
               // ************* Move this when we figure out async stuff ************
               // *******************************************************************
               var crop_dropdown = document.getElementById("crop_dropdown");
-
+              crop_dropdown.options.length = 0;
               for (var i = 0; i < cropArray.length; i++) {
                 var node = document.createElement("option");          
                 node.text = cropArray[i].Name;
                 node.setAttribute("value", cropArray[i].Name);
-
                 crop_dropdown.add(node);
               }
-
               // *******************************************************************
               // *********** End Move this *****************************************
               // *******************************************************************
-
               if (data != "0") {
                          //window.location.replace("webapp/loginhome.html");
                   console.log("Completed");
               }
           }
-
           xhr.open("POST", "http://localhost:3000/items", true);
           xhr.setRequestHeader("Content-Type", 'application/json');
           xhr.send(JSON.stringify(payload));
@@ -487,7 +515,7 @@
       
       window.onload = function() {
           getAnimals();
-          getCrops();
+          
           processGet();
           checkList();
       }

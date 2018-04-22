@@ -7,6 +7,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
   <script>
+    function pad(n, width, z) {
+      z = z || '0';
+      n = n + '';
+      return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+    }
       current_item_list = [];
 
       function logItem(item) {
@@ -209,7 +214,7 @@
           Commercial = property_info.IsCommercial;
           Items = property_info.IName;
 
-          document.getElementById("id_text").innerHTML = "ID: " + ID;
+          document.getElementById("id_text").innerHTML = "ID: " + pad(ID, 5);
           document.getElementById("name").value = Name;
           document.getElementById("address").value = Address;
           document.getElementById("size").value = Size;

@@ -33,6 +33,11 @@
             "items" : items
           }
 
+          if (isNaN(payload.zip) || isNaN(payload.acres)) {
+              alert("Zip or acres invalid");
+              return;
+          }
+
           console.log(payload);
 
           var xhr = new XMLHttpRequest();
