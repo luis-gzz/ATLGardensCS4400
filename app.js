@@ -209,19 +209,19 @@ app.post('/properties', function(req, res){
   var sql;
   if (type == "ownerProps") {
     // All properties for owned by a user
-    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email) AS Count, AVG(Rating) AS Avg FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.OwnedBy = ? Group By Property.ID";
+    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email) AS Count, AVG(Rating) AS Avg FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.OwnedBy = ? Group By Property.ID ORDER BY Property.ID ORDER BY Property.ID";
   } else if (type == "notOwner") {
     // All properties not owned by a user
     var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email) AS Count, AVG(Rating) AS Avg FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.OwnedBy != ? AND Property.ApprovedBy IS NOT NULL Group By Property.ID";
   } else if (type == "public") {
     // All public and confirmed properties
-    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email) AS Count, AVG(Rating) AS Avg FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.IsPublic = 1 AND Property.ApprovedBy IS NOT NULL Group By Property.ID";
+    var sql = "SELECT ID, Name, Address, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email) AS Count, AVG(Rating) AS Avg FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.IsPublic = 1 AND Property.ApprovedBy IS NOT NULL Group By Property.ID ORDER BY Property.ID";
   } else if (type == "conf") {
     // All confirmed properties
-    var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email) AS Count, AVG(Rating) AS Avg FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.ApprovedBy IS NOT NULL Group By Property.ID";
+    var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial, COUNT(Visits.Email) AS Count, AVG(Rating) AS Avg FROM `Property` Left Join `Visits` ON Property.ID = Visits.PId WHERE Property.ApprovedBy IS NOT NULL Group By Property.ID ORDER BY Property.ID";
   } else if (type == "unconf") {
     // All unonfrimed properties
-    var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial FROM `Property` WHERE Property.ApprovedBy IS NULL Group By Property.ID";
+    var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial FROM `Property` WHERE Property.ApprovedBy IS NULL Group By Property.ID ORDER BY Property.ID";
   } else if (type == "id") {
     var sql = "SELECT ID, Name, Address, OwnedBy, ApprovedBy, PType, Size, IsPublic, IsCommercial FROM `Property` WHERE Property.ID = ?";
   } else {
@@ -597,19 +597,19 @@ app.post('/items', function(req, res){
   if (type == "animal") {
     // All properties for owned by a user
     type = "Animal";
-    var sql = "SELECT Name, IType FROM `FarmItem` WHERE IType = ? AND isApproved = ?";
+    var sql = "SELECT Name, IType FROM `FarmItem` WHERE IType = ? AND isApproved = ? ORDER BY Name";
   } else if (type == "crop") {
     // All properties for owned by a user
     type = "Animal";
-    var sql = "SELECT Name, IType FROM `FarmItem` WHERE IType != ? AND isApproved = ?";
+    var sql = "SELECT Name, IType FROM `FarmItem` WHERE IType != ? AND isApproved = ? ORDER BY Name";
   } else if (type == "garden") {
-    var sql = "SELECT Name, IType FROM `FarmItem` WHERE (IType = 'Vegetables' OR IType = 'Flower') AND isApproved = 1;";
+    var sql = "SELECT Name, IType FROM `FarmItem` WHERE (IType = 'Vegetables' OR IType = 'Flower') AND isApproved = 1 ORDER BY Name";
 } else if (type == "orchard") {
-    var sql = "SELECT Name, IType FROM `FarmItem` WHERE (IType = 'Fruit' OR IType = 'Nut') AND isApproved = 1;";
+    var sql = "SELECT Name, IType FROM `FarmItem` WHERE (IType = 'Fruit' OR IType = 'Nut') AND isApproved = 1 ORDER BY Name";
   } else if (type == "unapproved") {
-    var sql = "SELECT Name, IType FROM `FarmItem` WHERE isApproved = 0";
+    var sql = "SELECT Name, IType FROM `FarmItem` WHERE isApproved = 0 ORDER BY Name";
   } else if (type == "approved") {
-    var sql = "SELECT Name, IType FROM `FarmItem` WHERE isApproved = 1";
+    var sql = "SELECT Name, IType FROM `FarmItem` WHERE isApproved = 1 ORDER BY Name";
   }
 
   console.log(type + confirmed);
@@ -641,7 +641,7 @@ app.post('/visits', function(req, res){
   // }
 
   var email = req.body.email;
-  var sql = "SELECT Property.Name AS Name, VDate, AVG(Rating) AS Avg FROM Visits LEFT Join Property ON Property.ID = Visits.PId WHERE Visits.Email = ? Group by (Property.Name)"
+  var sql = "SELECT Property.Name AS Name, VDate, AVG(Rating) AS Avg FROM Visits LEFT Join Property ON Property.ID = Visits.PId WHERE Visits.Email = ? Group by (Property.Name) ORDER BY Property.ID"
 
   connection.query(sql, [email],
       function(err, results, fields) {
