@@ -360,9 +360,7 @@
     
   var low = document.getElementById("lowbound").value;
   var high  = document.getElementById("highbound").value
-    if(document.getElementById("lowbound").value=="" || document.getElementById("highbound").value ==""){
-        return;
-    }
+   
 
   var input, filter, table, tr, td, i;
   input = document.getElementById("myInput");
@@ -374,11 +372,16 @@
 
   // Loop through all table rows, and hide those who don't match the search query
   if(n == 10 || n== 11){
-        
+          if(document.getElementById("lowbound").value=="" ){
+        low = 0;
+    }
+     if(document.getElementById("highbound").value ==""){
+        high = 999;
+    }
         for (i = 0; i < tr.length; i++) {
             td = tr[i].getElementsByTagName("td")[n];
-            if (td && td.innerHTML !="N/A") {
-                if (parseFloat(td.innerHTML)>=low && parseFloat(td.innerHTML) <=high ) {
+            if (td ) {
+                if (parseFloat(td.innerHTML)>=low && parseFloat(td.innerHTML) <=high && td.innerHTML !="N/A") {
                 tr[i].style.display = "";
             } else {
             tr[i].style.display = "none";
