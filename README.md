@@ -1,6 +1,6 @@
 # ATL Gardens Webpage
 
-The final project for CS4400 Intro to Database Systems. We were tasked with creating a ER diagram for the relational database
+Final project for CS4400 Intro to Database Systems. We were tasked with creating a ER diagram for the relational database
 tables, writing the SQL queries, and building a full stack app. The project tasked us with creating a propetry management
 portal for owners and visitors of Atlanta area gardens, farms, and orchards.
 
